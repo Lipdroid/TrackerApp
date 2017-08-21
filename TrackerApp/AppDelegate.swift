@@ -7,21 +7,74 @@
 //
 
 import UIKit
+import Firebase
+import FacebookCore
+import FBSDKCoreKit
+import GoogleSignIn
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate,GIDSignInDelegate {
 
     var window: UIWindow?
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        return true
+        
+        //configure Firebase
+        FIRApp.configure()
+        
+        //configure Google Signin
+        GIDSignIn.sharedInstance().clientID = FIRApp.defaultApp()?.options.clientID
+        GIDSignIn.sharedInstance().delegate = self
+        
+        //Configure facebook
+        return FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
+        
     }
+    
+    func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
+        print("123")
+        if let err = error{
+            print("Something went wrong with google login",err)
+            return
+        }
+        
+        print("Successfully Signed in")
+        guard let idToken = user.authentication.idToken else {
+            return
+        }
+        guard let accessToken = user.authentication.accessToken else {
+            return
+        }
+        let credential = FIRGoogleAuthProvider.credential(withIDToken: idToken, accessToken: accessToken)
+        FIRAuth.auth()?.signIn(with: credential, completion: { (User, error) in
+            if(error != nil){
+                print("error")
+            return
+            }
+            
+            guard let uid = user?.userID else{return}
+            print("Successfully logged in",uid)
+        })
+        
+    }
+    
+    
+    
+    func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
+        GIDSignIn.sharedInstance().handle(url,
+                                          sourceApplication:options[UIApplicationOpenURLOptionsKey.sourceApplication] as? String,
+                                          annotation: [:])
+        return FBSDKApplicationDelegate.sharedInstance().application(app, open: url, options: options)
+    }
+
 
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
+        FBSDKAppEvents.activateApp()
+
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
