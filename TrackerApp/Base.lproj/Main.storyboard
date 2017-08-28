@@ -49,7 +49,38 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="71" y="156"/>
+            <point key="canvasLocation" x="-273" y="166"/>
+        </scene>
+        <!--Map View Controller-->
+        <scene sceneID="r4O-ZI-vYx">
+            <objects>
+                <viewController storyboardIdentifier="MapViewController" id="JRU-wA-dhl" customClass="MapViewController" customModule="TrackerApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Pdy-jC-lUU"/>
+                        <viewControllerLayoutGuide type="bottom" id="PcB-xI-t7c"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="50i-cE-GWe">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Off-q7-hOu">
+                                <rect key="frame" x="162" y="318" width="51" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="LogOut"/>
+                                <connections>
+                                    <action selector="logout_btn_pressed:" destination="JRU-wA-dhl" eventType="touchUpInside" id="qez-3y-tnK"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <connections>
+                        <outlet property="logout_pressed" destination="Off-q7-hOu" id="Aow-Mn-VUi"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="vni-ft-99L" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="498" y="166"/>
         </scene>
     </scenes>
 </document>

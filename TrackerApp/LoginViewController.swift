@@ -12,19 +12,53 @@ import FacebookLogin
 import FBSDKLoginKit
 import GoogleSignIn
 
-class LoginViewController: UIViewController,GIDSignInUIDelegate {
+class LoginViewController: UIViewController,GIDSignInDelegate,GIDSignInUIDelegate {
     var dict : [String : AnyObject]!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        
+        
+        //configure Google Signin
+        GIDSignIn.sharedInstance().clientID = FIRApp.defaultApp()?.options.clientID
+        GIDSignIn.sharedInstance().delegate = self
         GIDSignIn.sharedInstance().uiDelegate = self
+
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
+        print("123")
+        if let err = error{
+            print("Something went wrong with google login",err)
+            return
+        }
+        
+        print("Successfully Signed in")
+        guard let idToken = user.authentication.idToken else {
+            return
+        }
+        guard let accessToken = user.authentication.accessToken else {
+            return
+        }
+        let credential = FIRGoogleAuthProvider.credential(withIDToken: idToken, accessToken: accessToken)
+        FIRAuth.auth()?.signIn(with: credential, completion: { (User, error) in
+            if(error != nil){
+                print("error")
+                return
+            }
+            
+            guard let uid = user?.userID else{return}
+            print("Successfully logged in",uid)
+        })
+        
+    }
+
 
     @IBAction func after_click_facebook_login(_ sender: Any) {
         let fbLoginManager : FBSDKLoginManager = FBSDKLoginManager()
@@ -51,7 +85,7 @@ class LoginViewController: UIViewController,GIDSignInUIDelegate {
                         })
                         
                         //self.getFBUserData()
-                        //fbLoginManager.logOut()
+                       // fbLoginManager.logOut()
                         
                     }
                 }
@@ -73,6 +107,7 @@ class LoginViewController: UIViewController,GIDSignInUIDelegate {
     }
 
     @IBAction func after_click_google(_ sender: Any) {
+       // GIDSignIn.sharedInstance().signOut()
         GIDSignIn.sharedInstance().signIn()
     }
 

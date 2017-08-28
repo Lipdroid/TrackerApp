@@ -13,7 +13,7 @@ import FBSDKCoreKit
 import GoogleSignIn
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate,GIDSignInDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
@@ -24,42 +24,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate,GIDSignInDelegate {
         //configure Firebase
         FIRApp.configure()
         
-        //configure Google Signin
-        GIDSignIn.sharedInstance().clientID = FIRApp.defaultApp()?.options.clientID
-        GIDSignIn.sharedInstance().delegate = self
+        // Access the storyboard and fetch an instance of the view controller
+        let storyboard = UIStoryboard(name: "Main", bundle: nil);
+        var viewController: UIViewController?
+        
+        if (FIRAuth.auth()?.currentUser) != nil {
+            // segue to main view controller
+            print("Already logged in")
+            viewController = storyboard.instantiateViewController(withIdentifier: "MapViewController") as? MapViewController
+
+        } else {
+            // sign in
+            viewController = storyboard.instantiateViewController(withIdentifier: "LoginViewController") as! LoginViewController
+        }
+        
+        window?.rootViewController = viewController
+        window?.makeKeyAndVisible()
         
         //Configure facebook
         return FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
         
     }
-    
-    func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
-        print("123")
-        if let err = error{
-            print("Something went wrong with google login",err)
-            return
-        }
-        
-        print("Successfully Signed in")
-        guard let idToken = user.authentication.idToken else {
-            return
-        }
-        guard let accessToken = user.authentication.accessToken else {
-            return
-        }
-        let credential = FIRGoogleAuthProvider.credential(withIDToken: idToken, accessToken: accessToken)
-        FIRAuth.auth()?.signIn(with: credential, completion: { (User, error) in
-            if(error != nil){
-                print("error")
-            return
-            }
-            
-            guard let uid = user?.userID else{return}
-            print("Successfully logged in",uid)
-        })
-        
-    }
-    
     
     
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
