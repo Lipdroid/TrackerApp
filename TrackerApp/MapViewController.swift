@@ -19,6 +19,8 @@ class MapViewController: UIViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        //configure Google Signin
+        GIDSignIn.sharedInstance().clientID = FIRApp.defaultApp()?.options.clientID
     }
 
     override func didReceiveMemoryWarning() {
