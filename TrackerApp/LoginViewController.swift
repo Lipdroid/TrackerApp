@@ -1,4 +1,4 @@
-//
+  //
 //  ViewController.swift
 //  TrackerApp
 //
@@ -14,7 +14,8 @@ import GoogleSignIn
 
 class LoginViewController: UIViewController,GIDSignInDelegate,GIDSignInUIDelegate {
     var dict : [String : AnyObject]!
-
+    var mUserObj: UserObject? = nil
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -53,8 +54,19 @@ class LoginViewController: UIViewController,GIDSignInDelegate,GIDSignInUIDelegat
                 return
             }
             
-            guard let uid = user?.userID else{return}
-            print("Successfully logged in",uid)
+            //guard let uid = user?.userID else{return}
+            let userId = user.userID                  // For client-side use only!
+            let idToken = user.authentication.idToken // Safe to send to the server
+            let fullName = user.profile.name
+            let givenName = user.profile.givenName
+            let familyName = user.profile.familyName
+            let email = user.profile.email
+            
+            self.mUserObj = UserObject()
+            self.mUserObj?.userName = fullName
+            print("Successfully logged in",fullName!)
+            self.go_to_main_page()
+
         })
         
     }
@@ -81,11 +93,13 @@ class LoginViewController: UIViewController,GIDSignInDelegate,GIDSignInUIDelegat
                                 print("Something went wrong",error ?? "")
                             }
                             
+                            
+                            self.getFBUserData()
+
+                            
+
                             print("Logged In")
                         })
-                        
-                        //self.getFBUserData()
-                       // fbLoginManager.logOut()
                         
                     }
                 }
@@ -99,16 +113,39 @@ class LoginViewController: UIViewController,GIDSignInDelegate,GIDSignInUIDelegat
             FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "id, name, first_name, last_name, picture.type(large), email"]).start(completionHandler: { (connection, result, error) -> Void in
                 if (error == nil){
                     self.dict = result as! [String : AnyObject]
-                    //print(result!)
-                    print(self.dict)
+                    
+                    self.mUserObj = UserObject()
+                    if let name = self.dict["name"] as? String{
+                        self.mUserObj?.userName = name
+
+                    }
+                    
+                    
+                    
+                    self.go_to_main_page()
+                    print(result!)
                 }
             })
         }
     }
 
     @IBAction func after_click_google(_ sender: Any) {
-       // GIDSignIn.sharedInstance().signOut()
+       // GIDSignIn.sharedInstance().
+        ()
         GIDSignIn.sharedInstance().signIn()
+    }
+    
+    func go_to_main_page(){
+        //
+        performSegue(withIdentifier: Constants.LOGINVIEW_TO_MAPVIEW_SEGUE_IDENTIFIER, sender: nil)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == Constants.LOGINVIEW_TO_MAPVIEW_SEGUE_IDENTIFIER{
+            if let dest: MapViewController = segue.destination as? MapViewController{
+                dest.mUserObj = self.mUserObj
+            }
+        }
     }
 
 }

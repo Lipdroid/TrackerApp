@@ -16,6 +16,6 @@ target 'TrackerApp' do
   pod 'FacebookShare'
   
   pod 'GoogleSignIn'
-
+  pod 'GoogleMaps'
 
 end

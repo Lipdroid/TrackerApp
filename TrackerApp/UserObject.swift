@@ -8,5 +8,20 @@
 
 import Foundation
 class UserObject{
+    private var _userName: String!
+    
+    var userName: String?{
+        get{
+        if _userName == nil {
+            _userName = "No Name Available"
+        }
+        return _userName
+        }
+        set{
+          _userName = newValue
+        }
+    }
+    
+
     
 }

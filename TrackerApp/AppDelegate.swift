@@ -11,6 +11,7 @@ import Firebase
 import FacebookCore
 import FBSDKCoreKit
 import GoogleSignIn
+import GoogleMaps
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -23,19 +24,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         //configure Firebase
         FIRApp.configure()
+        //initialize Map with key
+        GMSServices.provideAPIKey(MAP_API_KEY)
         
         // Access the storyboard and fetch an instance of the view controller
-        let storyboard = UIStoryboard(name: "Main", bundle: nil);
+        let storyboard = UIStoryboard(name: Constants.STORYBOARD_MAIN, bundle: nil);
         var viewController: UIViewController?
         
         if (FIRAuth.auth()?.currentUser) != nil {
             // segue to main view controller
             print("Already logged in")
-            viewController = storyboard.instantiateViewController(withIdentifier: "MapViewController") as? MapViewController
+            viewController = storyboard.instantiateViewController(withIdentifier: Constants.MAPVIEW_IDENTIFIER_STORYBOARD) as? MapViewController
 
         } else {
             // sign in
-            viewController = storyboard.instantiateViewController(withIdentifier: "LoginViewController") as! LoginViewController
+            viewController = storyboard.instantiateViewController(withIdentifier: Constants.LOGINVIEW_IDENTIFIER_STORYBOARD) as! LoginViewController
         }
         
         window?.rootViewController = viewController
