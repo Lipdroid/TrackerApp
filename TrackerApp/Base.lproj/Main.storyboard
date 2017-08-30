@@ -85,7 +85,6 @@
                     </view>
                     <connections>
                         <outlet property="google_map" destination="B3V-ha-krJ" id="ULY-cY-4NT"/>
-                        <outlet property="logout_pressed" destination="Off-q7-hOu" id="Aow-Mn-VUi"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vni-ft-99L" userLabel="First Responder" sceneMemberID="firstResponder"/>

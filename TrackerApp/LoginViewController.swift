@@ -62,7 +62,14 @@ class LoginViewController: UIViewController,GIDSignInDelegate,GIDSignInUIDelegat
             let familyName = user.profile.familyName
             let email = user.profile.email
             
-            self.mUserObj = UserObject()
+            //getting the google image url
+            let imageUrl = user.profile.imageURL(withDimension: 400).absoluteString
+//            let url  = NSURL(string: imageUrl)! as URL
+//            let data = NSData(contentsOf: url)
+//            
+            print(imageUrl)
+            
+            self.mUserObj = UserObject(authId: (FIRAuth.auth()?.currentUser?.uid)!)
             self.mUserObj?.userName = fullName
             print("Successfully logged in",fullName!)
             self.go_to_main_page()
@@ -114,7 +121,7 @@ class LoginViewController: UIViewController,GIDSignInDelegate,GIDSignInUIDelegat
                 if (error == nil){
                     self.dict = result as! [String : AnyObject]
                     
-                    self.mUserObj = UserObject()
+                    self.mUserObj = UserObject(authId: (FIRAuth.auth()?.currentUser?.uid)!)
                     if let name = self.dict["name"] as? String{
                         self.mUserObj?.userName = name
 

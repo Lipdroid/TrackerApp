@@ -13,6 +13,7 @@ public let MAP_API_KEY: String = "AIzaSyC3xIKFe9SiegwfaqP9WFAjLN53HaaBDm0"
 public let destination_latitude: CLLocationDegrees = 23.887
 public let destination_longitude: CLLocationDegrees = 90.622
 
+typealias Completion = ()->()
 
 struct Constants {
     static let STORYBOARD_MAIN = "Main"

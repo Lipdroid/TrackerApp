@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		7402EB241F5422BC00BE2897 /* UserObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7402EB231F5422BC00BE2897 /* UserObject.swift */; };
 		7402EB261F542AE700BE2897 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7402EB251F542AE700BE2897 /* MapViewController.swift */; };
+		741243B41F568D9600ADCCEF /* DADataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741243B31F568D9600ADCCEF /* DADataService.swift */; };
 		744EFDB81F552807004364D0 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744EFDB71F552807004364D0 /* Constants.swift */; };
 		744EFDBA1F555706004364D0 /* MarkerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 744EFDB91F555706004364D0 /* MarkerView.xib */; };
 		744EFDBD1F55576C004364D0 /* MarkerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744EFDBC1F55576C004364D0 /* MarkerView.swift */; };
@@ -25,6 +26,7 @@
 		3DA19FFD6374542A8AF57804 /* Pods-TrackerApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TrackerApp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TrackerApp/Pods-TrackerApp.debug.xcconfig"; sourceTree = "<group>"; };
 		7402EB231F5422BC00BE2897 /* UserObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserObject.swift; sourceTree = "<group>"; };
 		7402EB251F542AE700BE2897 /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
+		741243B31F568D9600ADCCEF /* DADataService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DADataService.swift; sourceTree = "<group>"; };
 		744EFDB71F552807004364D0 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		744EFDB91F555706004364D0 /* MarkerView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MarkerView.xib; sourceTree = "<group>"; };
 		744EFDBC1F55576C004364D0 /* MarkerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MarkerView.swift; sourceTree = "<group>"; };
@@ -99,6 +101,14 @@
 			name = Model;
 			sourceTree = "<group>";
 		};
+		741243B21F568D6600ADCCEF /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				741243B31F568D9600ADCCEF /* DADataService.swift */,
+			);
+			name = Services;
+			sourceTree = "<group>";
+		};
 		744EFDB61F5527E9004364D0 /* Constants */ = {
 			isa = PBXGroup;
 			children = (
@@ -136,6 +146,7 @@
 		749BC3121F4A7D80006AA55D /* TrackerApp */ = {
 			isa = PBXGroup;
 			children = (
+				741243B21F568D6600ADCCEF /* Services */,
 				744EFDBB1F55573D004364D0 /* CustomViews */,
 				7402EB221F54164A00BE2897 /* Model */,
 				7402EB1F1F54161100BE2897 /* View */,
@@ -285,6 +296,7 @@
 				749BC3141F4A7D80006AA55D /* AppDelegate.swift in Sources */,
 				7402EB241F5422BC00BE2897 /* UserObject.swift in Sources */,
 				744EFDBD1F55576C004364D0 /* MarkerView.swift in Sources */,
+				741243B41F568D9600ADCCEF /* DADataService.swift in Sources */,
 				7402EB261F542AE700BE2897 /* MapViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

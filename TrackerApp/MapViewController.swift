@@ -78,10 +78,15 @@ class MapViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    @IBOutlet weak var logout_pressed: UIButton!
 
     @IBAction func logout_btn_pressed(_ sender: Any) {
-        try! FIRAuth.auth()!.signOut()
+        if FIRAuth.auth()?.currentUser != nil {
+            do {
+                try FIRAuth.auth()?.signOut()
+            } catch let error as NSError {
+                print(error.localizedDescription)
+            }
+        }
 
     }
     /*
