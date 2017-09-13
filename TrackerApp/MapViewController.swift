@@ -15,10 +15,13 @@ import GoogleMaps
 
 
 class MapViewController: UIViewController {
-    var mUserObj: UserObject? = nil
+    var mUserObj: UserObject! = nil
 
     @IBOutlet weak var google_map: GMSMapView!
   
+    @IBOutlet weak var user_image: CircleImageView!
+    @IBOutlet weak var user_name_label: UILabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -26,7 +29,29 @@ class MapViewController: UIViewController {
         
         
         initMaps()
+        if(mUserObj != nil){
+            setUserData()
+        }
         
+        
+    }
+    
+    private func setUserData(){
+        if let name = mUserObj.userName{
+            user_name_label.text = name
+        }
+        //show image from image url
+        if let imageUrl = mUserObj.imageUrl{
+            let url = URL(string: imageUrl)
+            let data = try? Data(contentsOf: url!)
+        
+            if let imageData = data {
+                let image = UIImage(data: imageData)
+                user_image.image = image
+            }
+        }else{
+            print("no image found")
+        }
         
     }
     

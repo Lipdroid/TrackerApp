@@ -59,9 +59,6 @@ class UserObject{
     }
     var imageUrl: String?{
         get{
-            if _imageUrl == nil {
-                _imageUrl = "No image url Available"
-            }
             return _imageUrl
         }
         set{

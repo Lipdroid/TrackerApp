@@ -71,6 +71,7 @@ class LoginViewController: UIViewController,GIDSignInDelegate,GIDSignInUIDelegat
             
             self.mUserObj = UserObject(authId: (FIRAuth.auth()?.currentUser?.uid)!)
             self.mUserObj?.userName = fullName
+            self.mUserObj?.imageUrl = imageUrl
             print("Successfully logged in",fullName!)
             self.go_to_main_page()
 
@@ -124,6 +125,16 @@ class LoginViewController: UIViewController,GIDSignInDelegate,GIDSignInUIDelegat
                     self.mUserObj = UserObject(authId: (FIRAuth.auth()?.currentUser?.uid)!)
                     if let name = self.dict["name"] as? String{
                         self.mUserObj?.userName = name
+                        
+                        if let picture = self.dict["picture"] as? Dictionary<String,AnyObject>{
+                            if let data = picture["data"] as? Dictionary<String,AnyObject>{
+                                if let imageUrl = data["url"] as? String{
+                                    self.mUserObj?.imageUrl = imageUrl
+
+                                }
+
+                            }
+                        }
 
                     }
                     
