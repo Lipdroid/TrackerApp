@@ -32,7 +32,7 @@ class DADataService {
         REF_COMPANY.child(userObject.companyName!).child("users").child(uid).updateChildValues(user as Any as! [AnyHashable : Any])
     }
     
-    func getUserFromFirebaseDB(uid: String, companyName: String, completed: @escaping Completion){
+    func getUserFromFirebaseDB(uid: String, companyName: String, callback: @escaping Completion){
         var mUserObj = UserObject(authId: uid)
         REF_COMPANY.child(companyName).child("users").child(uid).observe(.value, with: { (snapshot) in
             // Get user value
@@ -52,7 +52,7 @@ class DADataService {
                 
                 mUserObj = UserObject(uid: uid, userName: name, userEmail: email, userCompany: companyName, imageUrl: imageUrl, userRoute: userRoute)
                 
-                completed(mUserObj)
+                callback(mUserObj)
                 
             }
         }) { (error) in
