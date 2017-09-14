@@ -21,29 +21,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        
         //configure Firebase
         FIRApp.configure()
         //initialize Map with key
         GMSServices.provideAPIKey(MAP_API_KEY)
-        
-        // Access the storyboard and fetch an instance of the view controller
-        let storyboard = UIStoryboard(name: Constants.STORYBOARD_MAIN, bundle: nil);
-        var viewController: UIViewController?
-        
-        if (FIRAuth.auth()?.currentUser) != nil {
-            // segue to main view controller
-            print("Already logged in")
-            viewController = storyboard.instantiateViewController(withIdentifier: Constants.MAPVIEW_IDENTIFIER_STORYBOARD) as? MapViewController
-
-        } else {
-            // sign in
-            viewController = storyboard.instantiateViewController(withIdentifier: Constants.LOGINVIEW_IDENTIFIER_STORYBOARD) as! LoginViewController
-        }
-        
-        window?.rootViewController = viewController
-        window?.makeKeyAndVisible()
-        
         //Configure facebook
         return FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
         

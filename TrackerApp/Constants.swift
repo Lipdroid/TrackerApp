@@ -26,7 +26,13 @@ struct Constants {
     static let LOGINVIEW_TO_MAPVIEW_SEGUE_IDENTIFIER = "toMapSegue"
     static let LOGOUT_SEGUE_IDENTIFIER = "toLoginPage"
 
+    //user status on trip
+    static let USER_ROUTE_STATUS_NOT_STARTED = "notStarted"
+    static let USER_ROUTE_STATUS_ON_TRAFFIC = "onTraffic"
+    static let USER_ROUTE_STATUS_WAITING = "waiting"
+    static let USER_ROUTE_STATUS_TRIP_STARTED = "tripStarted"
     
-    
+    static let DEFAULT_COMPANY_NAME = "defaultCompany"
+
 
 }

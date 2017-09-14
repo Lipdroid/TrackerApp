@@ -25,7 +25,14 @@ class LoginViewController: UIViewController,GIDSignInDelegate,GIDSignInUIDelegat
         GIDSignIn.sharedInstance().clientID = FIRApp.defaultApp()?.options.clientID
         GIDSignIn.sharedInstance().delegate = self
         GIDSignIn.sharedInstance().uiDelegate = self
-
+        
+        if (FIRAuth.auth()?.currentUser) != nil {
+            // segue to main view controller
+            print("Already logged in")
+            //get User Data from Firebase & autologin
+            
+            
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -70,8 +77,6 @@ class LoginViewController: UIViewController,GIDSignInDelegate,GIDSignInUIDelegat
             print(imageUrl)
             
             self.mUserObj = UserObject(authId: (FIRAuth.auth()?.currentUser?.uid)!)
-            self.mUserObj?.userName = fullName
-            self.mUserObj?.imageUrl = imageUrl
             print("Successfully logged in",fullName!)
             self.go_to_main_page()
 
@@ -87,7 +92,6 @@ class LoginViewController: UIViewController,GIDSignInDelegate,GIDSignInUIDelegat
                 let fbloginresult : FBSDKLoginManagerLoginResult = result!
                 if fbloginresult.grantedPermissions != nil {
                     if(fbloginresult.grantedPermissions.contains("email")){
-                
                         //login successfully
                         //send the access token to firebase for authenticate
                         let accessToken = FBSDKAccessToken.current()
@@ -100,13 +104,8 @@ class LoginViewController: UIViewController,GIDSignInDelegate,GIDSignInUIDelegat
                             if(error != nil){
                                 print("Something went wrong",error ?? "")
                             }
-                            
-                            
                             self.getFBUserData()
-
-                            
-
-                            print("Logged In")
+                            print("facebook authentiion complete through firebase")
                         })
                         
                     }
@@ -120,28 +119,15 @@ class LoginViewController: UIViewController,GIDSignInDelegate,GIDSignInUIDelegat
         if((FBSDKAccessToken.current()) != nil){
             FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "id, name, first_name, last_name, picture.type(large), email"]).start(completionHandler: { (connection, result, error) -> Void in
                 if (error == nil){
-                    self.dict = result as! [String : AnyObject]
-                    
-                    self.mUserObj = UserObject(authId: (FIRAuth.auth()?.currentUser?.uid)!)
-                    if let name = self.dict["name"] as? String{
-                        self.mUserObj?.userName = name
-                        
-                        if let picture = self.dict["picture"] as? Dictionary<String,AnyObject>{
-                            if let data = picture["data"] as? Dictionary<String,AnyObject>{
-                                if let imageUrl = data["url"] as? String{
-                                    self.mUserObj?.imageUrl = imageUrl
+                    print(result!)
+                    if let dict = result as? Dictionary<String,AnyObject>{
+                        self.mUserObj = UserObject(authId: (FIRAuth.auth()?.currentUser?.uid)!,dict: dict)
+                        DADataService.instance.createFirebaseDBUser(uid: (FIRAuth.auth()?.currentUser?.uid)!, userObject: self.mUserObj!)
+                        self.go_to_main_page()
 
-                                }
-
-                            }
-                        }
 
                     }
                     
-                    
-                    
-                    self.go_to_main_page()
-                    print(result!)
                 }
             })
         }
