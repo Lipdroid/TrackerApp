@@ -41,13 +41,12 @@ class LoginViewController: UIViewController,GIDSignInDelegate,GIDSignInUIDelegat
     }
     
     func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
-        print("123")
         if let err = error{
             print("Something went wrong with google login",err)
             return
         }
         
-        print("Successfully Signed in")
+        print("Successfully Signed in by google")
         guard let idToken = user.authentication.idToken else {
             return
         }
@@ -59,25 +58,9 @@ class LoginViewController: UIViewController,GIDSignInDelegate,GIDSignInUIDelegat
             if(error != nil){
                 print("error")
                 return
-            }
-            
-            //guard let uid = user?.userID else{return}
-            let userId = user.userID                  // For client-side use only!
-            let idToken = user.authentication.idToken // Safe to send to the server
-            let fullName = user.profile.name
-            let givenName = user.profile.givenName
-            let familyName = user.profile.familyName
-            let email = user.profile.email
-            
-            //getting the google image url
-            let imageUrl = user.profile.imageURL(withDimension: 400).absoluteString
-//            let url  = NSURL(string: imageUrl)! as URL
-//            let data = NSData(contentsOf: url)
-//            
-            print(imageUrl)
-            
-            self.mUserObj = UserObject(authId: (FIRAuth.auth()?.currentUser?.uid)!)
-            print("Successfully logged in",fullName!)
+            }            
+            self.mUserObj = UserObject(authId: (FIRAuth.auth()?.currentUser?.uid)!, user: user)
+            self.addUpdateUserToFirebaseDB();
             self.go_to_main_page()
 
         })
@@ -122,7 +105,7 @@ class LoginViewController: UIViewController,GIDSignInDelegate,GIDSignInUIDelegat
                     print(result!)
                     if let dict = result as? Dictionary<String,AnyObject>{
                         self.mUserObj = UserObject(authId: (FIRAuth.auth()?.currentUser?.uid)!,dict: dict)
-                        DADataService.instance.createFirebaseDBUser(uid: (FIRAuth.auth()?.currentUser?.uid)!, userObject: self.mUserObj!)
+                        self.addUpdateUserToFirebaseDB();
                         self.go_to_main_page()
 
 
@@ -150,6 +133,11 @@ class LoginViewController: UIViewController,GIDSignInDelegate,GIDSignInUIDelegat
                 dest.mUserObj = self.mUserObj
             }
         }
+    }
+    
+    private func addUpdateUserToFirebaseDB(){
+        //it will add new users and update old users
+        DADataService.instance.createFirebaseDBUser(uid: (FIRAuth.auth()?.currentUser?.uid)!, userObject: self.mUserObj!)
     }
 
 }

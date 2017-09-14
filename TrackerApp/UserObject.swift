@@ -7,6 +7,8 @@
 //
 
 import Foundation
+import GoogleSignIn
+
 class UserObject{
     private var _companyName: String!
     private var _userName: String!
@@ -41,6 +43,7 @@ class UserObject{
         self._userNodeId = authId
     }
     
+    //this is for facebook user
     init(authId: String, dict: Dictionary<String, AnyObject>) {
         _userRouteStatus = Constants.USER_ROUTE_STATUS_NOT_STARTED;
         _companyName = Constants.DEFAULT_COMPANY_NAME;
@@ -59,6 +62,23 @@ class UserObject{
             }
         }
     }
+    
+    //this is for google user
+    init(authId: String, user: GIDGoogleUser!) {
+        _userRouteStatus = Constants.USER_ROUTE_STATUS_NOT_STARTED;
+        _companyName = Constants.DEFAULT_COMPANY_NAME;
+        self._userNodeId = authId
+        if let name = user.profile.name{
+            _userName = name
+        }
+        if let email = user.profile.email{
+            _userEmail = email
+        }
+        let imageUrl = user.profile.imageURL(withDimension: 400).absoluteString
+        _imageUrl = imageUrl
+
+    }
+
 
     
 }
