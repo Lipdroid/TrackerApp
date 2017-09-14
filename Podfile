@@ -6,16 +6,14 @@ target 'TrackerApp' do
   use_frameworks!
   
   # Pods for TrackerApp
-
   pod 'Firebase/Core'
   pod 'Firebase/Auth’
   pod 'Firebase/Database’
-  
   pod 'FacebookCore'
   pod 'FacebookLogin'
   pod 'FacebookShare'
-  
   pod 'GoogleSignIn'
   pod 'GoogleMaps'
+  pod 'SwiftKeychainWrapper'
 
 end

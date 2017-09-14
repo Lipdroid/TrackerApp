@@ -13,7 +13,7 @@ public let MAP_API_KEY: String = "AIzaSyC3xIKFe9SiegwfaqP9WFAjLN53HaaBDm0"
 public let destination_latitude: CLLocationDegrees = 23.887
 public let destination_longitude: CLLocationDegrees = 90.622
 
-typealias Completion = ()->()
+typealias Completion = (AnyObject)->()
 
 struct Constants {
     static let STORYBOARD_MAIN = "Main"
@@ -33,6 +33,10 @@ struct Constants {
     static let USER_ROUTE_STATUS_TRIP_STARTED = "tripStarted"
     
     static let DEFAULT_COMPANY_NAME = "defaultCompany"
+    static let KEY_UID = "uid"
+    static let KEY_COMPANY = "companyName"
+
+
 
 
 }

@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "TrackerApp/LoginViewController.swift"
-            timestampString = "527056056.230942"
+            timestampString = "527064256.20042"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "108"
-            endingLineNumber = "108"
+            startingLineNumber = "126"
+            endingLineNumber = "126"
             landmarkName = "getFBUserData()"
             landmarkType = "7">
          </BreakpointContent>
@@ -26,13 +26,61 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "TrackerApp/LoginViewController.swift"
-            timestampString = "527056056.230942"
+            timestampString = "527064256.20042"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "113"
-            endingLineNumber = "113"
+            startingLineNumber = "131"
+            endingLineNumber = "131"
             landmarkName = "getFBUserData()"
             landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "TrackerApp/DADataService.swift"
+            timestampString = "527063625.278856"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "37"
+            endingLineNumber = "37"
+            landmarkName = "getUserFromFirebaseDB(uid:companyName:completed:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "TrackerApp.DADataService.getUserFromFirebaseDB (uid : Swift.String, companyName : Swift.String) -&gt; TrackerApp.UserObject"
+                  moduleName = "TrackerApp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mdmunirhossain/Documents/IOSProjects/TrackerApp/TrackerApp/DADataService.swift"
+                  timestampString = "527061433.484117"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "36"
+                  endingLineNumber = "36"
+                  offsetFromSymbolStart = "156">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "TrackerApp.DADataService.(getUserFromFirebaseDB (uid : Swift.String, companyName : Swift.String) -&gt; TrackerApp.UserObject).(closure #1)"
+                  moduleName = "TrackerApp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mdmunirhossain/Documents/IOSProjects/TrackerApp/TrackerApp/DADataService.swift"
+                  timestampString = "527061433.487943"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "38"
+                  endingLineNumber = "38"
+                  offsetFromSymbolStart = "15">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

@@ -12,6 +12,7 @@ import FacebookLogin
 import FBSDKLoginKit
 import GoogleSignIn
 import GoogleMaps
+import SwiftKeychainWrapper
 
 
 class MapViewController: UIViewController {
@@ -107,7 +108,12 @@ class MapViewController: UIViewController {
     @IBAction func logout_btn_pressed(_ sender: Any) {
         if FIRAuth.auth()?.currentUser != nil {
             do {
+                //clear keychain
+                KeychainWrapper.standard.removeObject(forKey: Constants.KEY_UID)
+                KeychainWrapper.standard.removeObject(forKey: Constants.KEY_COMPANY)
+                //logout firebase user
                 try FIRAuth.auth()?.signOut()
+                
             } catch let error as NSError {
                 print(error.localizedDescription)
             }

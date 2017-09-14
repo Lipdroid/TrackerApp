@@ -23,7 +23,6 @@ class DADataService {
     var REF_COMPANY: FIRDatabaseReference{
         return _REF_COMPANY
     }
-    
     func createFirebaseDBUser(uid: String, userObject: UserObject){
         let user = ["userName": userObject.userName,
                     "userEmail": userObject.userEmail,
@@ -31,8 +30,36 @@ class DADataService {
                     "userRouteStatus": userObject.userRouteStatus]
         
         REF_COMPANY.child(userObject.companyName!).child("users").child(uid).updateChildValues(user as Any as! [AnyHashable : Any])
-        
+    }
+    
+    func getUserFromFirebaseDB(uid: String, companyName: String, completed: @escaping Completion){
+        var mUserObj = UserObject(authId: uid)
+        REF_COMPANY.child(companyName).child("users").child(uid).observe(.value, with: { (snapshot) in
+            // Get user value
+            if let snap = snapshot.value as? Dictionary<String, String>{
+                guard let name = snap["userName"] else{
+                    return
+                }
+                guard let email = snap["userEmail"] else{
+                    return
+                }
+                guard let imageUrl = snap["imageUrl"] else{
+                    return
+                }
+                guard let userRoute = snap["userRouteStatus"] else{
+                    return
+                }
+                
+                mUserObj = UserObject(uid: uid, userName: name, userEmail: email, userCompany: companyName, imageUrl: imageUrl, userRoute: userRoute)
+                
+                completed(mUserObj)
+                
+            }
+        }) { (error) in
+            print(error.localizedDescription)
+        }
         
     }
+    
 
 }

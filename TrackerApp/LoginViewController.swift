@@ -11,6 +11,8 @@ import Firebase
 import FacebookLogin
 import FBSDKLoginKit
 import GoogleSignIn
+import SwiftKeychainWrapper
+
 
 class LoginViewController: UIViewController,GIDSignInDelegate,GIDSignInUIDelegate {
     var dict : [String : AnyObject]!
@@ -26,12 +28,19 @@ class LoginViewController: UIViewController,GIDSignInDelegate,GIDSignInUIDelegat
         GIDSignIn.sharedInstance().delegate = self
         GIDSignIn.sharedInstance().uiDelegate = self
         
-        if (FIRAuth.auth()?.currentUser) != nil {
+        if let uid = KeychainWrapper.standard.string(forKey: Constants.KEY_UID){
             // segue to main view controller
             print("Already logged in")
             //get User Data from Firebase & autologin
+            if let company_name = KeychainWrapper.standard.string(forKey: Constants.KEY_COMPANY){
+                DADataService.instance.getUserFromFirebaseDB(uid: uid,companyName: company_name){(user) in
+                    self.mUserObj = user as? UserObject
+                    self.go_to_main_page()
+
+                }
+            }
             
-            
+
         }
     }
 
@@ -58,10 +67,15 @@ class LoginViewController: UIViewController,GIDSignInDelegate,GIDSignInUIDelegat
             if(error != nil){
                 print("error")
                 return
-            }            
-            self.mUserObj = UserObject(authId: (FIRAuth.auth()?.currentUser?.uid)!, user: user)
-            self.addUpdateUserToFirebaseDB();
-            self.go_to_main_page()
+            }
+            if let authId = FIRAuth.auth()?.currentUser?.uid{
+                self.mUserObj = UserObject(authId: authId, user: user)
+                KeychainWrapper.standard.set(authId, forKey: Constants.KEY_UID)
+                KeychainWrapper.standard.set((self.mUserObj?.companyName)!
+                    , forKey: Constants.KEY_COMPANY)
+                self.addUpdateUserToFirebaseDB();
+                self.go_to_main_page()
+            }
 
         })
         
@@ -104,10 +118,14 @@ class LoginViewController: UIViewController,GIDSignInDelegate,GIDSignInUIDelegat
                 if (error == nil){
                     print(result!)
                     if let dict = result as? Dictionary<String,AnyObject>{
-                        self.mUserObj = UserObject(authId: (FIRAuth.auth()?.currentUser?.uid)!,dict: dict)
-                        self.addUpdateUserToFirebaseDB();
-                        self.go_to_main_page()
-
+                        if let authId = FIRAuth.auth()?.currentUser?.uid{
+                            self.mUserObj = UserObject(authId: authId,dict: dict)
+                            KeychainWrapper.standard.set(authId, forKey: Constants.KEY_UID)
+                            KeychainWrapper.standard.set((self.mUserObj?.companyName)!
+                                , forKey: Constants.KEY_COMPANY)
+                            self.addUpdateUserToFirebaseDB();
+                            self.go_to_main_page()
+                        }
 
                     }
                     

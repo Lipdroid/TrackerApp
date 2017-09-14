@@ -79,6 +79,15 @@ class UserObject{
 
     }
 
+    //for firebase User
+    init(uid: String,userName: String,userEmail: String,userCompany: String,imageUrl: String,userRoute:String) {
+        self._userNodeId = uid
+        self._userName = userName
+        self._companyName = userCompany
+        self._imageUrl = imageUrl
+        self._userEmail = userEmail
+        self._userRouteStatus = userRoute
 
+    }
     
 }
