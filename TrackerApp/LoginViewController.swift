@@ -109,6 +109,8 @@ class LoginViewController: UIViewController,GIDSignInDelegate,GIDSignInUIDelegat
                         FIRAuth.auth()?.signIn(with: credential, completion: { (User, error) in
                             if(error != nil){
                                 print("Something went wrong",error ?? "")
+                                Progress.sharedInstance.dismissLoading()
+                                return
                             }
                             self.getFBUserData()
                             print("facebook authentiion complete through firebase")
@@ -139,6 +141,8 @@ class LoginViewController: UIViewController,GIDSignInDelegate,GIDSignInUIDelegat
                                 , forKey: Constants.KEY_COMPANY)
                             self.addUpdateUserToFirebaseDB();
                             self.go_to_main_page()
+                        }else{
+                            print("no uid found from firebase current user for fb")
                         }
 
                     }
