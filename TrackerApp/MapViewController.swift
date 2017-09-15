@@ -97,6 +97,7 @@ class MapViewController: UIViewController {
                 print(error.localizedDescription)
             }
         }
+        dismiss(animated: true, completion: nil)
 
     }
     /*

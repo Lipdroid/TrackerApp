@@ -91,7 +91,6 @@
                                         <state key="normal" title="LogOut"/>
                                         <connections>
                                             <action selector="logout_btn_pressed:" destination="JRU-wA-dhl" eventType="touchUpInside" id="qez-3y-tnK"/>
-                                            <segue destination="BYZ-38-t0r" kind="show" identifier="toLoginPage" id="Zxa-5f-oDH"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -120,7 +119,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vni-ft-99L" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="439" y="166"/>
+            <point key="canvasLocation" x="498" y="166"/>
         </scene>
     </scenes>
     <resources>

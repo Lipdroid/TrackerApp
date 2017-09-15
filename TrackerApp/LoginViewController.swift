@@ -13,7 +13,6 @@ import FBSDKLoginKit
 import GoogleSignIn
 import SwiftKeychainWrapper
 
-
 class LoginViewController: UIViewController,GIDSignInDelegate,GIDSignInUIDelegate {
     var dict : [String : AnyObject]!
     var mUserObj: UserObject? = nil
@@ -21,7 +20,7 @@ class LoginViewController: UIViewController,GIDSignInDelegate,GIDSignInUIDelegat
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        
+
         
         //configure Google Signin
         GIDSignIn.sharedInstance().clientID = FIRApp.defaultApp()?.options.clientID
@@ -33,7 +32,9 @@ class LoginViewController: UIViewController,GIDSignInDelegate,GIDSignInUIDelegat
             print("Already logged in")
             //get User Data from Firebase & autologin
             if let company_name = KeychainWrapper.standard.string(forKey: Constants.KEY_COMPANY){
+                Progress.sharedInstance.showLoading()
                 DADataService.instance.getUserFromFirebaseDB(uid: uid,companyName: company_name){(user) in
+                    Progress.sharedInstance.dismissLoading()
                     self.mUserObj = user as? UserObject
                     self.go_to_main_page()
 
@@ -52,6 +53,7 @@ class LoginViewController: UIViewController,GIDSignInDelegate,GIDSignInUIDelegat
     func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
         if let err = error{
             print("Something went wrong with google login",err)
+            Progress.sharedInstance.dismissLoading()
             return
         }
         
@@ -64,6 +66,7 @@ class LoginViewController: UIViewController,GIDSignInDelegate,GIDSignInUIDelegat
         }
         let credential = FIRGoogleAuthProvider.credential(withIDToken: idToken, accessToken: accessToken)
         FIRAuth.auth()?.signIn(with: credential, completion: { (User, error) in
+            Progress.sharedInstance.dismissLoading()
             if(error != nil){
                 print("error")
                 return
@@ -83,10 +86,16 @@ class LoginViewController: UIViewController,GIDSignInDelegate,GIDSignInUIDelegat
 
 
     @IBAction func after_click_facebook_login(_ sender: Any) {
+        Progress.sharedInstance.showLoading()
         let fbLoginManager : FBSDKLoginManager = FBSDKLoginManager()
         fbLoginManager.logIn(withReadPermissions: ["email"], from: self) { (result, error) in
             if (error == nil){
                 let fbloginresult : FBSDKLoginManagerLoginResult = result!
+                //check if someone pressed cancel or done
+                guard (fbloginresult.grantedPermissions) != nil else{
+                    Progress.sharedInstance.dismissLoading()
+                    return
+                }
                 if fbloginresult.grantedPermissions != nil {
                     if(fbloginresult.grantedPermissions.contains("email")){
                         //login successfully
@@ -105,8 +114,12 @@ class LoginViewController: UIViewController,GIDSignInDelegate,GIDSignInUIDelegat
                             print("facebook authentiion complete through firebase")
                         })
                         
+                    }else{
+                        Progress.sharedInstance.dismissLoading()
                     }
                 }
+            }else{
+                Progress.sharedInstance.dismissLoading()
             }
         }
 
@@ -115,6 +128,7 @@ class LoginViewController: UIViewController,GIDSignInDelegate,GIDSignInUIDelegat
     func getFBUserData(){
         if((FBSDKAccessToken.current()) != nil){
             FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "id, name, first_name, last_name, picture.type(large), email"]).start(completionHandler: { (connection, result, error) -> Void in
+                Progress.sharedInstance.dismissLoading()
                 if (error == nil){
                     print(result!)
                     if let dict = result as? Dictionary<String,AnyObject>{
@@ -136,7 +150,7 @@ class LoginViewController: UIViewController,GIDSignInDelegate,GIDSignInUIDelegat
 
     @IBAction func after_click_google(_ sender: Any) {
        // GIDSignIn.sharedInstance().
-        ()
+        Progress.sharedInstance.showLoading()
         GIDSignIn.sharedInstance().signIn()
     }
     
