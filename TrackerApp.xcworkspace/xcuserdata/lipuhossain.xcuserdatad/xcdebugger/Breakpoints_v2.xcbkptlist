@@ -26,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "TrackerApp/MapViewController.swift"
-            timestampString = "527029914.308732"
+            timestampString = "527182071.467036"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "46"
-            endingLineNumber = "46"
+            startingLineNumber = "42"
+            endingLineNumber = "42"
             landmarkName = "setUserData()"
             landmarkType = "7">
          </BreakpointContent>
@@ -42,11 +42,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "TrackerApp/MapViewController.swift"
-            timestampString = "527029916.710712"
+            timestampString = "527182071.467036"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "44"
-            endingLineNumber = "44"
+            startingLineNumber = "40"
+            endingLineNumber = "40"
             landmarkName = "setUserData()"
             landmarkType = "7">
          </BreakpointContent>
@@ -65,38 +65,22 @@
             endingLineNumber = "126"
             landmarkName = "getFBUserData()"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "TrackerApp.LoginViewController.(getFBUserData () -&gt; ()).(closure #1)"
-                  moduleName = "TrackerApp"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/lipuhossain/Documents/IOS%20Programming/TrackerApp/TrackerApp/LoginViewController.swift"
-                  timestampString = "527030723.822975"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "126"
-                  endingLineNumber = "126"
-                  offsetFromSymbolStart = "894">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "TrackerApp.LoginViewController.(getFBUserData () -&gt; ()).(closure #1)"
-                  moduleName = "TrackerApp"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/lipuhossain/Documents/IOS%20Programming/TrackerApp/TrackerApp/LoginViewController.swift"
-                  timestampString = "527030723.825216"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "126"
-                  endingLineNumber = "126"
-                  offsetFromSymbolStart = "1528">
-               </Location>
-            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "TrackerApp/MapViewController.swift"
+            timestampString = "527183231.309692"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "125"
+            endingLineNumber = "125"
+            landmarkName = "locationManager(_:didUpdateLocations:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
