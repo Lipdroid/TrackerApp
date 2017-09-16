@@ -21,6 +21,13 @@ class MapViewController: UIViewController {
     @IBOutlet weak var user_image: CircleImageView!
     @IBOutlet weak var user_name_label: UILabel!
     let locationManager = CLLocationManager()
+    
+    deinit {
+        // Release all recoureces
+        // perform the deinitialization
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
+
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,9 +35,42 @@ class MapViewController: UIViewController {
         initMaps()
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
+        NotificationCenter.default.addObserver(self, selector:#selector(checkForLocationPermission), name: NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
+
         if(mUserObj != nil){
             setUserData()
         }
+    }
+    
+    func checkForLocationPermission(){
+        if (CLLocationManager.locationServicesEnabled())
+        {
+            switch(CLLocationManager.authorizationStatus())
+            {
+            case .notDetermined, .restricted, .denied:
+                print("User disabled Location permisson")
+                showAlertForSettings()
+                break
+            case .authorizedAlways, .authorizedWhenInUse:
+                print("User enabled Location permission")
+                locationManager.delegate = self
+                locationManager.desiredAccuracy = kCLLocationAccuracyBest
+                locationManager.requestAlwaysAuthorization()
+                locationManager.startUpdatingLocation()
+                //google_map.isMyLocationEnabled = true
+                google_map.settings.myLocationButton = true
+                break
+            }
+            
+        }else{
+            showAlertForSettings()
+        }
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        checkForLocationPermission()
+        
     }
     
     private func setUserData(){
@@ -49,6 +89,8 @@ class MapViewController: UIViewController {
         }else{
             print("no image found")
         }
+        
+        
         
     }
     
@@ -100,15 +142,22 @@ class MapViewController: UIViewController {
         dismiss(animated: true, completion: nil)
 
     }
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    private func showAlertForSettings(){
+        // create the alert
+        let alert = UIAlertController(title: "Alert", message: "Please enable your location service from settings to run this app", preferredStyle: UIAlertControllerStyle.alert)
+        
+        // add the actions (buttons)
+        alert.addAction(UIAlertAction(title: "Settings", style: UIAlertActionStyle.default, handler: goToSystemSettings))
+        //alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil))
+        
+        // show the alert
+        self.present(alert, animated: true, completion: nil)
     }
-    */
+    
+    func goToSystemSettings(action: UIAlertAction) {
+        UIApplication.shared.open(URL(string: UIApplicationOpenSettingsURLString)!)
+    
+    }
 
 }
 
@@ -118,16 +167,26 @@ extension MapViewController: CLLocationManagerDelegate {
     private func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
         if status == .authorizedWhenInUse {
             locationManager.startUpdatingLocation()
-            google_map.isMyLocationEnabled = true
-            google_map.settings.myLocationButton = true
         }
     }
 //locationManager(_:didUpdateLocations:) executes when the location manager receives new location data.
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let location = locations.first {
-            google_map.camera = GMSCameraPosition(target: location.coordinate, zoom: 10, bearing: 0, viewingAngle: 0)
-            self.addMarker(location: location)
-            locationManager.stopUpdatingLocation()
+            if let user_lat = mUserObj.user_start_lat,let user_lng = mUserObj.user_start_lng
+            {
+                //journey already started or just opened the app
+                print("new location: lat:\(location.coordinate.latitude), lng:\(location.coordinate.longitude) user:\(user_lat),\(user_lng)")
+
+            }else{
+                mUserObj.user_start_lat = "\(location.coordinate.latitude)"
+                mUserObj.user_start_lng = "\(location.coordinate.longitude)"
+                google_map.camera = GMSCameraPosition(target: location.coordinate, zoom: 18, bearing: 0, viewingAngle: 0)
+                self.addMarker(location: location)
+                locationManager.stopUpdatingLocation()
+            }
+            
+
+            
         }
         
     }
@@ -148,5 +207,7 @@ extension MapViewController: CLLocationManagerDelegate {
        // google_map.animate(to: camera)
         
     }
- 
+    
+    
+   
 }

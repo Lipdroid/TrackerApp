@@ -18,6 +18,11 @@ class UserObject{
     private var _imageUrl: String!
     
     
+    private var _user_start_lat: String!
+    private var _user_start_lng: String!
+    
+    
+    
     //getters
     var companyName: String?{
         return _companyName
@@ -36,6 +41,22 @@ class UserObject{
     }
     var imageUrl: String?{
             return _imageUrl
+    }
+    var user_start_lat: String?{
+        get{
+            return _user_start_lat
+        }
+        set{
+           _user_start_lat = newValue
+        }
+    }
+    var user_start_lng: String?{
+        get{
+            return _user_start_lng
+        }
+        set{
+            _user_start_lng = newValue
+        }
     }
     
     //initialize

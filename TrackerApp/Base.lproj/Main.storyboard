@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -72,7 +72,7 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="p3R-Um-CRq">
-                                <rect key="frame" x="67" y="30" width="240" height="128"/>
+                                <rect key="frame" x="67" y="30" width="240" height="100"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Liep jshdkro" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="awq-TL-NRz">
                                         <rect key="frame" x="96" y="23" width="111" height="21"/>
@@ -81,7 +81,7 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <imageView clipsSubviews="YES" clearsContextBeforeDrawing="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="dummy_profile_pic" translatesAutoresizingMaskIntoConstraints="NO" id="HxB-kT-CUH" customClass="CircleImageView" customModule="TrackerApp" customModuleProvider="target">
+                                    <imageView clipsSubviews="YES" clearsContextBeforeDrawing="NO" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="dummy_profile_pic" translatesAutoresizingMaskIntoConstraints="NO" id="HxB-kT-CUH" customClass="CircleImageView" customModule="TrackerApp" customModuleProvider="target">
                                         <rect key="frame" x="8" y="23" width="80" height="80"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     </imageView>
@@ -97,8 +97,18 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <color key="tintColor" red="0.50196081400000003" green="0.50196081400000003" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="128" id="7dx-Lf-xQ8"/>
+                                    <constraint firstAttribute="height" constant="100" id="7dx-Lf-xQ8"/>
                                     <constraint firstAttribute="width" constant="240" id="bqf-gf-zUn"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="materialView" value="YES"/>
+                                </userDefinedRuntimeAttributes>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DIC-eh-8ue">
+                                <rect key="frame" x="8" y="579" width="359" height="80"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="80" id="sHh-15-0Zh"/>
                                 </constraints>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="materialView" value="YES"/>
@@ -107,7 +117,10 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstAttribute="trailing" secondItem="DIC-eh-8ue" secondAttribute="trailing" constant="8" id="7ZF-sa-6yO"/>
+                            <constraint firstItem="PcB-xI-t7c" firstAttribute="top" secondItem="DIC-eh-8ue" secondAttribute="bottom" constant="8" id="NVH-bM-bNa"/>
                             <constraint firstItem="p3R-Um-CRq" firstAttribute="centerX" secondItem="50i-cE-GWe" secondAttribute="centerX" id="bvO-R9-9Td"/>
+                            <constraint firstItem="DIC-eh-8ue" firstAttribute="leading" secondItem="50i-cE-GWe" secondAttribute="leading" constant="8" id="fdO-Rc-9n4"/>
                             <constraint firstItem="p3R-Um-CRq" firstAttribute="top" secondItem="Pdy-jC-lUU" secondAttribute="bottom" constant="10" id="kgB-rT-yVV"/>
                         </constraints>
                     </view>
@@ -119,7 +132,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vni-ft-99L" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="498" y="166"/>
+            <point key="canvasLocation" x="496.80000000000001" y="165.06746626686657"/>
         </scene>
     </scenes>
     <resources>
