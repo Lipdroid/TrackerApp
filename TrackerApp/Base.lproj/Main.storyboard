@@ -106,6 +106,16 @@
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DIC-eh-8ue">
                                 <rect key="frame" x="8" y="579" width="359" height="80"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yF3-Cq-pKn">
+                                        <rect key="frame" x="268" y="0.0" width="91" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" title="UserLocation"/>
+                                        <connections>
+                                            <action selector="currentLocation_btn_pressed:" destination="JRU-wA-dhl" eventType="touchUpInside" id="X6l-ss-uHj"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="80" id="sHh-15-0Zh"/>

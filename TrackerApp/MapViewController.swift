@@ -29,10 +29,17 @@ class MapViewController: UIViewController {
 
     }
 
+    @IBAction func currentLocation_btn_pressed(_ sender: Any) {
+        guard let lat = mUserObj.user_start_lat,let lng = mUserObj.user_start_lng else {
+            return
+        }
+        let camera = GMSCameraPosition.camera(withLatitude: (Double)(lat)!, longitude: (Double)(lng)!, zoom: 15.0)
+        google_map.animate(to: camera)
+
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        initMaps()
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
         NotificationCenter.default.addObserver(self, selector:#selector(checkForLocationPermission), name: NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
@@ -56,9 +63,7 @@ class MapViewController: UIViewController {
                 locationManager.delegate = self
                 locationManager.desiredAccuracy = kCLLocationAccuracyBest
                 locationManager.requestAlwaysAuthorization()
-                locationManager.startUpdatingLocation()
-                //google_map.isMyLocationEnabled = true
-                google_map.settings.myLocationButton = true
+                locationManager.startUpdatingLocation()add
                 break
             }
             
@@ -78,47 +83,24 @@ class MapViewController: UIViewController {
             user_name_label.text = name
         }
         //show image from image url
+        
+        
         if let imageUrl = mUserObj.imageUrl{
-            let url = URL(string: imageUrl)
-            let data = try? Data(contentsOf: url!)
-        
-            if let imageData = data {
-                let image = UIImage(data: imageData)
-                user_image.image = image
-            }
-        }else{
-            print("no image found")
+            user_image.image = convertURLToUIImage(imageUrl: imageUrl)
         }
-        
-        
-        
     }
     
-    private func initMaps(){
-        // Create a GMSCameraPosition that tells the map to display the
-        // coordinate -33.86,151.20 at zoom level 6.
-//        let camera = GMSCameraPosition.camera(withLatitude: destination_latitude, longitude: destination_latitude, zoom: 5.0)
-//
-//        // Creates a marker in the center of the map.
-//        let marker = GMSMarker()
-//        marker.position = CLLocationCoordinate2D(latitude: destination_latitude, longitude: destination_latitude)
-//        marker.title = "Oceanize"
-//        marker.snippet = "Bangladesh"
-//        marker.appearAnimation = .pop
-//        //marker.iconView = MarkerView()
-//       // marker.map = self.google_map
-//
-//        google_map.animate(to: camera)
-//        
-//        // Delay the dismissal by 5 seconds
-//        let when = DispatchTime.now() + 2 // change 2 to desired number of seconds
-//        DispatchQueue.main.asyncAfter(deadline: when) {
-//            // Your code with delay
-//            self.addMarker()
-//        }
-
-
+    func convertURLToUIImage(imageUrl: String)->UIImage{
+        let url = URL(string: imageUrl)
+        let data = try? Data(contentsOf: url!)
+        
+        if let imageData = data {
+            let image = UIImage(data: imageData)
+            return image!
+        }
+        return UIImage()
     }
+    
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -169,7 +151,7 @@ extension MapViewController: CLLocationManagerDelegate {
             locationManager.startUpdatingLocation()
         }
     }
-//locationManager(_:didUpdateLocations:) executes when the location manager receives new location data.
+    //locationManager(_:didUpdateLocations:) executes when the location manager receives new location data.
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let location = locations.first {
             if let user_lat = mUserObj.user_start_lat,let user_lng = mUserObj.user_start_lng
@@ -196,18 +178,49 @@ extension MapViewController: CLLocationManagerDelegate {
         // coordinate -33.86,151.20 at zoom level 6.
 //        let camera = GMSCameraPosition.camera(withLatitude: location.coordinate.latitude, longitude: location.coordinate.longitude, zoom: 15.0)
         // Creates a marker in the center of the map.
-        let marker = GMSMarker()
-        marker.position = CLLocationCoordinate2D(latitude: location.coordinate.latitude ,longitude: location.coordinate.longitude)
-        marker.title = mUserObj.userName
-        marker.snippet = mUserObj.userEmail
-        marker.appearAnimation = .pop
-        //marker.iconView = MarkerView()
-        marker.map = self.google_map
+        let user_marker = GMSMarker()
+        user_marker.position = CLLocationCoordinate2D(latitude: location.coordinate.latitude ,longitude: location.coordinate.longitude)
+        user_marker.title = mUserObj.userName
+        user_marker.snippet = mUserObj.userEmail
+        user_marker.appearAnimation = .pop
+        user_marker.icon = createMarkerWithImage()
+        user_marker.map = self.google_map
     
        // google_map.animate(to: camera)
         
     }
     
-    
+    func createMarkerWithImage()-> UIImage{
+        ///Creating UIView for Custom Marker
+        let DynamicView=UIView(frame: CGRect(x: 0, y: 0, width: 50, height: 50))
+        DynamicView.backgroundColor=UIColor.clear
+        
+        //Creating Marker Pin imageview for Custom Marker
+        var imageViewForPinMarker : UIImageView
+        imageViewForPinMarker  = UIImageView(frame:CGRect(x: 0, y: 0, width: 40, height: 50));
+        imageViewForPinMarker.image = UIImage(named:"marker_window")
+        
+        //Creating User Profile imageview
+        var imageViewForUserProfile : UIImageView
+        imageViewForUserProfile  = UIImageView(frame:CGRect(x: 0, y: 0, width: 40, height: 35));
+        imageViewForUserProfile.image = convertURLToUIImage(imageUrl: mUserObj.imageUrl!)
+        
+        //set the profile pic in the center
+        //imageViewForUserProfile.center = CGPoint(x: imageViewForPinMarker.frame.size.width  / 2,
+                                            //     y: imageViewForPinMarker.frame.size.height / 2);
+        
+        //Adding userprofile imageview inside Marker Pin Imageview
+        imageViewForPinMarker.addSubview(imageViewForUserProfile)
+        
+        //Adding Marker Pin Imageview isdie view for Custom Marker
+        DynamicView.addSubview(imageViewForPinMarker)
+        
+        //Converting dynamic uiview to get the image/marker icon.
+        UIGraphicsBeginImageContextWithOptions(DynamicView.frame.size, false, UIScreen.main.scale)
+        DynamicView.layer.render(in: UIGraphicsGetCurrentContext()!)
+        let imageConverted: UIImage = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+        return imageConverted
+    }
    
 }
