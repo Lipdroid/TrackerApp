@@ -63,7 +63,7 @@ class MapViewController: UIViewController {
                 locationManager.delegate = self
                 locationManager.desiredAccuracy = kCLLocationAccuracyBest
                 locationManager.requestAlwaysAuthorization()
-                locationManager.startUpdatingLocation()add
+                locationManager.startUpdatingLocation()
                 break
             }
             
