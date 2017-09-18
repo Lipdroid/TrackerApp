@@ -88,6 +88,7 @@ class LoginViewController: UIViewController,GIDSignInDelegate,GIDSignInUIDelegat
     @IBAction func after_click_facebook_login(_ sender: Any) {
         Progress.sharedInstance.showLoading()
         let fbLoginManager : FBSDKLoginManager = FBSDKLoginManager()
+        fbLoginManager.logOut()
         fbLoginManager.logIn(withReadPermissions: ["email"], from: self) { (result, error) in
             if (error == nil){
                 let fbloginresult : FBSDKLoginManagerLoginResult = result!
@@ -121,6 +122,7 @@ class LoginViewController: UIViewController,GIDSignInDelegate,GIDSignInUIDelegat
                     }
                 }
             }else{
+                print(error.debugDescription)
                 Progress.sharedInstance.dismissLoading()
             }
         }
