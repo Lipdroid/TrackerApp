@@ -72,8 +72,6 @@ class MapViewController: UIViewController {
             setUserData()
         }
         intMarkerSound()
-        
-
     }
     
     func getAllUserData(){
@@ -88,11 +86,12 @@ class MapViewController: UIViewController {
                     if let user_snap = snap.value as? Dictionary<String, String>{
                         if let employee = self.parseUserSnap(uid: snap.key, userSnapDict: user_snap){
                         
-                            if(employee.userNodeId != self.mUserObj.userNodeId){
-                                self.employees.append(employee)
-                            }
+                            self.employees.append(employee)
+                            
                             for employee in self.employees{
-                                self.addUserMarker(userObj: employee)
+                                if(employee.userNodeId != self.mUserObj.userNodeId){
+                                    self.addUserMarker(userObj: employee)
+                                }
                             }
                         }
                     }
@@ -136,8 +135,9 @@ class MapViewController: UIViewController {
         DADataService.instance.REF_COMPANY.child(mUserObj.companyName!).child("users").observe(.childChanged, with: { (snapshot) in
             // Get data changed user
             if let user_snap = snapshot.value as? Dictionary<String, String>{
-                if let employee = self.parseUserSnap(uid: snapshot.key, userSnapDict: user_snap){if(employee.userNodeId != self.mUserObj.userNodeId){
-                                self.employees.append(employee)
+                if let employee = self.parseUserSnap(uid: snapshot.key, userSnapDict: user_snap){
+                    if(employee.userNodeId != self.mUserObj.userNodeId){
+                        self.employees.append(employee)
                     }
                     self.addUserMarker(userObj: employee)
 
@@ -215,7 +215,7 @@ class MapViewController: UIViewController {
                 //logout firebase user
                 try FIRAuth.auth()?.signOut()
                 //clear login locaition
-                DADataService.instance.updateUserLoginLocation(uid: mUserObj.userNodeId!, companyName: mUserObj.companyName!, lat: 0.0, lng: 0.0){
+                DADataService.instance.updateUserLoginLocation(uid: mUserObj.userNodeId!, companyName: mUserObj.companyName!, lat: LOGOUT_LAT, lng: LOGOUT_LNG){
                 (response) in
                     //clear keychain
                     KeychainWrapper.standard.removeObject(forKey: Constants.KEY_UID)
@@ -287,7 +287,7 @@ extension MapViewController: CLLocationManagerDelegate {
     func addUserMarker(userObj: UserObject){
         let location: CLLocation = CLLocation(latitude: (Double)(userObj.user_login_lat!)!, longitude: (Double)(userObj.user_login_lng!)!)
         
-        guard let marker = marker_dict[userObj.userNodeId!] else {
+        guard var marker = marker_dict[userObj.userNodeId!] else {
             //add a new marker and save it to the dictionary
             let user_marker = GMSMarker()
             user_marker.position = CLLocationCoordinate2D(latitude: location.coordinate.latitude ,longitude: location.coordinate.longitude)
@@ -303,7 +303,9 @@ extension MapViewController: CLLocationManagerDelegate {
         
         //remove the marker
         marker.map = nil
+        marker_dict.removeValue(forKey: userObj.userNodeId!)
         //then add new marker
+        marker = GMSMarker()
         marker.position = CLLocationCoordinate2D(latitude: location.coordinate.latitude ,longitude: location.coordinate.longitude)
         marker.title = userObj.userName
         marker.snippet = userObj.userEmail

@@ -28,8 +28,8 @@ class DADataService {
                     "userEmail": userObject.userEmail,
                     "imageUrl": userObject.imageUrl,
                     "userRouteStatus": userObject.userRouteStatus,
-                    "user_login_lat":"0.0",
-                    "user_login_lng":"0.0"]
+                    "user_login_lat":"\(LOGOUT_LAT)",
+                    "user_login_lng":"\(LOGOUT_LNG)"]
         
         REF_COMPANY.child(userObject.companyName!).child("users").child(uid).updateChildValues(user as Any as! [AnyHashable : Any])
     }
