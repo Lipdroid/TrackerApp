@@ -27,7 +27,9 @@ class DADataService {
         let user = ["userName": userObject.userName,
                     "userEmail": userObject.userEmail,
                     "imageUrl": userObject.imageUrl,
-                    "userRouteStatus": userObject.userRouteStatus]
+                    "userRouteStatus": userObject.userRouteStatus,
+                    "user_login_lat":"0.0",
+                    "user_login_lng":"0.0"]
         
         REF_COMPANY.child(userObject.companyName!).child("users").child(uid).updateChildValues(user as Any as! [AnyHashable : Any])
     }
@@ -59,6 +61,16 @@ class DADataService {
             print(error.localizedDescription)
         }
         
+    }
+    
+    //update user login location lat lng
+    func updateUserLoginLocation(uid: String,companyName: String,lat: Double,lng: Double,callback: Completion?){
+        let user_login_location = ["user_login_lat":"\(lat)",
+                    "user_login_lng":"\(lng)"]
+        REF_COMPANY.child(companyName).child("users").child(uid).updateChildValues(user_login_location as Any as! [AnyHashable : Any])
+        if let callback = callback{
+            callback("Success" as AnyObject)
+        }
     }
     
 

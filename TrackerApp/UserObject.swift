@@ -18,8 +18,8 @@ class UserObject{
     private var _imageUrl: String!
     
     
-    private var _user_start_lat: String!
-    private var _user_start_lng: String!
+    private var _user_login_lat: String!
+    private var _user_login_lng: String!
     
     
     
@@ -42,26 +42,39 @@ class UserObject{
     var imageUrl: String?{
             return _imageUrl
     }
-    var user_start_lat: String?{
+    var user_login_lat: String?{
         get{
-            return _user_start_lat
+            return _user_login_lat
         }
         set{
-           _user_start_lat = newValue
+           _user_login_lat = newValue
         }
     }
-    var user_start_lng: String?{
+    var user_login_lng: String?{
         get{
-            return _user_start_lng
+            return _user_login_lng
         }
         set{
-            _user_start_lng = newValue
+            _user_login_lng = newValue
         }
     }
     
     //initialize
     init(authId: String) {
         self._userNodeId = authId
+    }
+    
+    //Firebase user
+    init(uid: String,companyName: String,email: String,userName: String,routeStatus: String,imageUrl: String,user_login_lat
+        :String,user_login_lng:String) {
+        self._userNodeId = uid
+        self._userName = userName
+        self._companyName = companyName
+        self._userEmail = email
+        self._imageUrl = imageUrl
+        self._userRouteStatus = routeStatus
+        self._user_login_lat = user_login_lat
+        self._user_login_lng = user_login_lng
     }
     
     //this is for facebook user
