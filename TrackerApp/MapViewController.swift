@@ -23,6 +23,7 @@ class MapViewController: UIViewController {
     let locationManager = CLLocationManager()
     
     var employees = [UserObject]()
+    var marker_dict = Dictionary<String,GMSMarker>()
     
     deinit {
         // Release all recoureces
@@ -35,7 +36,7 @@ class MapViewController: UIViewController {
         guard let lat = mUserObj.user_login_lat,let lng = mUserObj.user_login_lng else {
             return
         }
-        let camera = GMSCameraPosition.camera(withLatitude: (Double)(lat)!, longitude: (Double)(lng)!, zoom: 18.0)
+        let camera = GMSCameraPosition.camera(withLatitude: (Double)(lat)!, longitude: (Double)(lng)!, zoom: MAP_ZOOM_LEVEL)
         google_map.animate(to: camera)
 
     }
@@ -63,36 +64,15 @@ class MapViewController: UIViewController {
 
                 for snap in snapshots {
                     if let user_snap = snap.value as? Dictionary<String, String>{
-                        guard let name = user_snap["userName"] else{
-                            return
-                        }
-                        guard let imageUrl = user_snap["imageUrl"] else{
-                            return
-                        }
-                        guard let email = user_snap["userEmail"] else{
-                            return
-                        }
-                        guard let route = user_snap["userRouteStatus"] else{
-                            return
-                        }
-                        guard let lat = user_snap["user_login_lat"] else{
-                            return
-                        }
-                        guard let lng = user_snap["user_login_lng"] else{
-                            return
-                        }
+                        if let employee = self.parseUserSnap(uid: snap.key, userSnapDict: user_snap){
                         
-                        let employee = UserObject(uid: snap.key, companyName: self.mUserObj.companyName!, email: email, userName: name, routeStatus: route, imageUrl: imageUrl, user_login_lat: lat, user_login_lng: lng)
-                        
-                        if(employee.userNodeId != self.mUserObj.userNodeId){
-                            self.employees.append(employee)
+                            if(employee.userNodeId != self.mUserObj.userNodeId){
+                                self.employees.append(employee)
+                            }
+                            for employee in self.employees{
+                                self.addUserMarker(userObj: employee)
+                            }
                         }
-                        
-                        for employee in self.employees{
-                            self.addUserMarker(userObj: employee)
-                        }
-                        
-                        
                     }
                 }
             }
@@ -102,47 +82,44 @@ class MapViewController: UIViewController {
         }
     }
     
+    func parseUserSnap(uid: String,userSnapDict: Dictionary<String,String>)->UserObject?{
+        var userObj = UserObject(authId: uid)
+        
+        guard let name = userSnapDict["userName"] else{
+            return userObj
+        }
+        guard let imageUrl = userSnapDict["imageUrl"] else{
+            return userObj
+        }
+        guard let email = userSnapDict["userEmail"] else{
+            return userObj
+        }
+        guard let route = userSnapDict["userRouteStatus"] else{
+            return userObj
+        }
+        guard let lat = userSnapDict["user_login_lat"] else{
+            return userObj
+        }
+        guard let lng = userSnapDict["user_login_lng"] else{
+            return userObj
+        }
+        
+        userObj = UserObject(uid: uid, companyName: self.mUserObj.companyName!, email: email, userName: name, routeStatus: route, imageUrl: imageUrl, user_login_lat: lat, user_login_lng: lng)
+        
+        return userObj
+    }
+    
     func startObservingUserDataChange(){
         Progress.sharedInstance.showLoading()
         DADataService.instance.REF_COMPANY.child(mUserObj.companyName!).child("users").observe(.childChanged, with: { (snapshot) in
-            // Get all user
-            Progress.sharedInstance.dismissLoading()
-//            if let snapshots = snapshot.children.allObjects as? [FIRDataSnapshot]{
-//                print("emplyoee count:\(snapshots.count)")
-//                
-//                for snap in snapshots {
-                    if let user_snap = snapshot.value as? Dictionary<String, String>{
-                        guard let name = user_snap["userName"] else{
-                            return
-                        }
-                        guard let imageUrl = user_snap["imageUrl"] else{
-                            return
-                        }
-                        guard let email = user_snap["userEmail"] else{
-                            return
-                        }
-                        guard let route = user_snap["userRouteStatus"] else{
-                            return
-                        }
-                        guard let lat = user_snap["user_login_lat"] else{
-                            return
-                        }
-                        guard let lng = user_snap["user_login_lng"] else{
-                            return
-                        }
-                        
-                        let employee = UserObject(uid: snapshot.key, companyName: self.mUserObj.companyName!, email: email, userName: name, routeStatus: route, imageUrl: imageUrl, user_login_lat: lat, user_login_lng: lng)
-                        
-                        if(employee.userNodeId != self.mUserObj.userNodeId){
-                            self.employees.append(employee)
-                        }
-                        
-//                        for employee in self.employees{
-                        self.addUserMarker(userObj: employee)
-                       // }
-                        
-                   // }
-              //  }
+            // Get data changed user
+            if let user_snap = snapshot.value as? Dictionary<String, String>{
+                if let employee = self.parseUserSnap(uid: snapshot.key, userSnapDict: user_snap){if(employee.userNodeId != self.mUserObj.userNodeId){
+                                self.employees.append(employee)
+                    }
+                    self.addUserMarker(userObj: employee)
+
+                    }
             }
             
         }) { (error) in
@@ -213,21 +190,22 @@ class MapViewController: UIViewController {
         if FIRAuth.auth()?.currentUser != nil {
             do {
                 Progress.sharedInstance.showLoading()
-                //clear keychain
-                KeychainWrapper.standard.removeObject(forKey: Constants.KEY_UID)
-                KeychainWrapper.standard.removeObject(forKey: Constants.KEY_COMPANY)
                 //logout firebase user
                 try FIRAuth.auth()?.signOut()
                 //clear login locaition
                 DADataService.instance.updateUserLoginLocation(uid: mUserObj.userNodeId!, companyName: mUserObj.companyName!, lat: 0.0, lng: 0.0){
                 (response) in
+                    //clear keychain
+                    KeychainWrapper.standard.removeObject(forKey: Constants.KEY_UID)
+                    KeychainWrapper.standard.removeObject(forKey: Constants.KEY_COMPANY)
                     Progress.sharedInstance.dismissLoading()
+                    self.dismiss(animated: true, completion: nil)
+
                 }
             } catch let error as NSError {
                 print(error.localizedDescription)
             }
         }
-        dismiss(animated: true, completion: nil)
 
     }
     private func showAlertForSettings(){
@@ -273,7 +251,7 @@ extension MapViewController: CLLocationManagerDelegate {
                     self.getAllUserData()
                     self.startObservingUserDataChange()
                 }
-                google_map.camera = GMSCameraPosition(target: location.coordinate, zoom: 18, bearing: 0, viewingAngle: 0)
+                google_map.camera = GMSCameraPosition(target: location.coordinate, zoom: MAP_ZOOM_LEVEL, bearing: 0, viewingAngle: 0)
                 self.addUserMarker(userObj: mUserObj)
                 locationManager.stopUpdatingLocation()
             }
@@ -287,13 +265,30 @@ extension MapViewController: CLLocationManagerDelegate {
     func addUserMarker(userObj: UserObject){
         let location: CLLocation = CLLocation(latitude: (Double)(userObj.user_login_lat!)!, longitude: (Double)(userObj.user_login_lng!)!)
         
-        let user_marker = GMSMarker()
-        user_marker.position = CLLocationCoordinate2D(latitude: location.coordinate.latitude ,longitude: location.coordinate.longitude)
-        user_marker.title = userObj.userName
-        user_marker.snippet = userObj.userEmail
-        user_marker.appearAnimation = .pop
-        user_marker.icon = createMarkerWithImage(url: userObj.imageUrl!)
-        user_marker.map = self.google_map
+        guard let marker = marker_dict[userObj.userNodeId!] else {
+            //add a new marker and save it to the dictionary
+            let user_marker = GMSMarker()
+            user_marker.position = CLLocationCoordinate2D(latitude: location.coordinate.latitude ,longitude: location.coordinate.longitude)
+            user_marker.title = userObj.userName
+            user_marker.snippet = userObj.userEmail
+            user_marker.appearAnimation = .pop
+            user_marker.icon = createMarkerWithImage(url: userObj.imageUrl!)
+            user_marker.map = self.google_map
+            marker_dict[userObj.userNodeId!] = user_marker
+            return
+        }
+        
+        //remove the marker
+        marker.map = nil
+        //then add new marker
+        marker.position = CLLocationCoordinate2D(latitude: location.coordinate.latitude ,longitude: location.coordinate.longitude)
+        marker.title = userObj.userName
+        marker.snippet = userObj.userEmail
+        marker.appearAnimation = .pop
+        marker.icon = createMarkerWithImage(url: userObj.imageUrl!)
+        marker.map = self.google_map
+        
+        marker_dict[userObj.userNodeId!] = marker
     }
     
     
@@ -312,6 +307,7 @@ extension MapViewController: CLLocationManagerDelegate {
         imageViewForUserProfile  = UIImageView(frame:CGRect(x: 0, y: 0, width: 40, height: 35));
         imageViewForUserProfile.layer.cornerRadius = 5.0
         imageViewForUserProfile.clipsToBounds = true
+        imageViewForUserProfile.contentMode = .scaleAspectFill
         imageViewForUserProfile.image = convertURLToUIImage(imageUrl: url)
         
         //set the profile pic in the center
