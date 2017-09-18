@@ -203,6 +203,8 @@ extension MapViewController: CLLocationManagerDelegate {
         //Creating User Profile imageview
         var imageViewForUserProfile : UIImageView
         imageViewForUserProfile  = UIImageView(frame:CGRect(x: 0, y: 0, width: 40, height: 35));
+        imageViewForUserProfile.layer.cornerRadius = 5.0
+        imageViewForUserProfile.clipsToBounds = true
         imageViewForUserProfile.image = convertURLToUIImage(imageUrl: mUserObj.imageUrl!)
         
         //set the profile pic in the center
