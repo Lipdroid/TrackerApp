@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		7183373E1F703DCD00BEF060 /* marker_add.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 7183373D1F703DCD00BEF060 /* marker_add.mp3 */; };
+		718337401F70453500BEF060 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7183373F1F70453500BEF060 /* Utils.swift */; };
 		7198D7B61F69CDC800EEF51E /* CircleImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7198D7B51F69CDC800EEF51E /* CircleImageView.swift */; };
 		7198D7B91F69D7A000EEF51E /* MaterialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7198D7B81F69D7A000EEF51E /* MaterialView.swift */; };
 		71F809EB1F6C480700C42771 /* Progress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71F809EA1F6C480700C42771 /* Progress.swift */; };
@@ -30,6 +31,7 @@
 		3DA19FFD6374542A8AF57804 /* Pods-TrackerApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TrackerApp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TrackerApp/Pods-TrackerApp.debug.xcconfig"; sourceTree = "<group>"; };
 		711093B41F6C69CA00E86B5E /* TrackerApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TrackerApp.entitlements; sourceTree = "<group>"; };
 		7183373D1F703DCD00BEF060 /* marker_add.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = marker_add.mp3; sourceTree = "<group>"; };
+		7183373F1F70453500BEF060 /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		7198D7B51F69CDC800EEF51E /* CircleImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CircleImageView.swift; sourceTree = "<group>"; };
 		7198D7B81F69D7A000EEF51E /* MaterialView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MaterialView.swift; sourceTree = "<group>"; };
 		71F809EA1F6C480700C42771 /* Progress.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Progress.swift; sourceTree = "<group>"; };
@@ -131,6 +133,7 @@
 			isa = PBXGroup;
 			children = (
 				744EFDB71F552807004364D0 /* Constants.swift */,
+				7183373F1F70453500BEF060 /* Utils.swift */,
 			);
 			name = Constants;
 			sourceTree = "<group>";
@@ -326,6 +329,7 @@
 				749BC3141F4A7D80006AA55D /* AppDelegate.swift in Sources */,
 				71F809EB1F6C480700C42771 /* Progress.swift in Sources */,
 				7402EB241F5422BC00BE2897 /* UserObject.swift in Sources */,
+				718337401F70453500BEF060 /* Utils.swift in Sources */,
 				744EFDBD1F55576C004364D0 /* MarkerView.swift in Sources */,
 				741243B41F568D9600ADCCEF /* DADataService.swift in Sources */,
 				7402EB261F542AE700BE2897 /* MapViewController.swift in Sources */,
