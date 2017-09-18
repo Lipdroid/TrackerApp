@@ -13,7 +13,7 @@ import FBSDKLoginKit
 import GoogleSignIn
 import GoogleMaps
 import SwiftKeychainWrapper
-
+import AVFoundation
 
 class MapViewController: UIViewController {
     var mUserObj: UserObject! = nil
@@ -24,12 +24,33 @@ class MapViewController: UIViewController {
     
     var employees = [UserObject]()
     var marker_dict = Dictionary<String,GMSMarker>()
-    
+    var player : AVAudioPlayer?
+
     deinit {
         // Release all recoureces
         // perform the deinitialization
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
 
+    }
+    
+    func intMarkerSound(){
+        let url = Bundle.main.url(forResource: "marker_add", withExtension: "mp3")!
+        
+        do {
+            player = try AVAudioPlayer(contentsOf: url)
+            guard let player = player else { return }
+            
+            player.prepareToPlay()
+        } catch let error as NSError {
+            print(error.description)
+        }
+    }
+    
+    func playMarkerAddSound(){
+        if(player?.isPlaying)!{
+            player?.stop()
+        }
+        player?.play()
     }
 
     @IBAction func currentLocation_btn_pressed(_ sender: Any) {
@@ -50,6 +71,7 @@ class MapViewController: UIViewController {
         if(mUserObj != nil){
             setUserData()
         }
+        intMarkerSound()
         
 
     }
@@ -274,6 +296,7 @@ extension MapViewController: CLLocationManagerDelegate {
             user_marker.appearAnimation = .pop
             user_marker.icon = createMarkerWithImage(url: userObj.imageUrl!)
             user_marker.map = self.google_map
+            playMarkerAddSound()
             marker_dict[userObj.userNodeId!] = user_marker
             return
         }
@@ -287,7 +310,7 @@ extension MapViewController: CLLocationManagerDelegate {
         marker.appearAnimation = .pop
         marker.icon = createMarkerWithImage(url: userObj.imageUrl!)
         marker.map = self.google_map
-        
+        playMarkerAddSound()
         marker_dict[userObj.userNodeId!] = marker
     }
     
