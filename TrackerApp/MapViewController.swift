@@ -96,7 +96,12 @@ class MapViewController: UIViewController {
                 //put markers for all the users/employee
                 for employee in self.employees{
                     if(employee.userNodeId != self.mUserObj.userNodeId){
-                        self.addUserMarker(userObj: employee)
+                        if(employee.user_login_lat != "\(LOGOUT_LAT)" && employee.imageUrl != "\(LOGOUT_LNG)"){
+                            print("\(employee.userName!) is logged in user")
+                            self.addUserMarker(userObj: employee)
+                        }else{
+                            print("\(employee.userName!) is logged out user")
+                        }
                     }
                 }
             }
@@ -304,20 +309,26 @@ extension MapViewController: CLLocationManagerDelegate {
         marker.map = nil
         marker_dict.removeValue(forKey: userObj.userNodeId!)
         //then add new marker
-        marker = GMSMarker()
-        marker.position = CLLocationCoordinate2D(latitude: location.coordinate.latitude ,longitude: location.coordinate.longitude)
-        marker.title = userObj.userName
-        marker.snippet = userObj.userEmail
-        marker.appearAnimation = .pop
-        createMarkerWithImage(url: userObj.imageUrl!)
-        {(image) in
-            if let marker_image = image as? UIImage{
-                marker.icon = marker_image
-                marker.map = self.google_map
-                self.playMarkerAddSound()
-                self.marker_dict[userObj.userNodeId!] = marker
-                
+        if(userObj.user_login_lat != "\(LOGOUT_LAT)" && userObj.imageUrl != "\(LOGOUT_LNG)"){
+            print("\(userObj.userName!) is logged in user")
+            marker = GMSMarker()
+            marker.position = CLLocationCoordinate2D(latitude: location.coordinate.latitude ,longitude: location.coordinate.longitude)
+            marker.title = userObj.userName
+            marker.snippet = userObj.userEmail
+            marker.appearAnimation = .pop
+            createMarkerWithImage(url: userObj.imageUrl!)
+            {(image) in
+                if let marker_image = image as? UIImage{
+                    marker.icon = marker_image
+                    marker.map = self.google_map
+                    self.playMarkerAddSound()
+                    self.marker_dict[userObj.userNodeId!] = marker
+                    
+                }
             }
+
+        }else{
+            print("\(userObj.userName!) is logged out user")
         }
         
     }
