@@ -15,7 +15,9 @@ import GoogleMaps
 import SwiftKeychainWrapper
 import AVFoundation
 
-class MapViewController: UIViewController {
+class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSource {
+    
+    @IBOutlet weak var tableView: UITableView!
     var mUserObj: UserObject! = nil
     @IBOutlet weak var google_map: GMSMapView!
     @IBOutlet weak var user_image: CircleImageView!
@@ -72,6 +74,9 @@ class MapViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.tableFooterView = UIView()
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
         NotificationCenter.default.addObserver(self, selector:#selector(checkForLocationPermission), name: NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
@@ -80,6 +85,30 @@ class MapViewController: UIViewController {
             setUserData()
         }
         intMarkerSound()
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if let cell = tableView.dequeueReusableCell(withIdentifier: "userCell", for: indexPath) as? UserCell{
+            configureCell(cell: cell, indexPath: indexPath)
+            return cell
+        }else{
+            return UITableViewCell()
+        }
+    }
+    
+    
+    func configureCell(cell: UserCell,indexPath: IndexPath){
+        if let item = employees[indexPath.row] as? UserObject{
+            cell.configureCell(userObj: item)
+        }
+    }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return employees.count
     }
     
     func getAllUserData(){
@@ -101,14 +130,19 @@ class MapViewController: UIViewController {
                     }
                 }
                 
+                self.tableView.reloadData()
+                
                 //put markers for all the users/employee
                 for employee in self.employees{
                     if(employee.userNodeId != self.mUserObj.userNodeId){
-                        if(employee.user_login_lat != "\(LOGOUT_LAT)" && employee.imageUrl != "\(LOGOUT_LNG)"){
+                        switch employee.status!{
+                        case .OFFLINE:
+                            print("\(employee.userName!) is logged out user")
+                            break
+                        case .ONLINE:
                             print("\(employee.userName!) is logged in user")
                             self.addUserMarker(userObj: employee)
-                        }else{
-                            print("\(employee.userName!) is logged out user")
+                            break
                         }
                     }
                 }
@@ -140,8 +174,12 @@ class MapViewController: UIViewController {
         guard let lng = userSnapDict["user_login_lng"] else{
             return userObj
         }
+        guard let status = userSnapDict["status"] else{
+            return userObj
+        }
+
         
-        userObj = UserObject(uid: uid, companyName: self.mUserObj.companyName!, email: email, userName: name, routeStatus: route, imageUrl: imageUrl, user_login_lat: lat, user_login_lng: lng)
+        userObj = UserObject(uid: uid, companyName: self.mUserObj.companyName!, email: email, userName: name, routeStatus: route, imageUrl: imageUrl, user_login_lat: lat, user_login_lng: lng,status: status)
         
         return userObj
     }
@@ -154,10 +192,33 @@ class MapViewController: UIViewController {
             print("receive user data changed")
             if let user_snap = snapshot.value as? Dictionary<String, String>{
                 if let employee = self.parseUserSnap(uid: snapshot.key, userSnapDict: user_snap){
-                    if(employee.userNodeId != self.mUserObj.userNodeId){
-                        self.employees.append(employee)
+                    
+                   //if already exist then remove that item
+                    if let index = self.employees.index(where: { $0.userNodeId == employee.userNodeId }) {
+                        self.employees.remove(at: index)
+                        //continue do: arrPickerData.append(...)
                     }
-                    self.addUserMarker(userObj: employee)
+                    //add that item again
+                    self.employees.append(employee)
+                    self.tableView.reloadData()
+                    
+                    //if offline no marker add
+                    switch employee.status!{
+                        case .OFFLINE:
+                            print("\(employee.userName!) offline marker not added")
+                            //remove if prevoiusly added
+                            guard let marker = self.marker_dict[employee.userNodeId!] else {
+                                return
+                            }
+                            marker.map = nil
+                            self.marker_dict.removeValue(forKey: employee.userNodeId!)
+                            
+                        break
+                        case .ONLINE:
+                            print("\(employee.userName!) online marker not added")
+                            self.addUserMarker(userObj: employee)
+                            break
+                        }
 
                     }
             }
@@ -218,7 +279,7 @@ class MapViewController: UIViewController {
                 //logout firebase user
                 try FIRAuth.auth()?.signOut()
                 //clear login locaition
-                DADataService.instance.updateUserLoginLocation(uid: mUserObj.userNodeId!, companyName: mUserObj.companyName!, lat: LOGOUT_LAT, lng: LOGOUT_LNG){
+                DADataService.instance.updateUserLoginLocation(uid: mUserObj.userNodeId!, companyName: mUserObj.companyName!, lat: LOGOUT_LAT, lng: LOGOUT_LNG, status: .OFFLINE){
                 (response) in
                     //clear keychain
                     KeychainWrapper.standard.removeObject(forKey: Constants.KEY_UID)
@@ -306,7 +367,7 @@ extension MapViewController: CLLocationManagerDelegate {
             }else{
                 mUserObj.user_login_lat = "\(location.coordinate.latitude)"
                 mUserObj.user_login_lng = "\(location.coordinate.longitude)"
-                DADataService.instance.updateUserLoginLocation(uid: mUserObj.userNodeId!, companyName: mUserObj.companyName!, lat: location.coordinate.latitude, lng: location.coordinate.longitude){
+                DADataService.instance.updateUserLoginLocation(uid: mUserObj.userNodeId!, companyName: mUserObj.companyName!, lat: location.coordinate.latitude, lng: location.coordinate.longitude, status: .ONLINE){
                     (response) in
                     self.getAllUserData()
                     self.startObservingUserDataChange()
@@ -325,8 +386,6 @@ extension MapViewController: CLLocationManagerDelegate {
     
     func addUserMarker(userObj: UserObject){
         let location: CLLocation = CLLocation(latitude: (Double)(userObj.user_login_lat!)!, longitude: (Double)(userObj.user_login_lng!)!)
-        
-        guard var marker = marker_dict[userObj.userNodeId!] else {
             //add a new marker and save it to the dictionary
             let user_marker = GMSMarker()
             user_marker.position = CLLocationCoordinate2D(latitude: location.coordinate.latitude ,longitude: location.coordinate.longitude)
@@ -343,31 +402,5 @@ extension MapViewController: CLLocationManagerDelegate {
 
                 }
             }
-            return
-        }
-        
-        //remove the marker
-        marker.map = nil
-        marker_dict.removeValue(forKey: userObj.userNodeId!)
-        //then add new marker
-        if(userObj.user_login_lat != "\(LOGOUT_LAT)" && userObj.imageUrl != "\(LOGOUT_LNG)"){
-            print("\(userObj.userName!) is logged in user")
-            marker = GMSMarker()
-            marker.position = CLLocationCoordinate2D(latitude: location.coordinate.latitude ,longitude: location.coordinate.longitude)
-            marker.title = userObj.userName
-            marker.snippet = userObj.userEmail
-            marker.appearAnimation = .pop
-            createMarkerWithImage(url: userObj.imageUrl!)
-            {(image) in
-                if let marker_image = image as? UIImage{
-                    marker.icon = marker_image
-                    marker.map = self.google_map
-                    self.playMarkerAddSound()
-                    self.marker_dict[userObj.userNodeId!] = marker
-                }
-            }
-        }else{
-            print("\(userObj.userName!) is logged out user")
-        }
-    }       
+    }
 }

@@ -12,7 +12,7 @@ class CircleImageView: UIImageView {
     override func awakeFromNib() {
         self.layer.borderWidth = 1
         self.layer.masksToBounds = false
-        self.layer.borderColor = UIColor.black.cgColor
+        self.layer.borderColor = UIColor.white.cgColor
         
     }
 

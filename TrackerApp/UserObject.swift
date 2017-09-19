@@ -9,6 +9,11 @@
 import Foundation
 import GoogleSignIn
 
+enum Status: String{
+    case ONLINE = "online"
+    case OFFLINE = "offline"
+}
+
 class UserObject{
     private var _companyName: String!
     private var _userName: String!
@@ -20,6 +25,8 @@ class UserObject{
     
     private var _user_login_lat: String!
     private var _user_login_lng: String!
+    
+    private var _user_status = Status.OFFLINE
     
     
     
@@ -58,15 +65,25 @@ class UserObject{
             _user_login_lng = newValue
         }
     }
+    var status: Status?{
+        get{
+            switch _user_status {
+                case Status.ONLINE:
+                    return Status.ONLINE
+                case Status.OFFLINE:
+                    return Status.OFFLINE
+                }
+           }
+    }
     
     //initialize
     init(authId: String) {
         self._userNodeId = authId
     }
     
-    //Firebase user
+    //for firebase User with lat lng
     init(uid: String,companyName: String,email: String,userName: String,routeStatus: String,imageUrl: String,user_login_lat
-        :String,user_login_lng:String) {
+        :String,user_login_lng:String,status: String) {
         self._userNodeId = uid
         self._userName = userName
         self._companyName = companyName
@@ -75,6 +92,14 @@ class UserObject{
         self._userRouteStatus = routeStatus
         self._user_login_lat = user_login_lat
         self._user_login_lng = user_login_lng
+        switch status {
+        case Status.ONLINE.rawValue:
+            self._user_status = .ONLINE
+        case Status.OFFLINE.rawValue:
+            self._user_status = .OFFLINE
+        default:
+            break
+        }
     }
     
     //this is for facebook user
@@ -113,14 +138,22 @@ class UserObject{
 
     }
 
-    //for firebase User
-    init(uid: String,userName: String,userEmail: String,userCompany: String,imageUrl: String,userRoute:String) {
+    //for firebase User without lat lng
+    init(uid: String,userName: String,userEmail: String,userCompany: String,imageUrl: String,userRoute:String,status: String) {
         self._userNodeId = uid
         self._userName = userName
         self._companyName = userCompany
         self._imageUrl = imageUrl
         self._userEmail = userEmail
         self._userRouteStatus = userRoute
+        switch status {
+        case Status.ONLINE.rawValue:
+            self._user_status = .ONLINE
+        case Status.OFFLINE.rawValue:
+            self._user_status = .OFFLINE
+        default:
+            break
+        }
 
     }
     
