@@ -76,24 +76,27 @@ class MapViewController: UIViewController {
     
     func getAllUserData(){
         Progress.sharedInstance.showLoading()
+        print("start getting all user data")
         DADataService.instance.REF_COMPANY.child(mUserObj.companyName!).child("users").observeSingleEvent(of: .value, with: { (snapshot) in
             // Get all user
+            print("finish getting all user data")
             Progress.sharedInstance.dismissLoading()
             if let snapshots = snapshot.children.allObjects as? [FIRDataSnapshot]{
                 print("emplyoee count:\(snapshots.count)")
-
+                //remove if their is any previous information about emplyoee/user
+                self.employees.removeAll()
                 for snap in snapshots {
                     if let user_snap = snap.value as? Dictionary<String, String>{
                         if let employee = self.parseUserSnap(uid: snap.key, userSnapDict: user_snap){
-                        
                             self.employees.append(employee)
-                            
-                            for employee in self.employees{
-                                if(employee.userNodeId != self.mUserObj.userNodeId){
-                                    self.addUserMarker(userObj: employee)
-                                }
-                            }
                         }
+                    }
+                }
+                
+                //put markers for all the users/employee
+                for employee in self.employees{
+                    if(employee.userNodeId != self.mUserObj.userNodeId){
+                        self.addUserMarker(userObj: employee)
                     }
                 }
             }
@@ -132,8 +135,10 @@ class MapViewController: UIViewController {
     
     func startObservingUserDataChange(){
         Progress.sharedInstance.showLoading()
+        print("start observing")
         DADataService.instance.REF_COMPANY.child(mUserObj.companyName!).child("users").observe(.childChanged, with: { (snapshot) in
             // Get data changed user
+            print("receive user data changed")
             if let user_snap = snapshot.value as? Dictionary<String, String>{
                 if let employee = self.parseUserSnap(uid: snapshot.key, userSnapDict: user_snap){
                     if(employee.userNodeId != self.mUserObj.userNodeId){
@@ -186,7 +191,7 @@ class MapViewController: UIViewController {
         
         
         if let imageUrl = mUserObj.imageUrl{
-            user_image.image = convertURLToUIImage(imageUrl: imageUrl)
+            user_image.imageFromServerURL(urlString: imageUrl, defaultImage: "Default image link")
         }
     }
     override func didReceiveMemoryWarning() {
@@ -259,10 +264,11 @@ extension MapViewController: CLLocationManagerDelegate {
                     (response) in
                     self.getAllUserData()
                     self.startObservingUserDataChange()
+                    self.google_map.camera = GMSCameraPosition(target: location.coordinate, zoom: MAP_ZOOM_LEVEL, bearing: 0, viewingAngle: 0)
+                    self.addUserMarker(userObj: self.mUserObj)
+                    self.locationManager.stopUpdatingLocation()
                 }
-                google_map.camera = GMSCameraPosition(target: location.coordinate, zoom: MAP_ZOOM_LEVEL, bearing: 0, viewingAngle: 0)
-                self.addUserMarker(userObj: mUserObj)
-                locationManager.stopUpdatingLocation()
+                
             }
             
 
@@ -281,10 +287,16 @@ extension MapViewController: CLLocationManagerDelegate {
             user_marker.title = userObj.userName
             user_marker.snippet = userObj.userEmail
             user_marker.appearAnimation = .pop
-            user_marker.icon = createMarkerWithImage(url: userObj.imageUrl!)
-            user_marker.map = self.google_map
-            playMarkerAddSound()
-            marker_dict[userObj.userNodeId!] = user_marker
+            createMarkerWithImage(url: userObj.imageUrl!)
+            {(image) in
+                if let marker_image = image as? UIImage{
+                    user_marker.icon = marker_image
+                    user_marker.map = self.google_map
+                    self.playMarkerAddSound()
+                    self.marker_dict[userObj.userNodeId!] = user_marker
+
+                }
+            }
             return
         }
         
@@ -297,10 +309,17 @@ extension MapViewController: CLLocationManagerDelegate {
         marker.title = userObj.userName
         marker.snippet = userObj.userEmail
         marker.appearAnimation = .pop
-        marker.icon = createMarkerWithImage(url: userObj.imageUrl!)
-        marker.map = self.google_map
-        playMarkerAddSound()
-        marker_dict[userObj.userNodeId!] = marker
+        createMarkerWithImage(url: userObj.imageUrl!)
+        {(image) in
+            if let marker_image = image as? UIImage{
+                marker.icon = marker_image
+                marker.map = self.google_map
+                self.playMarkerAddSound()
+                self.marker_dict[userObj.userNodeId!] = marker
+                
+            }
+        }
+        
     }
     
     
