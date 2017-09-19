@@ -21,10 +21,18 @@ class MapViewController: UIViewController {
     @IBOutlet weak var user_image: CircleImageView!
     @IBOutlet weak var user_name_label: UILabel!
     let locationManager = CLLocationManager()
+    var player : AVAudioPlayer?
+
+    @IBOutlet weak var currentLocationButtonView: UIView!
+    @IBOutlet weak var right_nav_menu: UIView!//This is the right navigation view
+    @IBOutlet weak var right_nav_view: UIView!//This is the top right userlist show view
+    @IBOutlet weak var tranparent_overlay: UIVisualEffectView!
+    @IBOutlet weak var right_nav_trailing_constraint: NSLayoutConstraint!
+    var right_nav_view_isShown = false
+
     
     var employees = [UserObject]()
     var marker_dict = Dictionary<String,GMSMarker>()
-    var player : AVAudioPlayer?
 
     deinit {
         // Release all recoureces
@@ -193,8 +201,6 @@ class MapViewController: UIViewController {
             user_name_label.text = name
         }
         //show image from image url
-        
-        
         if let imageUrl = mUserObj.imageUrl{
             user_image.imageFromServerURL(urlString: imageUrl, defaultImage: "Default image link")
         }
@@ -225,6 +231,41 @@ class MapViewController: UIViewController {
                 print(error.localizedDescription)
             }
         }
+
+    }
+    
+    @IBAction func nav_right_icon_pressed(_ sender: Any) {
+        if !right_nav_view_isShown{
+            right_nav_trailing_constraint.constant = 0
+            right_nav_menu.layer.shadowOpacity = 1
+            right_nav_menu.layer.shadowRadius = 6.0
+            tranparent_overlay.isHidden = false
+            right_nav_view.isHidden = true
+            currentLocationButtonView.isHidden = true
+            
+        }else{
+            right_nav_trailing_constraint.constant = -280
+
+        }
+        
+        UIView.animate(withDuration: 0.4, animations: {
+            self.view.layoutIfNeeded()
+            
+        }){(true) in
+            if !self.right_nav_view_isShown{
+                self.right_nav_menu.layer.shadowOpacity = 0
+                self.tranparent_overlay.isHidden = true
+                self.currentLocationButtonView.isHidden = false
+                self.right_nav_view.isHidden = false
+            }else{
+                self.currentLocationButtonView.isHidden = true
+                self.right_nav_view.isHidden = true
+
+            }
+            
+        }
+        
+        right_nav_view_isShown = !right_nav_view_isShown
 
     }
     private func showAlertForSettings(){
@@ -323,16 +364,10 @@ extension MapViewController: CLLocationManagerDelegate {
                     marker.map = self.google_map
                     self.playMarkerAddSound()
                     self.marker_dict[userObj.userNodeId!] = marker
-                    
                 }
             }
-
         }else{
             print("\(userObj.userName!) is logged out user")
         }
-        
-    }
-    
-    
-       
+    }       
 }
