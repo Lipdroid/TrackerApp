@@ -28,6 +28,9 @@ struct Constants {
     //storyboard segue
     static let LOGINVIEW_TO_MAPVIEW_SEGUE_IDENTIFIER = "toMapSegue"
     static let LOGOUT_SEGUE_IDENTIFIER = "toLoginPage"
+    static let CHATROOM_SEGUE_IDENTIFIER = "toChatPage"
+    static let HISTORY_SEGUE_IDENTIFIER = "toHistoryPage"
+
 
     //user status on trip
     static let USER_ROUTE_STATUS_NOT_STARTED = "notStarted"

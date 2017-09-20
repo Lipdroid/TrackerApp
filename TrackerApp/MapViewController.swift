@@ -385,6 +385,19 @@ class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSou
         
         right_nav_view_isShown = !right_nav_view_isShown
     }
+    
+    @IBAction func home_btn_pressed(_ sender: Any) {
+        toggleLeftMenu()
+    }
+    @IBAction func chat_btn_pressed(_ sender: Any) {
+        toggleLeftMenu()
+        self.performSegue(withIdentifier: Constants.CHATROOM_SEGUE_IDENTIFIER, sender: nil)
+
+    }
+    @IBAction func history_btn_pressed(_ sender: Any) {
+        toggleLeftMenu()
+        self.performSegue(withIdentifier: Constants.HISTORY_SEGUE_IDENTIFIER, sender: nil)
+    }
     private func showAlertForSettings(){
         // create the alert
         let alert = UIAlertController(title: "Alert", message: "Please enable your location service from settings to run this app", preferredStyle: UIAlertControllerStyle.alert)

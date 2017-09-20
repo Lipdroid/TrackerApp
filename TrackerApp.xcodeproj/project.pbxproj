@@ -18,6 +18,8 @@
 		7402EB261F542AE700BE2897 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7402EB251F542AE700BE2897 /* MapViewController.swift */; };
 		741243B41F568D9600ADCCEF /* DADataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741243B31F568D9600ADCCEF /* DADataService.swift */; };
 		744EFDB81F552807004364D0 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744EFDB71F552807004364D0 /* Constants.swift */; };
+		745AAC951F7272C100BA8413 /* ChatRoomVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745AAC941F7272C100BA8413 /* ChatRoomVC.swift */; };
+		745AAC971F727C4100BA8413 /* HistoryVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745AAC961F727C4100BA8413 /* HistoryVC.swift */; };
 		749BC3141F4A7D80006AA55D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 749BC3131F4A7D80006AA55D /* AppDelegate.swift */; };
 		749BC3161F4A7D80006AA55D /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 749BC3151F4A7D80006AA55D /* LoginViewController.swift */; };
 		749BC3191F4A7D80006AA55D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 749BC3171F4A7D80006AA55D /* Main.storyboard */; };
@@ -40,6 +42,8 @@
 		7402EB251F542AE700BE2897 /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		741243B31F568D9600ADCCEF /* DADataService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DADataService.swift; sourceTree = "<group>"; };
 		744EFDB71F552807004364D0 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		745AAC941F7272C100BA8413 /* ChatRoomVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatRoomVC.swift; sourceTree = "<group>"; };
+		745AAC961F727C4100BA8413 /* HistoryVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryVC.swift; sourceTree = "<group>"; };
 		749BC3101F4A7D80006AA55D /* TrackerApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TrackerApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		749BC3131F4A7D80006AA55D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		749BC3151F4A7D80006AA55D /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -95,6 +99,8 @@
 				749BC3131F4A7D80006AA55D /* AppDelegate.swift */,
 				749BC3151F4A7D80006AA55D /* LoginViewController.swift */,
 				7402EB251F542AE700BE2897 /* MapViewController.swift */,
+				745AAC941F7272C100BA8413 /* ChatRoomVC.swift */,
+				745AAC961F727C4100BA8413 /* HistoryVC.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -319,6 +325,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7198D7B61F69CDC800EEF51E /* CircleImageView.swift in Sources */,
+				745AAC951F7272C100BA8413 /* ChatRoomVC.swift in Sources */,
 				744EFDB81F552807004364D0 /* Constants.swift in Sources */,
 				749BC3161F4A7D80006AA55D /* LoginViewController.swift in Sources */,
 				7198D7B91F69D7A000EEF51E /* MaterialView.swift in Sources */,
@@ -328,6 +335,7 @@
 				718337401F70453500BEF060 /* Utils.swift in Sources */,
 				741243B41F568D9600ADCCEF /* DADataService.swift in Sources */,
 				716FCD9B1F718D3E00A40595 /* UserCell.swift in Sources */,
+				745AAC971F727C4100BA8413 /* HistoryVC.swift in Sources */,
 				7402EB261F542AE700BE2897 /* MapViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
