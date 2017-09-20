@@ -90,27 +90,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "TrackerApp/MapViewController.swift"
-            timestampString = "527510545.364355"
+            timestampString = "527569141.691417"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "318"
-            endingLineNumber = "318"
-            landmarkName = "locationManager(_:didUpdateLocations:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "TrackerApp/MapViewController.swift"
-            timestampString = "527510545.364355"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "55"
-            endingLineNumber = "55"
+            startingLineNumber = "59"
+            endingLineNumber = "59"
             landmarkName = "intMarkerSound()"
             landmarkType = "7">
          </BreakpointContent>
@@ -122,28 +106,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "TrackerApp/MapViewController.swift"
-            timestampString = "527510545.364355"
+            timestampString = "527570412.695933"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "309"
-            endingLineNumber = "309"
-            landmarkName = "locationManager(_:didUpdateLocations:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "TrackerApp/MapViewController.swift"
-            timestampString = "527510545.364355"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "288"
-            endingLineNumber = "288"
-            landmarkName = "goToSystemSettings(action:)"
+            startingLineNumber = "296"
+            endingLineNumber = "296"
+            landmarkName = "logout_btn_pressed(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -186,13 +154,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "TrackerApp/MapViewController.swift"
-            timestampString = "527510545.364355"
+            timestampString = "527570412.695933"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "348"
-            endingLineNumber = "348"
-            landmarkName = "addUserMarker(userObj:)"
-            landmarkType = "7">
+            startingLineNumber = "404"
+            endingLineNumber = "404"
+            landmarkName = "MapViewController"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -202,12 +170,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "TrackerApp/MapViewController.swift"
-            timestampString = "527510545.364355"
+            timestampString = "527570412.695933"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "129"
-            endingLineNumber = "129"
-            landmarkName = "parseUserSnap(uid:userSnapDict:)"
+            startingLineNumber = "137"
+            endingLineNumber = "137"
+            landmarkName = "getAllUserData()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -250,28 +218,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "TrackerApp/MapViewController.swift"
-            timestampString = "527510545.364355"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "95"
-            endingLineNumber = "95"
-            landmarkName = "getAllUserData()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "TrackerApp/MapViewController.swift"
-            timestampString = "527510545.364355"
+            timestampString = "527569141.691417"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "99"
             endingLineNumber = "99"
-            landmarkName = "getAllUserData()"
+            landmarkName = "tableView(_:cellForRowAt:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -282,12 +234,28 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "TrackerApp/MapViewController.swift"
-            timestampString = "527510545.364355"
+            timestampString = "527569141.691417"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "313"
-            endingLineNumber = "313"
-            landmarkName = "locationManager(_:didUpdateLocations:)"
+            startingLineNumber = "103"
+            endingLineNumber = "103"
+            landmarkName = "MapViewController"
+            landmarkType = "3">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "TrackerApp/MapViewController.swift"
+            timestampString = "527569141.691417"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "111"
+            endingLineNumber = "111"
+            landmarkName = "numberOfSections(in:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -298,28 +266,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "TrackerApp/MapViewController.swift"
-            timestampString = "527510545.364355"
+            timestampString = "527569141.691417"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "107"
-            endingLineNumber = "107"
-            landmarkName = "getAllUserData()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "TrackerApp/MapViewController.swift"
-            timestampString = "527510545.364355"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "110"
-            endingLineNumber = "110"
-            landmarkName = "getAllUserData()"
+            startingLineNumber = "114"
+            endingLineNumber = "114"
+            landmarkName = "tableView(_:numberOfRowsInSection:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -330,12 +282,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "TrackerApp/MapViewController.swift"
-            timestampString = "527510545.364355"
+            timestampString = "527570412.695933"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "240"
-            endingLineNumber = "240"
-            landmarkName = "nav_right_icon_pressed(_:)"
+            startingLineNumber = "248"
+            endingLineNumber = "248"
+            landmarkName = "checkForLocationPermission()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -346,12 +298,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "TrackerApp/MapViewController.swift"
-            timestampString = "527510545.364355"
+            timestampString = "527570412.695933"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "241"
-            endingLineNumber = "241"
-            landmarkName = "nav_right_icon_pressed(_:)"
+            startingLineNumber = "249"
+            endingLineNumber = "249"
+            landmarkName = "checkForLocationPermission()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -362,12 +314,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "TrackerApp/MapViewController.swift"
-            timestampString = "527510545.364355"
+            timestampString = "527570412.695933"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "257"
-            endingLineNumber = "257"
-            landmarkName = "nav_right_icon_pressed(_:)"
+            startingLineNumber = "265"
+            endingLineNumber = "265"
+            landmarkName = "viewDidAppear(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

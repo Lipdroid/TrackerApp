@@ -32,7 +32,11 @@ class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSou
     @IBOutlet weak var right_nav_trailing_constraint: NSLayoutConstraint!
     var right_nav_view_isShown = false
 
-    
+    @IBOutlet weak var left_nav_btn_view: UIView!
+    @IBOutlet weak var left_nav_menu: UIView!
+    var left_nav_view_isShown = false
+    @IBOutlet weak var left_nav_leading_constraint: NSLayoutConstraint!
+
     var employees = [UserObject]()
     var marker_dict = Dictionary<String,GMSMarker>()
 
@@ -109,6 +113,10 @@ class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSou
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return employees.count
+    }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        NSLog("You selected cell number: \(indexPath.row)!")
+        toggleRightMenu()
     }
     
     func getAllUserData(){
@@ -295,7 +303,56 @@ class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSou
 
     }
     
+    @IBAction func nav_left_icon_pressed(_ sender: Any) {
+        toggleLeftMenu()
+    }
+    
+    @IBAction func transparent_view_touched(_ sender: Any) {
+        //depending on whicn view is open it will toggle
+        if(left_nav_view_isShown){
+            toggleLeftMenu()
+        }
+        if(right_nav_view_isShown){
+            toggleRightMenu()
+        }
+    }
+    private func toggleLeftMenu(){
+        if !left_nav_view_isShown{
+            left_nav_leading_constraint.constant = 0
+            left_nav_menu.layer.shadowOpacity = 1
+            left_nav_menu.layer.shadowRadius = 6.0
+            tranparent_overlay.isHidden = false
+            left_nav_btn_view.isHidden = true
+            
+        }else{
+            left_nav_leading_constraint.constant = -280
+            
+        }
+        
+        UIView.animate(withDuration: 0.4, animations: {
+            self.view.layoutIfNeeded()
+            
+        }){(true) in
+            if !self.left_nav_view_isShown{
+                self.left_nav_menu.layer.shadowOpacity = 0
+                self.tranparent_overlay.isHidden = true
+                self.left_nav_btn_view.isHidden = false
+            }else{
+                self.left_nav_btn_view.isHidden = true
+                
+            }
+            
+        }
+        
+        left_nav_view_isShown = !left_nav_view_isShown
+    }
+    
+    
     @IBAction func nav_right_icon_pressed(_ sender: Any) {
+        toggleRightMenu()
+    }
+    
+    private func toggleRightMenu(){
         if !right_nav_view_isShown{
             right_nav_trailing_constraint.constant = 0
             right_nav_menu.layer.shadowOpacity = 1
@@ -306,7 +363,7 @@ class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSou
             
         }else{
             right_nav_trailing_constraint.constant = -280
-
+            
         }
         
         UIView.animate(withDuration: 0.4, animations: {
@@ -321,13 +378,12 @@ class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSou
             }else{
                 self.currentLocationButtonView.isHidden = true
                 self.right_nav_view.isHidden = true
-
+                
             }
             
         }
         
         right_nav_view_isShown = !right_nav_view_isShown
-
     }
     private func showAlertForSettings(){
         // create the alert
