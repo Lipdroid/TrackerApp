@@ -254,10 +254,10 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="k4Q-zv-Bac" userLabel="LeftNavBtnView">
-                                <rect key="frame" x="16" y="32" width="28" height="28"/>
+                                <rect key="frame" x="16" y="32" width="24" height="24"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mSG-O7-Yyu" userLabel="LeftNavToogleButton">
-                                        <rect key="frame" x="0.0" y="0.0" width="28" height="28"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="24" height="24"/>
                                         <state key="normal" image="icon_left_menu"/>
                                         <connections>
                                             <action selector="nav_left_icon_pressed:" destination="JRU-wA-dhl" eventType="touchUpInside" id="872-FK-HhP"/>
@@ -267,9 +267,9 @@
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstItem="mSG-O7-Yyu" firstAttribute="width" secondItem="k4Q-zv-Bac" secondAttribute="width" id="6kW-nK-zyW"/>
-                                    <constraint firstAttribute="height" constant="28" id="PTO-j8-Qfh"/>
+                                    <constraint firstAttribute="height" constant="24" id="PTO-j8-Qfh"/>
                                     <constraint firstItem="mSG-O7-Yyu" firstAttribute="height" secondItem="k4Q-zv-Bac" secondAttribute="height" id="XTa-L3-IUA"/>
-                                    <constraint firstAttribute="width" constant="28" id="arx-w2-YDi"/>
+                                    <constraint firstAttribute="width" constant="24" id="arx-w2-YDi"/>
                                     <constraint firstItem="mSG-O7-Yyu" firstAttribute="centerX" secondItem="k4Q-zv-Bac" secondAttribute="centerX" id="c2z-uQ-e4a"/>
                                     <constraint firstItem="mSG-O7-Yyu" firstAttribute="centerY" secondItem="k4Q-zv-Bac" secondAttribute="centerY" id="qkl-QI-VOc"/>
                                 </constraints>
@@ -383,10 +383,10 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zzz-aO-dz1" userLabel="RightNavBtnView">
-                                <rect key="frame" x="331" y="38" width="28" height="22"/>
+                                <rect key="frame" x="331" y="35" width="28" height="28"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sX7-xH-jrL" userLabel="RightNavToggleButton">
-                                        <rect key="frame" x="0.0" y="0.0" width="28" height="22"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="28" height="28"/>
                                         <state key="normal" image="icon_user_list"/>
                                         <connections>
                                             <action selector="nav_right_icon_pressed:" destination="JRU-wA-dhl" eventType="touchUpInside" id="Yzr-RL-d4N"/>
@@ -399,7 +399,7 @@
                                     <constraint firstAttribute="width" constant="28" id="WvR-51-Jqg"/>
                                     <constraint firstItem="sX7-xH-jrL" firstAttribute="centerX" secondItem="zzz-aO-dz1" secondAttribute="centerX" id="hHO-0f-D8H"/>
                                     <constraint firstItem="sX7-xH-jrL" firstAttribute="height" secondItem="zzz-aO-dz1" secondAttribute="height" id="kAf-Xr-CDY"/>
-                                    <constraint firstAttribute="height" constant="22" id="lmc-eC-ZTL"/>
+                                    <constraint firstAttribute="height" constant="28" id="lmc-eC-ZTL"/>
                                     <constraint firstItem="sX7-xH-jrL" firstAttribute="centerY" secondItem="zzz-aO-dz1" secondAttribute="centerY" id="zmP-1v-k1B"/>
                                 </constraints>
                             </view>
@@ -444,7 +444,7 @@
                             <constraint firstAttribute="trailing" secondItem="B3V-ha-krJ" secondAttribute="trailing" id="Swv-7A-l3I"/>
                             <constraint firstItem="PcB-xI-t7c" firstAttribute="top" secondItem="B3V-ha-krJ" secondAttribute="bottom" id="Vvd-Ef-sF3"/>
                             <constraint firstItem="PcB-xI-t7c" firstAttribute="top" secondItem="d35-lF-KMF" secondAttribute="bottom" id="WET-VW-D74"/>
-                            <constraint firstItem="zzz-aO-dz1" firstAttribute="top" secondItem="Pdy-jC-lUU" secondAttribute="bottom" constant="18" id="eDH-wC-4ed"/>
+                            <constraint firstItem="zzz-aO-dz1" firstAttribute="top" secondItem="Pdy-jC-lUU" secondAttribute="bottom" constant="15" id="eDH-wC-4ed"/>
                             <constraint firstItem="B3V-ha-krJ" firstAttribute="top" secondItem="50i-cE-GWe" secondAttribute="top" id="f70-FH-y60"/>
                             <constraint firstItem="xp8-x7-tqO" firstAttribute="top" secondItem="50i-cE-GWe" secondAttribute="top" id="fRB-Ed-zTc"/>
                             <constraint firstItem="PcB-xI-t7c" firstAttribute="top" secondItem="Ry2-3O-kxQ" secondAttribute="bottom" id="ged-ot-qfa"/>
