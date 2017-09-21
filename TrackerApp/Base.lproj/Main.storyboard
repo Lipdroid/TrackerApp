@@ -53,7 +53,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-306" y="125"/>
+            <point key="canvasLocation" x="-1935" y="-539"/>
         </scene>
         <!--Map View Controller-->
         <scene sceneID="r4O-ZI-vYx">
@@ -531,7 +531,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vni-ft-99L" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-306" y="-613"/>
+            <point key="canvasLocation" x="-1001" y="-539"/>
         </scene>
         <!--Chat RoomVC-->
         <scene sceneID="xfY-d3-SRD">
@@ -591,7 +591,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="R1Y-OZ-BSN" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="409" y="-1722"/>
+            <point key="canvasLocation" x="-678" y="213"/>
         </scene>
         <!--HistoryVC-->
         <scene sceneID="1JA-Vb-S6n">
@@ -651,7 +651,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HdB-9G-dLi" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1173.5999999999999" y="-539.28035982008998"/>
+            <point key="canvasLocation" x="-1935" y="213"/>
         </scene>
         <!--ProfileVC-->
         <scene sceneID="hTt-1S-rsu">
@@ -862,7 +862,7 @@
                 </view>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tYL-mi-XSv" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1943" y="-699"/>
+            <point key="canvasLocation" x="4" y="-539"/>
         </scene>
     </scenes>
     <resources>
