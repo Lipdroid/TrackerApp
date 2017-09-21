@@ -117,8 +117,28 @@ class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSou
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         NSLog("You selected cell number: \(indexPath.row)!")
         toggleRightMenu()
+        self.performSegue(withIdentifier: Constants.PROFILE_SEGUE_IDENTIFIER, sender: nil)
+
+    }
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == Constants.PROFILE_SEGUE_IDENTIFIER{
+            if let dest: ProfileVC = segue.destination as? ProfileVC{
+                let index = self.tableView.indexPathForSelectedRow
+                let indexNumber = index?.row //0,1,2,3
+                dest.mUserObj = self.employees[indexNumber!]
+            }
+        }else if segue.identifier == Constants.USER_PROFILE_SEGUE_IDENTIFIER{
+            if let dest: ProfileVC = segue.destination as? ProfileVC{
+                dest.mUserObj = self.mUserObj
+            }
+        }
     }
     
+    
+    @IBAction func profile_icon_changed(_ sender: Any) {
+        toggleLeftMenu()
+        self.performSegue(withIdentifier: Constants.USER_PROFILE_SEGUE_IDENTIFIER, sender: nil)
+    }
     func getAllUserData(){
         Progress.sharedInstance.showLoading()
         print("start getting all user data")

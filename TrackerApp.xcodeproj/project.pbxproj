@@ -25,6 +25,7 @@
 		749BC3191F4A7D80006AA55D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 749BC3171F4A7D80006AA55D /* Main.storyboard */; };
 		749BC31E1F4A7D80006AA55D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 749BC31C1F4A7D80006AA55D /* LaunchScreen.storyboard */; };
 		749BC3261F4A9883006AA55D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 749BC3251F4A9883006AA55D /* GoogleService-Info.plist */; };
+		74D8184B1F73570600646154 /* ProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D8184A1F73570600646154 /* ProfileVC.swift */; };
 		BC0603199903882553392C48 /* Pods_TrackerApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B6D8A77181E2D61273A592E5 /* Pods_TrackerApp.framework */; };
 /* End PBXBuildFile section */
 
@@ -51,6 +52,7 @@
 		749BC31D1F4A7D80006AA55D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		749BC31F1F4A7D80006AA55D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		749BC3251F4A9883006AA55D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		74D8184A1F73570600646154 /* ProfileVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileVC.swift; sourceTree = "<group>"; };
 		B6D8A77181E2D61273A592E5 /* Pods_TrackerApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TrackerApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D653A11911011B8DB62E2F55 /* Pods-TrackerApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TrackerApp.release.xcconfig"; path = "Pods/Target Support Files/Pods-TrackerApp/Pods-TrackerApp.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -101,6 +103,7 @@
 				7402EB251F542AE700BE2897 /* MapViewController.swift */,
 				745AAC941F7272C100BA8413 /* ChatRoomVC.swift */,
 				745AAC961F727C4100BA8413 /* HistoryVC.swift */,
+				74D8184A1F73570600646154 /* ProfileVC.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -326,6 +329,7 @@
 			files = (
 				7198D7B61F69CDC800EEF51E /* CircleImageView.swift in Sources */,
 				745AAC951F7272C100BA8413 /* ChatRoomVC.swift in Sources */,
+				74D8184B1F73570600646154 /* ProfileVC.swift in Sources */,
 				744EFDB81F552807004364D0 /* Constants.swift in Sources */,
 				749BC3161F4A7D80006AA55D /* LoginViewController.swift in Sources */,
 				7198D7B91F69D7A000EEF51E /* MaterialView.swift in Sources */,
