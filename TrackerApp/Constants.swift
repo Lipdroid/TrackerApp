@@ -43,7 +43,10 @@ struct Constants {
     static let KEY_UID = "uid"
     static let KEY_COMPANY = "companyName"
 
-
+    static let STATUS_START = 0
+    static let STATUS_TRAFFIC = 1
+    static let STATUS_WAITING = 2
+    static let STATUS_STOP = 3
 
 
 }

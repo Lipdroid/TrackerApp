@@ -71,6 +71,20 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="STATUS" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UsF-S7-FLw" userLabel="StatusLbl">
+                                <rect key="frame" x="112" y="614" width="150" height="45"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="150" id="7Ta-PG-MP5"/>
+                                    <constraint firstAttribute="height" constant="45" id="8zr-7n-p52"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="20"/>
+                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="materialView" value="YES"/>
+                                </userDefinedRuntimeAttributes>
+                            </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0X0-Du-N3R" userLabel="StatusView">
                                 <rect key="frame" x="62.5" y="100" width="250" height="50"/>
                                 <subviews>
@@ -87,6 +101,9 @@
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="boolean" keyPath="materialView" value="YES"/>
                                         </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="status_chage_pressed:" destination="JRU-wA-dhl" eventType="valueChanged" id="R07-2k-k61"/>
+                                        </connections>
                                     </segmentedControl>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -352,7 +369,7 @@
                                                 <rect key="frame" x="0.0" y="28" width="280" height="65"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Lri-fx-R9e" id="3At-Jn-Jef">
-                                                    <rect key="frame" x="0.0" y="0.0" width="280" height="64.5"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="280" height="65"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="dummy_profile_pic" translatesAutoresizingMaskIntoConstraints="NO" id="A5t-nU-mhf" customClass="CircleImageView" customModule="TrackerApp" customModuleProvider="target">
@@ -501,10 +518,12 @@
                             <constraint firstAttribute="trailing" secondItem="B3V-ha-krJ" secondAttribute="trailing" id="Swv-7A-l3I"/>
                             <constraint firstItem="PcB-xI-t7c" firstAttribute="top" secondItem="B3V-ha-krJ" secondAttribute="bottom" id="Vvd-Ef-sF3"/>
                             <constraint firstItem="PcB-xI-t7c" firstAttribute="top" secondItem="d35-lF-KMF" secondAttribute="bottom" id="WET-VW-D74"/>
+                            <constraint firstItem="PcB-xI-t7c" firstAttribute="top" secondItem="UsF-S7-FLw" secondAttribute="bottom" constant="8" id="X6L-DM-2xc"/>
                             <constraint firstItem="zzz-aO-dz1" firstAttribute="top" secondItem="Pdy-jC-lUU" secondAttribute="bottom" constant="12" id="eDH-wC-4ed"/>
                             <constraint firstItem="B3V-ha-krJ" firstAttribute="top" secondItem="50i-cE-GWe" secondAttribute="top" id="f70-FH-y60"/>
                             <constraint firstItem="xp8-x7-tqO" firstAttribute="top" secondItem="50i-cE-GWe" secondAttribute="top" id="fRB-Ed-zTc"/>
                             <constraint firstItem="PcB-xI-t7c" firstAttribute="top" secondItem="Ry2-3O-kxQ" secondAttribute="bottom" id="ged-ot-qfa"/>
+                            <constraint firstItem="UsF-S7-FLw" firstAttribute="centerX" secondItem="50i-cE-GWe" secondAttribute="centerX" id="iP1-tg-mER"/>
                             <constraint firstItem="Ry2-3O-kxQ" firstAttribute="leading" secondItem="zzz-aO-dz1" secondAttribute="trailing" constant="16" id="kdB-yP-GBW"/>
                             <constraint firstItem="0X0-Du-N3R" firstAttribute="centerX" secondItem="50i-cE-GWe" secondAttribute="centerX" id="o0W-GZ-FqL"/>
                             <constraint firstItem="Ry2-3O-kxQ" firstAttribute="leading" secondItem="xp8-x7-tqO" secondAttribute="trailing" id="oNu-aZ-sTg"/>
@@ -522,6 +541,8 @@
                         <outlet property="right_nav_menu" destination="Ry2-3O-kxQ" id="XAj-or-tB6"/>
                         <outlet property="right_nav_trailing_constraint" destination="KuY-Zt-X4G" id="gue-kc-At7"/>
                         <outlet property="right_nav_view" destination="zzz-aO-dz1" id="8AF-Z1-VMW"/>
+                        <outlet property="status_lbl" destination="UsF-S7-FLw" id="gsJ-Yh-Mju"/>
+                        <outlet property="status_seg" destination="WK1-bo-E4p" id="q90-w6-u2P"/>
                         <outlet property="tableView" destination="hPi-DQ-K6O" id="XoG-KF-3Rh"/>
                         <outlet property="tranparent_overlay" destination="xp8-x7-tqO" id="Ngn-MZ-cN1"/>
                         <outlet property="user_image" destination="HxB-kT-CUH" id="96A-Ec-wjR"/>
@@ -531,7 +552,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vni-ft-99L" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1001" y="-539"/>
+            <point key="canvasLocation" x="-1002.4" y="-539.28035982008998"/>
         </scene>
         <!--Chat RoomVC-->
         <scene sceneID="xfY-d3-SRD">

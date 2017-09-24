@@ -97,3 +97,9 @@ extension UIImageView {
         self.addSubview(blurEffectView)
     }
 }
+
+extension String {
+    func toDouble() -> Double? {
+        return NumberFormatter().number(from: self)?.doubleValue
+    }
+}

@@ -40,11 +40,64 @@ class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSou
     var employees = [UserObject]()
     var marker_dict = Dictionary<String,GMSMarker>()
 
+    @IBOutlet weak var status_seg: UISegmentedControl!
+    
+    var status = Constants.STATUS_STOP
+    var markerAnimationfinish = true
+
+    @IBOutlet weak var status_lbl: UILabel!
     deinit {
         // Release all recoureces
         // perform the deinitialization
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
 
+    }
+    
+    @IBAction func status_chage_pressed(_ sender: Any) {
+        switch status_seg.selectedSegmentIndex {
+        case Constants.STATUS_START:
+            status_segment_enable(enable: true)
+            locationManager.startUpdatingLocation()
+            status = Constants.STATUS_START
+            break
+        case Constants.STATUS_TRAFFIC:
+            status = Constants.STATUS_TRAFFIC
+            break
+        case Constants.STATUS_WAITING:
+            status = Constants.STATUS_WAITING
+            reset_segment()
+            break
+        case Constants.STATUS_STOP:
+            locationManager.stopUpdatingLocation()
+            status_segment_enable(enable: false)
+            self.status_seg.selectedSegmentIndex = 3;
+            status = Constants.STATUS_STOP
+            break
+        default:
+            break
+        }
+    }
+    
+    public func status_segment_enable(enable: Bool){
+        if enable{
+            self.status_seg.setEnabled(true, forSegmentAt: 1);
+            self.status_seg.setEnabled(true, forSegmentAt: 2);
+            self.status_seg.setEnabled(true, forSegmentAt: 3);
+        }else{
+            self.status_seg.setEnabled(false, forSegmentAt: 1);
+            self.status_seg.setEnabled(false, forSegmentAt: 2);
+            self.status_seg.setEnabled(false, forSegmentAt: 3);
+        }
+    }
+    
+    public func reset_segment(){
+            self.status_seg.selectedSegmentIndex = UISegmentedControlNoSegment;
+
+            self.status_seg.setEnabled(true, forSegmentAt: 0);
+            self.status_seg.setEnabled(true, forSegmentAt: 1);
+            self.status_seg.setEnabled(true, forSegmentAt: 2);
+            self.status_seg.setEnabled(true, forSegmentAt: 3);
+        
     }
     
     func intMarkerSound(){
@@ -451,7 +504,34 @@ extension MapViewController: CLLocationManagerDelegate {
             if let user_lat = mUserObj.user_login_lat,let user_lng = mUserObj.user_login_lng
             {
                 //journey already started or just opened the app
-                print("new location: lat:\(location.coordinate.latitude), lng:\(location.coordinate.longitude) user:\(user_lat),\(user_lng)")
+                let user_current_location = CLLocation(latitude: user_lat.toDouble()!, longitude: user_lng.toDouble()!)
+                let user_new_location = CLLocation(latitude: location.coordinate.latitude, longitude:location.coordinate.longitude)
+                let distanceInMeters = user_current_location.distance(from: user_new_location) // result is in meters
+                print("moved \(distanceInMeters) meters")
+                if(distanceInMeters >= 1)
+                {
+                    // 1 mile = 1609 meters
+                    // 1 kilometer = 1000 meters
+                    if(self.status != Constants.STATUS_STOP){
+                        if let marker = marker_dict[mUserObj.userNodeId!]{
+                            if(self.markerAnimationfinish){
+                                    self.markerAnimationfinish = false
+                                    status_lbl.text = "Moving"
+                                    anitmateMarkertoLocation(marker: marker, coordinates: CLLocationCoordinate2D(latitude: user_new_location.coordinate.latitude, longitude: user_new_location.coordinate.longitude), degrees: 0, duration: 3)
+                            }else{
+                                status_lbl.text = "Moving"
+                            }
+                        }
+                    }else{
+                        status_lbl.text = "UNAVAILABLE"
+                    }
+                    
+                }
+                else
+                {
+                    // in of 1000
+                    status_lbl.text = "Stopped"
+                }
 
             }else{
                 mUserObj.user_login_lat = "\(location.coordinate.latitude)"
@@ -492,4 +572,32 @@ extension MapViewController: CLLocationManagerDelegate {
                 }
             }
     }
+    
+    
+    func anitmateMarkertoLocation(marker: GMSMarker,coordinates: CLLocationCoordinate2D, degrees: CLLocationDegrees, duration: Double) {
+        // Keep Rotation Short
+        //if want to update the rotation also comment out these two lines
+//        CATransaction.begin()
+//        CATransaction.setAnimationDuration(0.5)
+//        marker.rotation = degrees
+//        CATransaction.commit()
+        
+        // Movement
+        CATransaction.begin()
+        CATransaction.setCompletionBlock({
+            print("Animation completed")
+            self.markerAnimationfinish = true
+            self.mUserObj.user_login_lat = "\(coordinates.latitude)"
+            self.mUserObj.user_login_lng = "\(coordinates.longitude)"
+        })
+        CATransaction.setAnimationDuration(duration)
+        marker.position = coordinates
+        //if want to update the camerea also comment out these two lines
+        // Center Map View
+        //let camera = GMSCameraUpdate.setTarget(coordinates)
+        //google_map.animate(with: camera)
+        
+        CATransaction.commit()
+    }
 }
+
