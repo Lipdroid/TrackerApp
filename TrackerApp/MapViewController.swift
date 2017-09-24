@@ -508,7 +508,7 @@ extension MapViewController: CLLocationManagerDelegate {
                 let user_new_location = CLLocation(latitude: location.coordinate.latitude, longitude:location.coordinate.longitude)
                 let distanceInMeters = user_current_location.distance(from: user_new_location) // result is in meters
                 print("moved \(distanceInMeters) meters")
-                if(distanceInMeters >= 1)
+                if(distanceInMeters >= 20)
                 {
                     // 1 mile = 1609 meters
                     // 1 kilometer = 1000 meters
