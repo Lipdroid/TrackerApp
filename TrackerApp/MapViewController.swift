@@ -184,6 +184,10 @@ class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSou
             if let dest: ProfileVC = segue.destination as? ProfileVC{
                 dest.mUserObj = self.mUserObj
             }
+        }else if segue.identifier == Constants.CHATROOM_SEGUE_IDENTIFIER{
+            if let dest: ChatRoomVC = segue.destination as? ChatRoomVC{
+                dest.mUserObj = self.mUserObj
+            }
         }
     }
     
@@ -524,6 +528,7 @@ extension MapViewController: CLLocationManagerDelegate {
                         }
                     }else{
                         status_lbl.text = "UNAVAILABLE"
+                        
                     }
                     
                 }
@@ -533,6 +538,9 @@ extension MapViewController: CLLocationManagerDelegate {
                     status_lbl.text = "Stopped"
                 }
 
+                if(self.status == Constants.STATUS_STOP){
+                    locationManager.stopUpdatingLocation()
+                }
             }else{
                 mUserObj.user_login_lat = "\(location.coordinate.latitude)"
                 mUserObj.user_login_lng = "\(location.coordinate.longitude)"

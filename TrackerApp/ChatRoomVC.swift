@@ -14,6 +14,8 @@ class ChatRoomVC: UIViewController, UITextFieldDelegate,UITableViewDelegate,UITa
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var message_text: UITextField!
     var chats = [ChatObject]()
+    var mUserObj: UserObject! = nil
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -26,19 +28,41 @@ class ChatRoomVC: UIViewController, UITextFieldDelegate,UITableViewDelegate,UITa
         tableView.dataSource = self
         tableView.delegate = self
         tableView.tableFooterView = UIView()
+        tableView.estimatedRowHeight = 600.0;
+        tableView.rowHeight = UITableViewAutomaticDimension;
+        
+        
+        tableView.setNeedsLayout()
+        tableView.layoutIfNeeded()
 
         getAllChatData()
+        
         
 
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if let cell = tableView.dequeueReusableCell(withIdentifier: "chatCell", for: indexPath) as? ChatCell{
-            configureCell(cell: cell, indexPath: indexPath)
-            return cell
-        }else{
-            return UITableViewCell()
-        }    }
+        if let item = chats[indexPath.row] as? ChatObject{
+            if(item.senderId == mUserObj.userNodeId){
+                if let cell = tableView.dequeueReusableCell(withIdentifier: "userChatCell", for: indexPath) as? UserChatCell{
+                    if let item = chats[indexPath.row] as? ChatObject{
+                        cell.configureCell(chat: item)
+                        return cell
+                    }
+                    return UserChatCell()
+                }
+            }else{
+                if let cell = tableView.dequeueReusableCell(withIdentifier: "chatCell", for: indexPath) as? ChatCell{
+                    if let item = chats[indexPath.row] as? ChatObject{
+                        cell.configureCell(chat: item)
+                        return cell
+                    }
+                    return ChatCell()
+                }
+            }
+        }
+        return UITableViewCell()
+    }
     
     
     
@@ -55,10 +79,16 @@ class ChatRoomVC: UIViewController, UITextFieldDelegate,UITableViewDelegate,UITa
             cell.configureCell(chat: item)
         }
     }
+    
+    // UITableViewAutomaticDimension calculates height of label contents/text
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableViewAutomaticDimension
+    }
+    
 
     func getAllChatData(){
         Progress.sharedInstance.showLoading()
-        DADataService.instance.REF_COMPANY.child(Constants.DEFAULT_COMPANY_NAME).child("ChatGroup").observeSingleEvent(of: .value, with: { (snapshot) in
+        DADataService.instance.REF_COMPANY.child(Constants.DEFAULT_COMPANY_NAME).child("chatGroup").observeSingleEvent(of: .value, with: { (snapshot) in
             // Get all user
             print("finish getting all user data")
             Progress.sharedInstance.dismissLoading()
@@ -68,13 +98,15 @@ class ChatRoomVC: UIViewController, UITextFieldDelegate,UITableViewDelegate,UITa
                 self.chats.removeAll()
                 for snap in snapshots {
                     if let chat_snap = snap.value as? Dictionary<String, String>{
-                        if let chat = self.parseChatSnap(uid: snap.key, chatSnapDict: chat_snap){
+                        if let chat = self.parseChatSnap(chatId:snap.key,chatSnapDict: chat_snap){
                             self.chats.append(chat)
                         }
                     }
                 }
                 
                 self.tableView.reloadData()
+                self.tableViewScrollToBottom(animated: true)
+                self.startObservingChatDataChange()
             }
             
         }) { (error) in
@@ -107,8 +139,8 @@ class ChatRoomVC: UIViewController, UITextFieldDelegate,UITableViewDelegate,UITa
         }
     }
     
-    func parseChatSnap(uid: String,chatSnapDict: Dictionary<String,String>)->ChatObject?{
-        var chatObj = ChatObject(senderId: uid)
+    func parseChatSnap(chatId: String,chatSnapDict: Dictionary<String,String>)->ChatObject?{
+        var chatObj = ChatObject()
         
         guard let senderName = chatSnapDict["senderName"] else{
             return chatObj
@@ -131,9 +163,55 @@ class ChatRoomVC: UIViewController, UITextFieldDelegate,UITableViewDelegate,UITa
         
         
         
-        chatObj = ChatObject(senderId: senderId, senderName: senderName, message: message, time: time, date: date, image_url: iamgeUrl)
+        chatObj = ChatObject(chatId: chatId,senderId: senderId, senderName: senderName, message: message, time: time, date: date, image_url: iamgeUrl)
         
         return chatObj
     }
 
+    @IBAction func send_btn_pressed(_ sender: Any) {
+        guard let text = message_text.text, !(message_text.text?.isEmpty)! else {
+            return
+        }
+        DADataService.instance.createFirebaseDBChat(message: text, userObject: mUserObj)
+        self.view.endEditing(true)
+        message_text.text = ""
+
+    }
+    
+    func startObservingChatDataChange(){
+        print("start observing")
+        DADataService.instance.REF_COMPANY.child(mUserObj.companyName!).child("chatGroup").queryLimited(toLast: 1).observe(.childAdded, with: { (snapshot) in
+            print("receive user data changed")
+            if let chat_snap = snapshot.value as? Dictionary<String, String>{
+                if let chat = self.parseChatSnap(chatId: snapshot.key,chatSnapDict: chat_snap){
+                    //if already exist then remove that item
+                    if let index = self.chats.index(where: { $0.chatId == chat.chatId }) {
+                        self.chats.remove(at: index)
+                        //continue do: arrPickerData.append(...)
+                    }
+                    //add that item
+                    self.chats.append(chat)
+                    
+                    self.tableView.reloadData()
+                    self.tableViewScrollToBottom(animated: true)
+                }
+            }
+            
+        }) { (error) in
+            print(error.localizedDescription)
+        }
+    }
+    func tableViewScrollToBottom(animated: Bool) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(300)) {
+            let numberOfSections = self.tableView.numberOfSections
+            let numberOfRows = self.tableView.numberOfRows(inSection: numberOfSections-1)
+            
+            if numberOfRows > 0 {
+                let indexPath = IndexPath(row: numberOfRows-1, section: (numberOfSections-1))
+                self.tableView.scrollToRow(at: indexPath, at: .bottom, animated: animated)
+            }
+        }
+    }
 }
+
+

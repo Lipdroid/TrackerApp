@@ -9,6 +9,7 @@
 import Foundation
 
 class ChatObject {
+    private var _chatId: String!
     private var _senderId: String!
     private var _senderName: String!
     private var _message: String!
@@ -16,6 +17,9 @@ class ChatObject {
     private var _date: String!
     private var _image_url: String!
     
+    var chatId: String!{
+        return _chatId
+    }
     var senderId: String!{
         return _senderId
     }
@@ -35,18 +39,17 @@ class ChatObject {
         return _date
     }
     
-    init(senderId: String,senderName: String,message: String,time: String,date: String,image_url: String) {
+    init(chatId: String,senderId: String,senderName: String,message: String,time: String,date: String,image_url: String) {
         self._senderId = senderId
         self._senderName = senderName
         self._message = message
         self._time = time
         self._date = date
         self._image_url = image_url
-
+        self._chatId = chatId
     }
     
-    init(senderId: String) {
-        self._senderId = senderId
+    init() {
     }
     
 

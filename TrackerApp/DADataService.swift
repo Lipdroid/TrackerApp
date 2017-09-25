@@ -80,5 +80,18 @@ class DADataService {
         }
     }
     
+    func createFirebaseDBChat(message: String, userObject: UserObject){
+        let chat = ["message": message,
+                    "senderName": userObject.userName,
+                    "imageUrl": userObject.imageUrl,
+                    "senderId": userObject.userNodeId,
+                    "time":getCurrentTime(),
+                    "date":getCurrentDate()]
+        
+        let newRef = REF_COMPANY.child(userObject.companyName!).child("chatGroup").childByAutoId()
+        
+        newRef.setValue(chat as Any as! [AnyHashable : Any])
+    }
+    
 
 }

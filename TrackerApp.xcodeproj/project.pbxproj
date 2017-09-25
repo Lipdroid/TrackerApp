@@ -27,6 +27,8 @@
 		749BC3191F4A7D80006AA55D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 749BC3171F4A7D80006AA55D /* Main.storyboard */; };
 		749BC31E1F4A7D80006AA55D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 749BC31C1F4A7D80006AA55D /* LaunchScreen.storyboard */; };
 		749BC3261F4A9883006AA55D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 749BC3251F4A9883006AA55D /* GoogleService-Info.plist */; };
+		74A33A541F78FCCF00F7260F /* UserChatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A33A531F78FCCF00F7260F /* UserChatCell.swift */; };
+		74A33A561F79051E00F7260F /* InsetLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A33A551F79051E00F7260F /* InsetLabel.swift */; };
 		74D8184B1F73570600646154 /* ProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D8184A1F73570600646154 /* ProfileVC.swift */; };
 		BC0603199903882553392C48 /* Pods_TrackerApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B6D8A77181E2D61273A592E5 /* Pods_TrackerApp.framework */; };
 /* End PBXBuildFile section */
@@ -56,6 +58,8 @@
 		749BC31D1F4A7D80006AA55D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		749BC31F1F4A7D80006AA55D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		749BC3251F4A9883006AA55D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		74A33A531F78FCCF00F7260F /* UserChatCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserChatCell.swift; sourceTree = "<group>"; };
+		74A33A551F79051E00F7260F /* InsetLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InsetLabel.swift; sourceTree = "<group>"; };
 		74D8184A1F73570600646154 /* ProfileVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileVC.swift; sourceTree = "<group>"; };
 		B6D8A77181E2D61273A592E5 /* Pods_TrackerApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TrackerApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D653A11911011B8DB62E2F55 /* Pods-TrackerApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TrackerApp.release.xcconfig"; path = "Pods/Target Support Files/Pods-TrackerApp/Pods-TrackerApp.release.xcconfig"; sourceTree = "<group>"; };
@@ -130,6 +134,7 @@
 				716FCD9A1F718D3E00A40595 /* UserCell.swift */,
 				74177DFE1F77B02700A21DA2 /* ChatCell.swift */,
 				74177E001F77B4F200A21DA2 /* ChatObject.swift */,
+				74A33A531F78FCCF00F7260F /* UserChatCell.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -156,6 +161,7 @@
 			children = (
 				7198D7B51F69CDC800EEF51E /* CircleImageView.swift */,
 				71F809EA1F6C480700C42771 /* Progress.swift */,
+				74A33A551F79051E00F7260F /* InsetLabel.swift */,
 			);
 			name = CustomViews;
 			sourceTree = "<group>";
@@ -339,9 +345,11 @@
 				74D8184B1F73570600646154 /* ProfileVC.swift in Sources */,
 				744EFDB81F552807004364D0 /* Constants.swift in Sources */,
 				749BC3161F4A7D80006AA55D /* LoginViewController.swift in Sources */,
+				74A33A541F78FCCF00F7260F /* UserChatCell.swift in Sources */,
 				7198D7B91F69D7A000EEF51E /* MaterialView.swift in Sources */,
 				749BC3141F4A7D80006AA55D /* AppDelegate.swift in Sources */,
 				71F809EB1F6C480700C42771 /* Progress.swift in Sources */,
+				74A33A561F79051E00F7260F /* InsetLabel.swift in Sources */,
 				74177DFF1F77B02700A21DA2 /* ChatCell.swift in Sources */,
 				7402EB241F5422BC00BE2897 /* UserObject.swift in Sources */,
 				718337401F70453500BEF060 /* Utils.swift in Sources */,

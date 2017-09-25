@@ -98,8 +98,38 @@ extension UIImageView {
     }
 }
 
+func getCurrentDate()->String{
+    var currentDate:String!
+    let date = Date()
+    let calendar = Calendar.current
+    let components = calendar.dateComponents([.year, .month, .day], from: date)
+    
+    let year =  components.year
+    let month = components.month
+    let day = components.day
+    
+    currentDate = "\(day ?? 00)/\(month ?? 00)/\(year ?? 0000)"
+    return currentDate
+}
+
+func getCurrentTime()->String{
+    var currentTime:String!
+    let formatter = DateFormatter()
+    formatter.dateFormat = "h:mm a"
+    formatter.amSymbol = "AM"
+    formatter.pmSymbol = "PM"
+    
+    let timeString = formatter.string(from: Date())
+    print(timeString)
+    
+    currentTime = timeString
+    return currentTime
+}
+
 extension String {
     func toDouble() -> Double? {
         return NumberFormatter().number(from: self)?.doubleValue
     }
 }
+
+

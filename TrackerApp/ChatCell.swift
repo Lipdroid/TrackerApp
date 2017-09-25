@@ -15,9 +15,13 @@ class ChatCell: UITableViewCell {
     @IBOutlet weak var time_lbl: UILabel!
     @IBOutlet weak var profile_image: CircleImageView!
     
+
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        sizeToFit()
+        layoutIfNeeded()
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -27,10 +31,12 @@ class ChatCell: UITableViewCell {
     }
     
     func configureCell(chat: ChatObject){
+    
         name_lbl.text = chat.senderName
         message_lbl.text = chat.message
         time_lbl.text = chat.time
         profile_image.imageFromServerURL(urlString: chat.image_url, defaultImage: "No Image")
+        profile_image.clipsToBounds = true
     
     }
     
