@@ -11,6 +11,7 @@ import UIKit
 class UserChatCell: UITableViewCell {
 
     @IBOutlet weak var message_lbl: UILabel!
+    @IBOutlet weak var message_view: UIView!
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -24,8 +25,8 @@ class UserChatCell: UITableViewCell {
     func configureCell(chat: ChatObject){
         
         message_lbl.text = chat.message
-        message_lbl.layer.cornerRadius = 5.0
-        message_lbl.clipsToBounds = true
+        message_view.layer.cornerRadius = 5.0
+        message_view.clipsToBounds = true
         
     }
 
