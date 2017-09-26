@@ -14,6 +14,7 @@ import GoogleSignIn
 import GoogleMaps
 import SwiftKeychainWrapper
 import AVFoundation
+import UserNotifications
 
 class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSource {
     
@@ -62,6 +63,15 @@ class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSou
             break
         case Constants.STATUS_TRAFFIC:
             status = Constants.STATUS_TRAFFIC
+            scheduleNotification(inSeconds: 1, body: "THis is a test message for all", title: "Md Munir Hossain", subtitle: "Oceanize", completion: {(success) in
+                if success{
+                    print("succesfull scheduling")
+                }else{
+                    print("Error sending notification schedule")
+                }
+                
+            })
+        
             break
         case Constants.STATUS_WAITING:
             status = Constants.STATUS_WAITING
@@ -142,6 +152,17 @@ class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSou
             setUserData()
         }
         intMarkerSound()
+        
+        //Request to user for permission
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert,.badge,.sound], completionHandler:{(granted,error) in
+            if (granted){
+                print("User granted Permission")
+            }else{
+                print(error?.localizedDescription ?? "Error!!!")
+            }
+            
+        })
+
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -607,5 +628,6 @@ extension MapViewController: CLLocationManagerDelegate {
         
         CATransaction.commit()
     }
+    
 }
 

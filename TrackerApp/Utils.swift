@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import UserNotifications
 
 var imageCache: NSCache<NSString, UIImage> =  NSCache()
 
@@ -130,6 +131,38 @@ extension String {
     func toDouble() -> Double? {
         return NumberFormatter().number(from: self)?.doubleValue
     }
+    
 }
+
+func scheduleNotification(inSeconds: TimeInterval,body: String,title: String,subtitle: String,completion: @escaping (_ Success: Bool)->()){
+    //Create Image Content for notification
+    
+    //Create the notification content or body
+    let notif_content = UNMutableNotificationContent()
+    notif_content.title = title
+    notif_content.body = body
+    notif_content.subtitle = subtitle
+    
+    //add a sound
+    notif_content.sound = UNNotificationSound.default()
+    
+    
+    //Create notification Trigger
+    let trigger = UNTimeIntervalNotificationTrigger(timeInterval: inSeconds, repeats: false)
+    
+    //create a request for notification
+    let request = UNNotificationRequest(identifier: "myNotification", content: notif_content, trigger: trigger)
+    
+    //add it to notificationCenter To show
+    UNUserNotificationCenter.current().add(request, withCompletionHandler: {(error) in
+        if error != nil {
+            completion(false)
+        }else{
+            completion(true)
+        }
+    })
+}
+
+
 
 
