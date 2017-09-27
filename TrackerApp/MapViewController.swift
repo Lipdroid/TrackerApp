@@ -92,33 +92,45 @@ class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSou
             if let chat_snap = snapshot.value as? Dictionary<String, String>{
                 
                 if let chat = self.parseChatSnap(chatId: snapshot.key,chatSnapDict: chat_snap){
-                    if let _ = self.chats.index(where: { $0.chatId == chat.chatId }) {
-                        //do nothing
-                    }else{
-                        if self.mUserObj.userNodeId != chat.senderId{
-                            //show a notification
-                            scheduleNotification(inSeconds: 1, body: chat.message, title: chat.senderName, subtitle: chat.time, completion: {(success) in
-                                    if success{
-                                        print("\(self.TAG): succesfull scheduling")
-                                    }else{
-                                        print("\(self.TAG): Error sending notification schedule")
-                                    }
-                            
-                            })
-                        }else{
-                            let update_current_user_count = Int(self.mUserObj.chat_notify_count!)!+1
-                            self.mUserObj.chat_notify_count = "\(update_current_user_count)"
-                        }
-                    }
                     if let index = self.chats.index(where: { $0.chatId == chat.chatId }) {
                         self.chats.remove(at: index)
-                        //continue do: arrPickerData.append(...)
+                        //do nothing
                     }
                     //add that item
                     self.chats.append(chat)
-                    self.count_show_badge()
-                    //update chat list in chat room vc
-                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "refreshChatList"), object: nil,userInfo:["snap": chat])
+                    
+                    if self.mUserObj.userNodeId != chat.senderId{
+                            if(!Constants.onChatPage){
+                            //show a notification
+                                scheduleNotification(inSeconds: 1, body: chat.message, title: chat.senderName, subtitle: chat.time, completion: {(success) in
+                                        if success{
+                                            print("\(self.TAG): succesfull scheduling")
+                                        }else{
+                                            print("\(self.TAG): Error sending notification schedule")
+                                        }
+                            
+                                    })
+                            }else{
+                                let update_current_user_count = self.chats.count
+                                self.mUserObj.chat_notify_count = "\(update_current_user_count)"
+                                //update current user DB firebase
+                                DADataService.instance.update_notification_count_for_user(uid: self.mUserObj.userNodeId!, companyName: self.mUserObj.companyName!, count: "\(update_current_user_count)"){(response) in
+                                }
+
+                            }
+                        }else{
+                            let update_current_user_count = self.chats.count
+                            self.mUserObj.chat_notify_count = "\(update_current_user_count)"
+                            //update current user DB firebase
+                            DADataService.instance.update_notification_count_for_user(uid: self.mUserObj.userNodeId!, companyName: self.mUserObj.companyName!, count: "\(update_current_user_count)"){(response) in
+                            }
+                        }
+                   
+                   
+                    
+                        self.count_show_badge()
+                        //update chat list in chat room vc
+                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "refreshChatList"), object: nil,userInfo:["snap": chat])
 
                 }
 
@@ -474,6 +486,8 @@ class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSou
         super.viewDidAppear(animated)
         getAllChatData()
         checkForLocationPermission()
+        Constants.onChatPage = false
+
     }
     
     private func setUserData(){

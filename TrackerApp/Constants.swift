@@ -48,6 +48,8 @@ struct Constants {
     static let STATUS_TRAFFIC = 1
     static let STATUS_WAITING = 2
     static let STATUS_STOP = 3
+    
+    static var onChatPage = false;
 
 
 }

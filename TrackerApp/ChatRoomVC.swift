@@ -48,6 +48,7 @@ class ChatRoomVC: UIViewController, UITextFieldDelegate,UITableViewDelegate,UITa
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.tableViewScrollToBottom(animated: true)
+        Constants.onChatPage = true
 
     }
     func refreshChatList(notification: NSNotification){
