@@ -40,6 +40,7 @@ struct Constants {
     static let USER_ROUTE_STATUS_TRIP_STARTED = "tripStarted"
     
     static let DEFAULT_COMPANY_NAME = "defaultCompany"
+    static let DEFAULT_CHAT_COUNT = "0"
     static let KEY_UID = "uid"
     static let KEY_COMPANY = "companyName"
 

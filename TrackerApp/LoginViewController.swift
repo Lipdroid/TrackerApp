@@ -16,7 +16,8 @@ import SwiftKeychainWrapper
 class LoginViewController: UIViewController,GIDSignInDelegate,GIDSignInUIDelegate {
     var dict : [String : AnyObject]!
     var mUserObj: UserObject? = nil
-    
+    private let TAG = "LoginViewController"
+
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -27,9 +28,12 @@ class LoginViewController: UIViewController,GIDSignInDelegate,GIDSignInUIDelegat
         GIDSignIn.sharedInstance().delegate = self
         GIDSignIn.sharedInstance().uiDelegate = self
         
+//        KeychainWrapper.standard.removeObject(forKey: Constants.KEY_UID)
+//        KeychainWrapper.standard.removeObject(forKey: Constants.KEY_COMPANY)
+        
         if let uid = KeychainWrapper.standard.string(forKey: Constants.KEY_UID){
             // segue to main view controller
-            print("Already logged in")
+            print("\(self.TAG): Already logged in")
             //get User Data from Firebase & autologin
             if let company_name = KeychainWrapper.standard.string(forKey: Constants.KEY_COMPANY){
                 Progress.sharedInstance.showLoading()
@@ -52,12 +56,12 @@ class LoginViewController: UIViewController,GIDSignInDelegate,GIDSignInUIDelegat
     
     func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
         if let err = error{
-            print("Something went wrong with google login",err)
+            print("\(self.TAG): Something went wrong with google login",err)
             Progress.sharedInstance.dismissLoading()
             return
         }
         
-        print("Successfully Signed in by google")
+        print("\(self.TAG): Successfully Signed in by google")
         guard let idToken = user.authentication.idToken else {
             return
         }
@@ -68,7 +72,7 @@ class LoginViewController: UIViewController,GIDSignInDelegate,GIDSignInUIDelegat
         FIRAuth.auth()?.signIn(with: credential, completion: { (User, error) in
             Progress.sharedInstance.dismissLoading()
             if(error != nil){
-                print("error")
+                print("\(self.TAG): error")
                 return
             }
             if let authId = FIRAuth.auth()?.currentUser?.uid{
@@ -77,7 +81,6 @@ class LoginViewController: UIViewController,GIDSignInDelegate,GIDSignInUIDelegat
                 KeychainWrapper.standard.set((self.mUserObj?.companyName)!
                     , forKey: Constants.KEY_COMPANY)
                 self.addUpdateUserToFirebaseDB();
-                self.go_to_main_page()
             }
 
         })
@@ -109,12 +112,12 @@ class LoginViewController: UIViewController,GIDSignInDelegate,GIDSignInUIDelegat
                         let credential = FIRFacebookAuthProvider.credential(withAccessToken: accessTokenString)
                         FIRAuth.auth()?.signIn(with: credential, completion: { (User, error) in
                             if(error != nil){
-                                print("Something went wrong",error ?? "")
+                                print("\(self.TAG): Something went wrong",error ?? "")
                                 Progress.sharedInstance.dismissLoading()
                                 return
                             }
                             self.getFBUserData()
-                            print("facebook authentiion complete through firebase")
+                            print("\(self.TAG): facebook authentication complete through firebase")
                         })
                         
                     }else{
@@ -142,9 +145,8 @@ class LoginViewController: UIViewController,GIDSignInDelegate,GIDSignInUIDelegat
                             KeychainWrapper.standard.set((self.mUserObj?.companyName)!
                                 , forKey: Constants.KEY_COMPANY)
                             self.addUpdateUserToFirebaseDB();
-                            self.go_to_main_page()
                         }else{
-                            print("no uid found from firebase current user for fb")
+                            print("\(self.TAG): no uid found from firebase current user for fb")
                         }
 
                     }
@@ -175,7 +177,15 @@ class LoginViewController: UIViewController,GIDSignInDelegate,GIDSignInUIDelegat
     
     private func addUpdateUserToFirebaseDB(){
         //it will add new users and update old users
-        DADataService.instance.createFirebaseDBUser(uid: (FIRAuth.auth()?.currentUser?.uid)!, userObject: self.mUserObj!)
+        DADataService.instance.get_chat_notify_count_by_user(uid: self.mUserObj!.userNodeId!, companyName: self.mUserObj!.companyName!){
+        (response) in
+            if let count = response as? String{
+                print("notify_count:\(count)")
+                self.mUserObj?.chat_notify_count = count
+                DADataService.instance.createFirebaseDBUser(uid: (FIRAuth.auth()?.currentUser?.uid)!, userObject: self.mUserObj!)
+                self.go_to_main_page()
+            }
+        }
     }
 
 }

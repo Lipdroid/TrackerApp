@@ -30,7 +30,8 @@ class DADataService {
                     "userRouteStatus": userObject.userRouteStatus,
                     "user_login_lat":"\(LOGOUT_LAT)",
                     "user_login_lng":"\(LOGOUT_LNG)",
-                    "status":"\(userObject.status?.rawValue ?? "online")"]
+                    "status":"\(userObject.status?.rawValue ?? "online")",
+                    "chat_notify_count":userObject.chat_notify_count]
 
         
         REF_COMPANY.child(userObject.companyName!).child("users").child(uid).updateChildValues(user as Any as! [AnyHashable : Any])
@@ -57,8 +58,11 @@ class DADataService {
                 guard let status = snap ["status"] else{
                     return
                 }
+                guard let chat_notify_count = snap ["chat_notify_count"] else{
+                    return
+                }
                 
-                mUserObj = UserObject(uid: uid, userName: name, userEmail: email, userCompany: companyName, imageUrl: imageUrl, userRoute: userRoute, status: status)
+                mUserObj = UserObject(uid: uid, userName: name, userEmail: email, userCompany: companyName, imageUrl: imageUrl, userRoute: userRoute, status: status, chat_notify_count: chat_notify_count)
                 
                 callback(mUserObj)
                 
@@ -93,5 +97,26 @@ class DADataService {
         newRef.setValue(chat as Any as! [AnyHashable : Any])
     }
     
-
+    func update_notification_count_for_user(uid: String,companyName: String,count: String,callback: Completion?){
+        let chat_notify_count = ["chat_notify_count": count]
+        REF_COMPANY.child(companyName).child("users").child(uid).updateChildValues(chat_notify_count as Any as! [AnyHashable : Any])
+        if let callback = callback{
+            callback("Success" as AnyObject)
+        }
+    }
+    
+    func get_chat_notify_count_by_user(uid: String,companyName: String,callback: Completion?){
+        REF_COMPANY.child(companyName).child("users").child(uid).child("chat_notify_count").observeSingleEvent(of: .value, with: { (snapshot) in
+            
+            if let item = snapshot.value as? String{
+                if let callback = callback{
+                    callback(item as AnyObject)
+                }
+            }else{
+                if let callback = callback{
+                    callback(Constants.DEFAULT_CHAT_COUNT as String as AnyObject)
+                }
+            }
+        })
+    }
 }

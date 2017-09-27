@@ -9,7 +9,8 @@
 import UIKit
 
 class ProfileVC: UIViewController {
-   
+    private let TAG = "ProfileVC"
+
     var mUserObj: UserObject! = nil
 
     @IBOutlet weak var online_icon: UIImageView!

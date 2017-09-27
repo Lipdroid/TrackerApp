@@ -21,13 +21,10 @@ class UserObject{
     private var _userNodeId: String!
     private var _userRouteStatus: String!
     private var _imageUrl: String!
-    
-    
     private var _user_login_lat: String!
     private var _user_login_lng: String!
-    
     private var _user_status = Status.OFFLINE
-    
+    private var _chat_notify_count:String!
     
     
     //getters
@@ -48,6 +45,14 @@ class UserObject{
     }
     var imageUrl: String?{
             return _imageUrl
+    }
+    var chat_notify_count: String?{
+        get{
+            return _chat_notify_count
+        }
+        set{
+            _chat_notify_count = newValue
+        }
     }
     var user_login_lat: String?{
         get{
@@ -83,7 +88,7 @@ class UserObject{
     
     //for firebase User with lat lng
     init(uid: String,companyName: String,email: String,userName: String,routeStatus: String,imageUrl: String,user_login_lat
-        :String,user_login_lng:String,status: String) {
+        :String,user_login_lng:String,status: String,chat_notify_count: String) {
         self._userNodeId = uid
         self._userName = userName
         self._companyName = companyName
@@ -92,6 +97,7 @@ class UserObject{
         self._userRouteStatus = routeStatus
         self._user_login_lat = user_login_lat
         self._user_login_lng = user_login_lng
+        self._chat_notify_count = chat_notify_count
         switch status {
         case Status.ONLINE.rawValue:
             self._user_status = .ONLINE
@@ -107,6 +113,7 @@ class UserObject{
         _userRouteStatus = Constants.USER_ROUTE_STATUS_NOT_STARTED;
         _companyName = Constants.DEFAULT_COMPANY_NAME;
         self._userNodeId = authId
+        self._chat_notify_count = Constants.DEFAULT_CHAT_COUNT
         if let name = dict["name"] as? String{
             _userName = name
         }
@@ -127,6 +134,7 @@ class UserObject{
         _userRouteStatus = Constants.USER_ROUTE_STATUS_NOT_STARTED;
         _companyName = Constants.DEFAULT_COMPANY_NAME;
         self._userNodeId = authId
+        self._chat_notify_count = Constants.DEFAULT_CHAT_COUNT
         if let name = user.profile.name{
             _userName = name
         }
@@ -139,13 +147,14 @@ class UserObject{
     }
 
     //for firebase User without lat lng
-    init(uid: String,userName: String,userEmail: String,userCompany: String,imageUrl: String,userRoute:String,status: String) {
+    init(uid: String,userName: String,userEmail: String,userCompany: String,imageUrl: String,userRoute:String,status: String,chat_notify_count: String) {
         self._userNodeId = uid
         self._userName = userName
         self._companyName = userCompany
         self._imageUrl = imageUrl
         self._userEmail = userEmail
         self._userRouteStatus = userRoute
+        self._chat_notify_count = chat_notify_count
         switch status {
         case Status.ONLINE.rawValue:
             self._user_status = .ONLINE

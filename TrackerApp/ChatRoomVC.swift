@@ -15,9 +15,12 @@ class ChatRoomVC: UIViewController, UITextFieldDelegate,UITableViewDelegate,UITa
     @IBOutlet weak var message_text: UITextField!
     var chats = [ChatObject]()
     var mUserObj: UserObject! = nil
-
+    private let TAG = "ChatRoomVC"
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(refreshChatList), name: NSNotification.Name(rawValue: "refreshChatList"), object: nil)
+
 
         // Do any additional setup after loading the view.
         NotificationCenter.default.addObserver(self, selector: #selector(ChatRoomVC.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
@@ -35,10 +38,31 @@ class ChatRoomVC: UIViewController, UITextFieldDelegate,UITableViewDelegate,UITa
         tableView.setNeedsLayout()
         tableView.layoutIfNeeded()
 
-        getAllChatData()
+        self.tableView.reloadData()
+        self.tableViewScrollToBottom(animated: true)
+        DADataService.instance.update_notification_count_for_user(uid: mUserObj.userNodeId!, companyName: mUserObj.companyName!, count: "\(chats.count)") {(response) in
         
-        
+        }
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.tableViewScrollToBottom(animated: true)
 
+    }
+    func refreshChatList(notification: NSNotification){
+        //load data here
+        print("\(TAG): tableview refreshed")
+        let chat = notification.userInfo!["snap"] as! ChatObject
+        if let index = self.chats.index(where: { $0.chatId == chat.chatId }) {
+            self.chats.remove(at: index)
+            //continue do: arrPickerData.append(...)
+        }
+        //add that item
+        self.chats.append(chat)
+        print("\(self.TAG): received new message")
+        self.tableView.reloadData()
+        self.tableViewScrollToBottom(animated: true)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -86,34 +110,7 @@ class ChatRoomVC: UIViewController, UITextFieldDelegate,UITableViewDelegate,UITa
     }
     
 
-    func getAllChatData(){
-        Progress.sharedInstance.showLoading()
-        DADataService.instance.REF_COMPANY.child(Constants.DEFAULT_COMPANY_NAME).child("chatGroup").observeSingleEvent(of: .value, with: { (snapshot) in
-            // Get all user
-            print("finish getting all user data")
-            Progress.sharedInstance.dismissLoading()
-            if let snapshots = snapshot.children.allObjects as? [FIRDataSnapshot]{
-                print("chat count:\(snapshots.count)")
-                //remove if their is any previous information about emplyoee/user
-                self.chats.removeAll()
-                for snap in snapshots {
-                    if let chat_snap = snap.value as? Dictionary<String, String>{
-                        if let chat = self.parseChatSnap(chatId:snap.key,chatSnapDict: chat_snap){
-                            self.chats.append(chat)
-                        }
-                    }
-                }
-                
-                self.tableView.reloadData()
-                self.tableViewScrollToBottom(animated: true)
-                self.startObservingChatDataChange()
-            }
-            
-        }) { (error) in
-            print(error.localizedDescription)
-        }
-    }
-
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         self.view.endEditing(true)
         return false
@@ -178,29 +175,7 @@ class ChatRoomVC: UIViewController, UITextFieldDelegate,UITableViewDelegate,UITa
 
     }
     
-    func startObservingChatDataChange(){
-        print("start observing")
-        DADataService.instance.REF_COMPANY.child(mUserObj.companyName!).child("chatGroup").queryLimited(toLast: 1).observe(.childAdded, with: { (snapshot) in
-            print("receive user data changed")
-            if let chat_snap = snapshot.value as? Dictionary<String, String>{
-                if let chat = self.parseChatSnap(chatId: snapshot.key,chatSnapDict: chat_snap){
-                    //if already exist then remove that item
-                    if let index = self.chats.index(where: { $0.chatId == chat.chatId }) {
-                        self.chats.remove(at: index)
-                        //continue do: arrPickerData.append(...)
-                    }
-                    //add that item
-                    self.chats.append(chat)
-                    
-                    self.tableView.reloadData()
-                    self.tableViewScrollToBottom(animated: true)
-                }
-            }
-            
-        }) { (error) in
-            print(error.localizedDescription)
-        }
-    }
+    
     func tableViewScrollToBottom(animated: Bool) {
         DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(300)) {
             let numberOfSections = self.tableView.numberOfSections

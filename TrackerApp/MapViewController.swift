@@ -17,7 +17,8 @@ import AVFoundation
 import UserNotifications
 
 class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSource {
-    
+    let TAG = "MapViewController"
+
     @IBOutlet weak var tableView: UITableView!
     var mUserObj: UserObject! = nil
     @IBOutlet weak var google_map: GMSMapView!
@@ -47,10 +48,14 @@ class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSou
     var markerAnimationfinish = true
 
     @IBOutlet weak var status_lbl: UILabel!
+    var chats = [ChatObject]()
+
+    @IBOutlet weak var badge: UILabel!
     deinit {
         // Release all recoureces
         // perform the deinitialization
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "refreshChatList"), object: nil)
 
     }
     
@@ -63,15 +68,7 @@ class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSou
             break
         case Constants.STATUS_TRAFFIC:
             status = Constants.STATUS_TRAFFIC
-            scheduleNotification(inSeconds: 1, body: "THis is a test message for all", title: "Md Munir Hossain", subtitle: "Oceanize", completion: {(success) in
-                if success{
-                    print("succesfull scheduling")
-                }else{
-                    print("Error sending notification schedule")
-                }
-                
-            })
-        
+            
             break
         case Constants.STATUS_WAITING:
             status = Constants.STATUS_WAITING
@@ -86,6 +83,115 @@ class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSou
         default:
             break
         }
+    }
+    
+    func startObservingChatDataChange(){
+        print("\(self.TAG): start observing messagese")
+        DADataService.instance.REF_COMPANY.child(mUserObj.companyName!).child("chatGroup").queryLimited(toLast: 1).observe(.childAdded, with: { (snapshot) in
+            print("\(self.TAG): receive chat data changed")
+            if let chat_snap = snapshot.value as? Dictionary<String, String>{
+                
+                if let chat = self.parseChatSnap(chatId: snapshot.key,chatSnapDict: chat_snap){
+                    if let _ = self.chats.index(where: { $0.chatId == chat.chatId }) {
+                        //do nothing
+                    }else{
+                        if self.mUserObj.userNodeId != chat.senderId{
+                            //show a notification
+                            scheduleNotification(inSeconds: 1, body: chat.message, title: chat.senderName, subtitle: chat.time, completion: {(success) in
+                                    if success{
+                                        print("\(self.TAG): succesfull scheduling")
+                                    }else{
+                                        print("\(self.TAG): Error sending notification schedule")
+                                    }
+                            
+                            })
+                        }else{
+                            let update_current_user_count = Int(self.mUserObj.chat_notify_count!)!+1
+                            self.mUserObj.chat_notify_count = "\(update_current_user_count)"
+                        }
+                    }
+                    if let index = self.chats.index(where: { $0.chatId == chat.chatId }) {
+                        self.chats.remove(at: index)
+                        //continue do: arrPickerData.append(...)
+                    }
+                    //add that item
+                    self.chats.append(chat)
+                    self.count_show_badge()
+                    //update chat list in chat room vc
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "refreshChatList"), object: nil,userInfo:["snap": chat])
+
+                }
+
+            }
+            
+        }) { (error) in
+            print(error.localizedDescription)
+        }
+    }
+    
+    func getAllChatData(){
+        DADataService.instance.REF_COMPANY.child(Constants.DEFAULT_COMPANY_NAME).child("chatGroup").observeSingleEvent(of: .value, with: { (snapshot) in
+            // Get all user
+            print("\(self.TAG): finish getting chat data")
+            if let snapshots = snapshot.children.allObjects as? [FIRDataSnapshot]{
+                print("\(self.TAG): chat count:\(snapshots.count)")
+                //remove if their is any previous information about emplyoee/user
+                self.chats.removeAll()
+                for snap in snapshots {
+                    if let chat_snap = snap.value as? Dictionary<String, String>{
+                        if let chat = self.parseChatSnap(chatId:snap.key,chatSnapDict: chat_snap){
+                            self.chats.append(chat)
+                        }
+                    }
+                }
+                self.count_show_badge()
+            }
+        }) { (error) in
+            print(error.localizedDescription)
+        }
+    }
+    
+    func count_show_badge(){
+        //count notification
+        if let seen_notification = Int(self.mUserObj.chat_notify_count!){
+            if seen_notification == self.chats.count{
+                //show no badge
+            }else{
+                //count badge
+                let badge_count = self.chats.count - seen_notification
+                print("\(self.TAG): \(badge_count)")
+                badge.text = "\(badge_count)"
+            }
+        }
+    }
+    
+    func parseChatSnap(chatId: String,chatSnapDict: Dictionary<String,String>)->ChatObject?{
+        var chatObj = ChatObject()
+        
+        guard let senderName = chatSnapDict["senderName"] else{
+            return chatObj
+        }
+        guard let senderId = chatSnapDict["senderId"] else{
+            return chatObj
+        }
+        guard let date = chatSnapDict["date"] else{
+            return chatObj
+        }
+        guard let iamgeUrl = chatSnapDict["imageUrl"] else{
+            return chatObj
+        }
+        guard let message = chatSnapDict["message"] else{
+            return chatObj
+        }
+        guard let time = chatSnapDict["time"] else{
+            return chatObj
+        }
+        
+        
+        
+        chatObj = ChatObject(chatId: chatId,senderId: senderId, senderName: senderName, message: message, time: time, date: date, image_url: iamgeUrl)
+        
+        return chatObj
     }
     
     public func status_segment_enable(enable: Bool){
@@ -156,14 +262,18 @@ class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSou
         //Request to user for permission
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert,.badge,.sound], completionHandler:{(granted,error) in
             if (granted){
-                print("User granted Permission")
+                print("\(self.TAG): User granted Permission")
             }else{
                 print(error?.localizedDescription ?? "Error!!!")
             }
             
         })
+        startObservingChatDataChange()
+
 
     }
+    
+
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if let cell = tableView.dequeueReusableCell(withIdentifier: "userCell", for: indexPath) as? UserCell{
@@ -208,6 +318,7 @@ class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSou
         }else if segue.identifier == Constants.CHATROOM_SEGUE_IDENTIFIER{
             if let dest: ChatRoomVC = segue.destination as? ChatRoomVC{
                 dest.mUserObj = self.mUserObj
+                dest.chats = self.chats
             }
         }
     }
@@ -219,13 +330,13 @@ class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSou
     }
     func getAllUserData(){
         Progress.sharedInstance.showLoading()
-        print("start getting all user data")
+        print("\(self.TAG): start getting all user data")
         DADataService.instance.REF_COMPANY.child(mUserObj.companyName!).child("users").observeSingleEvent(of: .value, with: { (snapshot) in
             // Get all user
-            print("finish getting all user data")
+            print("\(self.TAG): finish getting all user data")
             Progress.sharedInstance.dismissLoading()
             if let snapshots = snapshot.children.allObjects as? [FIRDataSnapshot]{
-                print("emplyoee count:\(snapshots.count)")
+                print("\(self.TAG): emplyoee count:\(snapshots.count)")
                 //remove if their is any previous information about emplyoee/user
                 self.employees.removeAll()
                 for snap in snapshots {
@@ -243,10 +354,10 @@ class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSou
                     if(employee.userNodeId != self.mUserObj.userNodeId){
                         switch employee.status!{
                         case .OFFLINE:
-                            print("\(employee.userName!) is logged out user")
+                            print("\(self.TAG): \(employee.userName!) is logged out user")
                             break
                         case .ONLINE:
-                            print("\(employee.userName!) is logged in user")
+                            print("\(self.TAG): \(employee.userName!) is logged in user")
                             self.addUserMarker(userObj: employee)
                             break
                         }
@@ -283,19 +394,21 @@ class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSou
         guard let status = userSnapDict["status"] else{
             return userObj
         }
+        guard let chat_notify_count = userSnapDict["chat_notify_count"] else{
+            return userObj
+        }
 
         
-        userObj = UserObject(uid: uid, companyName: self.mUserObj.companyName!, email: email, userName: name, routeStatus: route, imageUrl: imageUrl, user_login_lat: lat, user_login_lng: lng,status: status)
+        userObj = UserObject(uid: uid, companyName: self.mUserObj.companyName!, email: email, userName: name, routeStatus: route, imageUrl: imageUrl, user_login_lat: lat, user_login_lng: lng,status: status,chat_notify_count: chat_notify_count)
         
         return userObj
     }
     
     func startObservingUserDataChange(){
-        Progress.sharedInstance.showLoading()
-        print("start observing")
+        print("\(self.TAG): start observing")
         DADataService.instance.REF_COMPANY.child(mUserObj.companyName!).child("users").observe(.childChanged, with: { (snapshot) in
             // Get data changed user
-            print("receive user data changed")
+            print("\(self.TAG): receive user data changed")
             if let user_snap = snapshot.value as? Dictionary<String, String>{
                 if let employee = self.parseUserSnap(uid: snapshot.key, userSnapDict: user_snap){
                     
@@ -311,7 +424,7 @@ class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSou
                     //if offline no marker add
                     switch employee.status!{
                         case .OFFLINE:
-                            print("\(employee.userName!) offline marker not added")
+                            print("\(self.TAG): \(employee.userName!) offline marker not added")
                             //remove if prevoiusly added
                             guard let marker = self.marker_dict[employee.userNodeId!] else {
                                 return
@@ -321,7 +434,7 @@ class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSou
                             
                         break
                         case .ONLINE:
-                            print("\(employee.userName!) online marker not added")
+                            print("\(self.TAG): \(employee.userName!) online marker not added")
                             self.addUserMarker(userObj: employee)
                             break
                         }
@@ -340,11 +453,11 @@ class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSou
             switch(CLLocationManager.authorizationStatus())
             {
             case .notDetermined, .restricted, .denied:
-                print("User disabled Location permisson")
+                print("\(self.TAG): User disabled Location permisson")
                 showAlertForSettings()
                 break
             case .authorizedAlways, .authorizedWhenInUse:
-                print("User enabled Location permission")
+                print("\(self.TAG): User enabled Location permission")
                 locationManager.delegate = self
                 locationManager.desiredAccuracy = kCLLocationAccuracyBest
                 locationManager.requestAlwaysAuthorization()
@@ -359,8 +472,8 @@ class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSou
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        getAllChatData()
         checkForLocationPermission()
-        
     }
     
     private func setUserData(){
@@ -391,6 +504,11 @@ class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSou
                     KeychainWrapper.standard.removeObject(forKey: Constants.KEY_UID)
                     KeychainWrapper.standard.removeObject(forKey: Constants.KEY_COMPANY)
                     Progress.sharedInstance.dismissLoading()
+                    //remove the observers
+                    DADataService.instance.REF_COMPANY.child(self.mUserObj.companyName!).child("chatGroup").removeAllObservers()
+                    DADataService.instance.REF_COMPANY.child(self.mUserObj.companyName!).child("users").removeAllObservers()
+                    
+                    
                     self.dismiss(animated: true, completion: nil)
 
                 }
@@ -489,6 +607,8 @@ class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSou
     }
     @IBAction func chat_btn_pressed(_ sender: Any) {
         toggleLeftMenu()
+        badge.text = "0"
+        mUserObj.chat_notify_count = "\(chats.count)"
         self.performSegue(withIdentifier: Constants.CHATROOM_SEGUE_IDENTIFIER, sender: nil)
 
     }
@@ -532,7 +652,7 @@ extension MapViewController: CLLocationManagerDelegate {
                 let user_current_location = CLLocation(latitude: user_lat.toDouble()!, longitude: user_lng.toDouble()!)
                 let user_new_location = CLLocation(latitude: location.coordinate.latitude, longitude:location.coordinate.longitude)
                 let distanceInMeters = user_current_location.distance(from: user_new_location) // result is in meters
-                print("moved \(distanceInMeters) meters")
+                print("\(self.TAG): moved \(distanceInMeters) meters")
                 if(distanceInMeters >= 20)
                 {
                     // 1 mile = 1609 meters
@@ -614,7 +734,7 @@ extension MapViewController: CLLocationManagerDelegate {
         // Movement
         CATransaction.begin()
         CATransaction.setCompletionBlock({
-            print("Animation completed")
+            print("\(self.TAG): Animation completed")
             self.markerAnimationfinish = true
             self.mUserObj.user_login_lat = "\(coordinates.latitude)"
             self.mUserObj.user_login_lng = "\(coordinates.longitude)"
