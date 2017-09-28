@@ -100,10 +100,14 @@ class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSou
                     self.chats.append(chat)
                     
                     if self.mUserObj.userNodeId != chat.senderId{
+                            //if the user is not in chat page then show the notification
                             if(!Constants.onChatPage){
+                                //as observer runs first for the first time it gives the last message so
+                                //do not show it
                                 if let user_seen = Int(self.mUserObj.chat_notify_count!){
+                                    //if chat list size is lesser that means its for the first time observer called
                                     if self.chats.count > user_seen{
-                                            //show a notification
+                                        //show a notification
                                         scheduleNotification(inSeconds: 1, body: chat.message, title: chat.senderName, subtitle: chat.time, completion: {(success) in
                                                 if success{
                                                     print("\(self.TAG): succesfull scheduling")
@@ -114,33 +118,13 @@ class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSou
                                     }
                                 }
                             }else{
-                                let user_seen = Int(self.mUserObj.chat_notify_count!)!
-                                let total_chat = self.chats.count
-                                var update_current_user_count = 0
-                                if user_seen > total_chat{
-                                     update_current_user_count = user_seen
-                                }else{
-                                     update_current_user_count = self.chats.count
-                                }
-                                self.mUserObj.chat_notify_count = "\(update_current_user_count)"
-                                //update current user DB firebase
-                                DADataService.instance.update_notification_count_for_user(uid: self.mUserObj.userNodeId!, companyName: self.mUserObj.companyName!, count: "\(update_current_user_count)"){(response) in
-                                }
-
+                                //as the user is in chat page so user is up to date
+                                //update its status
+                                self.userNotificationStatusUptoDate()
                             }
                         }else{
-                                let user_seen = Int(self.mUserObj.chat_notify_count!)!
-                                let total_chat = self.chats.count
-                                var update_current_user_count = 0
-                                if user_seen > total_chat{
-                                        update_current_user_count = user_seen
-                                }else{
-                                        update_current_user_count = self.chats.count
-                                }
-                                self.mUserObj.chat_notify_count = "\(update_current_user_count)"
-                                //update current user DB firebase
-                                DADataService.instance.update_notification_count_for_user(uid: self.mUserObj.userNodeId!, companyName: self.mUserObj.companyName!, count: "\(update_current_user_count)"){(response) in
-                                }
+                            //as the user itself make the chat so no need to notify him
+                             self.userNotificationStatusUptoDate()
                         }
                         self.count_show_badge()
                         //update chat list in chat room vc
@@ -152,6 +136,21 @@ class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSou
             
         }) { (error) in
             print(error.localizedDescription)
+        }
+    }
+    
+    func userNotificationStatusUptoDate(){
+        let user_seen = Int(self.mUserObj.chat_notify_count!)!
+        let total_chat = self.chats.count
+        var update_current_user_count = 0
+        if user_seen > total_chat{
+            update_current_user_count = user_seen
+        }else{
+            update_current_user_count = self.chats.count
+        }
+        self.mUserObj.chat_notify_count = "\(update_current_user_count)"
+        //update current user DB firebase
+        DADataService.instance.update_notification_count_for_user(uid: self.mUserObj.userNodeId!, companyName: self.mUserObj.companyName!, count: "\(update_current_user_count)"){(response) in
         }
     }
     
