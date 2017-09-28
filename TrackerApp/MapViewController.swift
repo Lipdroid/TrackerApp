@@ -16,9 +16,10 @@ import SwiftKeychainWrapper
 import AVFoundation
 import UserNotifications
 
-class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSource {
+class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSource,UISearchBarDelegate {
     let TAG = "MapViewController"
-
+    @IBOutlet weak var searchBar: UISearchBar!
+    
     @IBOutlet weak var tableView: UITableView!
     var mUserObj: UserObject! = nil
     @IBOutlet weak var google_map: GMSMapView!
@@ -40,6 +41,7 @@ class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSou
     @IBOutlet weak var left_nav_leading_constraint: NSLayoutConstraint!
 
     var employees = [UserObject]()
+    var filter_employee = [UserObject]()
     var marker_dict = Dictionary<String,GMSMarker>()
 
     @IBOutlet weak var status_seg: UISegmentedControl!
@@ -51,6 +53,8 @@ class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSou
     var chats = [ChatObject]()
 
     @IBOutlet weak var badge: UILabel!
+    var isSearching = false
+    
     deinit {
         // Release all recoureces
         // perform the deinitialization
@@ -299,7 +303,9 @@ class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSou
             
         })
         startObservingChatDataChange()
-
+        
+        searchBar.delegate = self
+        searchBar.returnKeyType = UIReturnKeyType.done
 
     }
     
@@ -316,8 +322,27 @@ class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSou
     
     
     func configureCell(cell: UserCell,indexPath: IndexPath){
-        if let item = employees[indexPath.row] as? UserObject{
-            cell.configureCell(userObj: item)
+        if isSearching{
+            if let item = filter_employee[indexPath.row] as? UserObject{
+                cell.configureCell(userObj: item)
+            }
+        }else{
+            if let item = employees[indexPath.row] as? UserObject{
+                cell.configureCell(userObj: item)
+            }
+        }
+        
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchBar.text == nil || searchBar.text == ""{
+            isSearching = false
+            view.endEditing(true)
+            tableView.reloadData()
+        }else{
+            isSearching = true
+            filter_employee = employees.filter{$0.userName!.starts(with: searchBar.text!) }
+            tableView.reloadData()
         }
     }
     
@@ -326,7 +351,11 @@ class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSou
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return employees.count
+        if isSearching{
+            return filter_employee.count
+        }else{
+            return employees.count
+        }
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         NSLog("You selected cell number: \(indexPath.row)!")

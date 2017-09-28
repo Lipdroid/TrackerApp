@@ -560,6 +560,7 @@
                         <outlet property="right_nav_menu" destination="Ry2-3O-kxQ" id="XAj-or-tB6"/>
                         <outlet property="right_nav_trailing_constraint" destination="KuY-Zt-X4G" id="gue-kc-At7"/>
                         <outlet property="right_nav_view" destination="zzz-aO-dz1" id="8AF-Z1-VMW"/>
+                        <outlet property="searchBar" destination="E5O-V9-76g" id="glI-zm-Rrb"/>
                         <outlet property="status_lbl" destination="UsF-S7-FLw" id="gsJ-Yh-Mju"/>
                         <outlet property="status_seg" destination="WK1-bo-E4p" id="q90-w6-u2P"/>
                         <outlet property="tableView" destination="hPi-DQ-K6O" id="XoG-KF-3Rh"/>
