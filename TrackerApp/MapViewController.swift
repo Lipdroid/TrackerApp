@@ -346,6 +346,12 @@ class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSou
         }
     }
     
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar)
+    {
+        isSearching = false;
+        self.searchBar.endEditing(true)
+    }
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
