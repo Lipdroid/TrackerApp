@@ -101,17 +101,27 @@ class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSou
                     
                     if self.mUserObj.userNodeId != chat.senderId{
                             if(!Constants.onChatPage){
-                            //show a notification
-                                scheduleNotification(inSeconds: 1, body: chat.message, title: chat.senderName, subtitle: chat.time, completion: {(success) in
-                                        if success{
-                                            print("\(self.TAG): succesfull scheduling")
-                                        }else{
-                                            print("\(self.TAG): Error sending notification schedule")
-                                        }
-                            
-                                    })
+                                if let user_seen = Int(self.mUserObj.chat_notify_count!){
+                                    if self.chats.count > user_seen{
+                                            //show a notification
+                                        scheduleNotification(inSeconds: 1, body: chat.message, title: chat.senderName, subtitle: chat.time, completion: {(success) in
+                                                if success{
+                                                    print("\(self.TAG): succesfull scheduling")
+                                                }else{
+                                                    print("\(self.TAG): Error sending notification schedule")
+                                                }
+                                        })
+                                    }
+                                }
                             }else{
-                                let update_current_user_count = self.chats.count
+                                let user_seen = Int(self.mUserObj.chat_notify_count!)!
+                                let total_chat = self.chats.count
+                                var update_current_user_count = 0
+                                if user_seen > total_chat{
+                                     update_current_user_count = user_seen
+                                }else{
+                                     update_current_user_count = self.chats.count
+                                }
                                 self.mUserObj.chat_notify_count = "\(update_current_user_count)"
                                 //update current user DB firebase
                                 DADataService.instance.update_notification_count_for_user(uid: self.mUserObj.userNodeId!, companyName: self.mUserObj.companyName!, count: "\(update_current_user_count)"){(response) in
@@ -119,15 +129,19 @@ class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSou
 
                             }
                         }else{
-                            let update_current_user_count = self.chats.count
-                            self.mUserObj.chat_notify_count = "\(update_current_user_count)"
-                            //update current user DB firebase
-                            DADataService.instance.update_notification_count_for_user(uid: self.mUserObj.userNodeId!, companyName: self.mUserObj.companyName!, count: "\(update_current_user_count)"){(response) in
-                            }
+                                let user_seen = Int(self.mUserObj.chat_notify_count!)!
+                                let total_chat = self.chats.count
+                                var update_current_user_count = 0
+                                if user_seen > total_chat{
+                                        update_current_user_count = user_seen
+                                }else{
+                                        update_current_user_count = self.chats.count
+                                }
+                                self.mUserObj.chat_notify_count = "\(update_current_user_count)"
+                                //update current user DB firebase
+                                DADataService.instance.update_notification_count_for_user(uid: self.mUserObj.userNodeId!, companyName: self.mUserObj.companyName!, count: "\(update_current_user_count)"){(response) in
+                                }
                         }
-                   
-                   
-                    
                         self.count_show_badge()
                         //update chat list in chat room vc
                         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "refreshChatList"), object: nil,userInfo:["snap": chat])
@@ -168,11 +182,16 @@ class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSou
         if let seen_notification = Int(self.mUserObj.chat_notify_count!){
             if seen_notification == self.chats.count{
                 //show no badge
+                badge.text = "0"
+                badge.isHidden = true
             }else{
                 //count badge
                 let badge_count = self.chats.count - seen_notification
                 print("\(self.TAG): \(badge_count)")
-                badge.text = "\(badge_count)"
+                if(badge_count > 0){
+                    badge.text = "\(badge_count)"
+                    badge.isHidden = false
+                }
             }
         }
     }
@@ -447,6 +466,13 @@ class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSou
                         break
                         case .ONLINE:
                             print("\(self.TAG): \(employee.userName!) online marker not added")
+                            //if user has already a marker then remove it and add new marker with new position
+                            if let marker = self.marker_dict[employee.userNodeId!] {
+                                //remove if prevoiusly added
+                                marker.map = nil
+                                self.marker_dict.removeValue(forKey: employee.userNodeId!)
+                            }
+                            //add marker
                             self.addUserMarker(userObj: employee)
                             break
                         }
