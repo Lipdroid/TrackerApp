@@ -72,17 +72,21 @@ class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSou
             break
         case Constants.STATUS_TRAFFIC:
             status = Constants.STATUS_TRAFFIC
-            
+            onTrip = true;
             break
         case Constants.STATUS_WAITING:
+            onTrip = true;
             status = Constants.STATUS_WAITING
-            reset_segment()
+            //reset_segment()
             break
         case Constants.STATUS_STOP:
             locationManager.stopUpdatingLocation()
             status_segment_enable(enable: false)
             self.status_seg.selectedSegmentIndex = 3;
             status = Constants.STATUS_STOP
+            status_lbl.text = "Finish"
+            DADataService.instance.add_location_with_status(uid: self.mUserObj.userNodeId!, companyName: self.mUserObj.companyName!, status: Constants.STATUS_ON_FINISH, latitude: (Double)(mUserObj.user_login_lat!)!, longitude: (Double)(mUserObj.user_login_lng!)!, callback: nil)
+            onTrip = false;
             break
         default:
             break
@@ -727,7 +731,7 @@ extension MapViewController: CLLocationManagerDelegate {
                 let user_new_location = CLLocation(latitude: location.coordinate.latitude, longitude:location.coordinate.longitude)
                 let distanceInMeters = user_current_location.distance(from: user_new_location) // result is in meters
                 print("\(self.TAG): moved \(distanceInMeters) meters")
-                if(distanceInMeters >= 20)
+                if(distanceInMeters >= 5)
                 {
                     // 1 mile = 1609 meters
                     // 1 kilometer = 1000 meters
@@ -736,21 +740,28 @@ extension MapViewController: CLLocationManagerDelegate {
                             if(self.markerAnimationfinish){
                                     self.markerAnimationfinish = false
                                     status_lbl.text = "Moving"
+                                    DADataService.instance.add_location_with_status(uid: self.mUserObj.userNodeId!, companyName: self.mUserObj.companyName!, status: Constants.STATUS_ON_TRIP, latitude: user_new_location.coordinate.latitude, longitude: user_new_location.coordinate.longitude, callback: nil)
                                     anitmateMarkertoLocation(marker: marker, coordinates: CLLocationCoordinate2D(latitude: user_new_location.coordinate.latitude, longitude: user_new_location.coordinate.longitude), degrees: 0, duration: 3)
                             }else{
                                 status_lbl.text = "Moving"
                             }
                         }
                     }else{
-                        status_lbl.text = "UNAVAILABLE"
+                        status_lbl.text = "N?A"
                         
                     }
                     
                 }
                 else
                 {
-                    // in of 1000
-                    status_lbl.text = "Stopped"
+                    // in of 20
+                    if(self.status != Constants.STATUS_STOP){
+                        status_lbl.text = "Slow"
+                        DADataService.instance.add_location_with_status(uid: self.mUserObj.userNodeId!, companyName: self.mUserObj.companyName!, status: Constants.STATUS_ON_WAITING, latitude: user_new_location.coordinate.latitude, longitude: user_new_location.coordinate.longitude, callback: nil)
+                    }else{
+                        status_lbl.text = "N/A"
+                    }
+
                 }
 
                 if(self.status == Constants.STATUS_STOP){

@@ -119,4 +119,47 @@ class DADataService {
             }
         })
     }
+    
+    func add_location_with_status(uid: String,companyName: String,status: String,latitude: Double,longitude: Double,callback: Completion?){
+        let date = getCurrentDate()
+        let time = getCurrentTime()
+        let location = ["latitude": "\(latitude)",
+                    "longitude": "\(longitude)",
+                    "time": time]
+        var newRef: FIRDatabaseReference!
+        if onTrip{
+             let trip_id = UserDefaults.standard.string(forKey: Constants.TRIP_ID)
+             newRef = REF_COMPANY.child(companyName).child("userTrips").child(date).child(uid).child(trip_id!)
+        }else{
+            onTrip = true
+            let trip_id = randomTripID(length: 20)
+            let defaults = UserDefaults.standard
+            defaults.set(trip_id, forKey: Constants.TRIP_ID)
+            newRef = REF_COMPANY.child(companyName).child("userTrips").child(date).child(uid).child(trip_id)
+            //add to history in firebase
+            addHistoryByDate(uid: uid, companyName: companyName, date: date, tripId: trip_id)
+        }
+        var status_update_ref: FIRDatabaseReference!
+        switch status {
+        case Constants.STATUS_ON_TRIP:
+            status_update_ref = newRef.child(Constants.STATUS_ON_TRIP).childByAutoId()
+            break
+        case Constants.STATUS_ON_WAITING:
+            status_update_ref = newRef.child(Constants.STATUS_ON_WAITING).childByAutoId()
+            break
+        case Constants.STATUS_ON_FINISH:
+            status_update_ref = newRef.child(Constants.STATUS_ON_FINISH).childByAutoId()
+            break
+        default:
+            break
+        }
+
+        status_update_ref.setValue(location as Any as! [AnyHashable : Any])
+
+    }
+    
+    func addHistoryByDate(uid: String,companyName: String,date: String,tripId: String){
+        let history = ["trip": true]
+        REF_COMPANY.child(companyName).child("history").child(uid).child(date).child(tripId).setValue(history as Any as! [AnyHashable : Any])
+    }
 }

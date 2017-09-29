@@ -49,7 +49,11 @@ struct Constants {
     static let STATUS_WAITING = 2
     static let STATUS_STOP = 3
     
-    static var onChatPage = false;
+    static let STATUS_ON_TRIP = "onTrip"
+    static let STATUS_ON_FINISH = "onFinish"
+    static let STATUS_ON_WAITING = "onWaiting"
 
+    static var onChatPage = false;
+    static let TRIP_ID = "trip_id"
 
 }
