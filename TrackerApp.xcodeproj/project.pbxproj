@@ -27,6 +27,8 @@
 		749BC3191F4A7D80006AA55D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 749BC3171F4A7D80006AA55D /* Main.storyboard */; };
 		749BC31E1F4A7D80006AA55D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 749BC31C1F4A7D80006AA55D /* LaunchScreen.storyboard */; };
 		749BC3261F4A9883006AA55D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 749BC3251F4A9883006AA55D /* GoogleService-Info.plist */; };
+		749BD1A81F82055A009030C3 /* TripObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 749BD1A71F82055A009030C3 /* TripObject.swift */; };
+		749BD1AA1F823EFA009030C3 /* locationObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 749BD1A91F823EFA009030C3 /* locationObject.swift */; };
 		74A33A541F78FCCF00F7260F /* UserChatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A33A531F78FCCF00F7260F /* UserChatCell.swift */; };
 		74A33A561F79051E00F7260F /* InsetLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A33A551F79051E00F7260F /* InsetLabel.swift */; };
 		74A33A581F79170D00F7260F /* HeaderShadowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A33A571F79170D00F7260F /* HeaderShadowView.swift */; };
@@ -60,6 +62,8 @@
 		749BC31D1F4A7D80006AA55D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		749BC31F1F4A7D80006AA55D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		749BC3251F4A9883006AA55D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		749BD1A71F82055A009030C3 /* TripObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripObject.swift; sourceTree = "<group>"; };
+		749BD1A91F823EFA009030C3 /* locationObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = locationObject.swift; sourceTree = "<group>"; };
 		74A33A531F78FCCF00F7260F /* UserChatCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserChatCell.swift; sourceTree = "<group>"; };
 		74A33A551F79051E00F7260F /* InsetLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InsetLabel.swift; sourceTree = "<group>"; };
 		74A33A571F79170D00F7260F /* HeaderShadowView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HeaderShadowView.swift; sourceTree = "<group>"; };
@@ -139,6 +143,8 @@
 				74177DFE1F77B02700A21DA2 /* ChatCell.swift */,
 				74177E001F77B4F200A21DA2 /* ChatObject.swift */,
 				74A33A531F78FCCF00F7260F /* UserChatCell.swift */,
+				749BD1A71F82055A009030C3 /* TripObject.swift */,
+				749BD1A91F823EFA009030C3 /* locationObject.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -350,6 +356,7 @@
 				74C76D8F1F7C9F7F00B9A2FF /* BadgeLabel.swift in Sources */,
 				74177E011F77B4F200A21DA2 /* ChatObject.swift in Sources */,
 				74D8184B1F73570600646154 /* ProfileVC.swift in Sources */,
+				749BD1AA1F823EFA009030C3 /* locationObject.swift in Sources */,
 				744EFDB81F552807004364D0 /* Constants.swift in Sources */,
 				749BC3161F4A7D80006AA55D /* LoginViewController.swift in Sources */,
 				74A33A541F78FCCF00F7260F /* UserChatCell.swift in Sources */,
@@ -359,6 +366,7 @@
 				71F809EB1F6C480700C42771 /* Progress.swift in Sources */,
 				74A33A561F79051E00F7260F /* InsetLabel.swift in Sources */,
 				74177DFF1F77B02700A21DA2 /* ChatCell.swift in Sources */,
+				749BD1A81F82055A009030C3 /* TripObject.swift in Sources */,
 				7402EB241F5422BC00BE2897 /* UserObject.swift in Sources */,
 				718337401F70453500BEF060 /* Utils.swift in Sources */,
 				741243B41F568D9600ADCCEF /* DADataService.swift in Sources */,

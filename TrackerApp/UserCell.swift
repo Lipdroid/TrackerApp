@@ -30,7 +30,9 @@ class UserCell: UITableViewCell {
     func configureCell(userObj: UserObject){
         user_name.text = userObj.userName
         user_route_status_label.text = "Trip: \(userObj.userRouteStatus ?? "Not Started")"
-        profile_image.imageFromServerURL(urlString: userObj.imageUrl!, defaultImage: "")
+        if let imageUrl = userObj.imageUrl{
+            profile_image.imageFromServerURL(urlString: imageUrl, defaultImage: "")
+        }
         switch userObj.status! {
         case .ONLINE:
             user_status_image.isHidden = false

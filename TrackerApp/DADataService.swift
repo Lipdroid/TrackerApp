@@ -28,8 +28,8 @@ class DADataService {
                     "userEmail": userObject.userEmail,
                     "imageUrl": userObject.imageUrl,
                     "userRouteStatus": userObject.userRouteStatus,
-                    "user_login_lat":"\(LOGOUT_LAT)",
-                    "user_login_lng":"\(LOGOUT_LNG)",
+                    "user_current_lat":"\(LOGOUT_LAT)",
+                    "user_current_lng":"\(LOGOUT_LNG)",
                     "status":"\(userObject.status?.rawValue ?? "online")",
                     "chat_notify_count":userObject.chat_notify_count]
 
@@ -75,8 +75,8 @@ class DADataService {
     
     //update user login location lat lng
     func updateUserLoginLocation(uid: String,companyName: String,lat: Double,lng: Double,status: Status,callback: Completion?){
-        let user_login_location = ["user_login_lat":"\(lat)",
-                    "user_login_lng":"\(lng)",
+        let user_login_location = ["user_current_lat":"\(lat)",
+                    "user_current_lng":"\(lng)",
                     "status": status.rawValue]
         REF_COMPANY.child(companyName).child("users").child(uid).updateChildValues(user_login_location as Any as! [AnyHashable : Any])
         if let callback = callback{

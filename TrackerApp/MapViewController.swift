@@ -55,6 +55,9 @@ class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSou
     @IBOutlet weak var badge: UILabel!
     var isSearching = false
     
+    var allUserTripsDict = [String: TripObject]()
+    var tripObj:TripObject!
+    
     deinit {
         // Release all recoureces
         // perform the deinitialization
@@ -85,7 +88,7 @@ class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSou
             self.status_seg.selectedSegmentIndex = 3;
             status = Constants.STATUS_STOP
             status_lbl.text = "Finish"
-            DADataService.instance.add_location_with_status(uid: self.mUserObj.userNodeId!, companyName: self.mUserObj.companyName!, status: Constants.STATUS_ON_FINISH, latitude: (Double)(mUserObj.user_login_lat!)!, longitude: (Double)(mUserObj.user_login_lng!)!, callback: nil)
+            DADataService.instance.add_location_with_status(uid: self.mUserObj.userNodeId!, companyName: self.mUserObj.companyName!, status: Constants.STATUS_ON_FINISH, latitude: (Double)(mUserObj.user_current_lat!)!, longitude: (Double)(mUserObj.user_current_lng!)!, callback: nil)
             onTrip = false;
             break
         default:
@@ -275,7 +278,7 @@ class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSou
     }
 
     @IBAction func currentLocation_btn_pressed(_ sender: Any) {
-        guard let lat = mUserObj.user_login_lat,let lng = mUserObj.user_login_lng else {
+        guard let lat = mUserObj.user_current_lat,let lng = mUserObj.user_current_lng else {
             return
         }
         let camera = GMSCameraPosition.camera(withLatitude: (Double)(lat)!, longitude: (Double)(lng)!, zoom: MAP_ZOOM_LEVEL)
@@ -307,10 +310,101 @@ class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSou
             
         })
         startObservingChatDataChange()
-        
+        startObservingTrips()
         searchBar.delegate = self
         searchBar.returnKeyType = UIReturnKeyType.done
 
+    }
+    
+    func startObservingTrips(){
+        print("\(self.TAG): start observing trips")
+        print("\(self.TAG): current Date: \(getCurrentDate())")
+        DADataService.instance.REF_COMPANY.child(mUserObj.companyName!).child("userTrips").child(getCurrentDate()).observe(.value, with: { (snapshot) in
+            if let snapshots = snapshot.children.allObjects as? [FIRDataSnapshot]{
+                for snap in snapshots{
+                    if let trips = snap.value as? Dictionary<String,AnyObject>{
+                        for trip in trips{
+                            if let tripDict = trip.value as? Dictionary<String,AnyObject>{
+                                if let onTrip = tripDict["onTrip"]{
+                                    if let onTripDict = onTrip as? Dictionary<String,AnyObject>{
+                                        for trip in onTripDict{
+                                            self.tripObj = TripObject()
+                                
+                                            if let finalDict = trip.value as? Dictionary<String,String>{
+                                                //getting the main values
+                                                print("\(self.TAG): onTrip: \(finalDict)")
+                                                guard let latitude = finalDict["latitude"] else{
+                                                    return
+                                                }
+                                                guard let longitude = finalDict["longitude"] else{
+                                                    return
+                                                }
+                                                guard let time = finalDict["time"] else{
+                                                    return
+                                                }
+                                                let locationObj = locationObject(latitude: latitude, longitude: longitude, time: time)
+                                                self.tripObj.onTripLocation.append(locationObj)
+                                            }
+
+                                        }
+                                    }
+                                }
+                                if let onFinish = tripDict["onFinish"]{
+                                    if let onFinishDict = onFinish as? Dictionary<String,AnyObject>{
+                                        for trip in onFinishDict{
+                                            if let finalDict = trip.value as? Dictionary<String,String>{
+                                                //getting the main values
+                                                print("\(self.TAG): onFinish: \(finalDict)")
+                                                guard let latitude = finalDict["latitude"] else{
+                                                    return
+                                                }
+                                                guard let longitude = finalDict["longitude"] else{
+                                                    return
+                                                }
+                                                guard let time = finalDict["time"] else{
+                                                    return
+                                                }
+                                                let locationObj = locationObject(latitude: latitude, longitude: longitude, time: time)
+                                                self.tripObj.onFinishLocation.append(locationObj)
+                                            }
+                                            
+                                        }
+                                    }
+                                }
+                                if let onWaiting = tripDict["onWaiting"]{
+                                    if let onWaitingDict = onWaiting as? Dictionary<String,AnyObject>{
+                                        for trip in onWaitingDict{
+                                            if let finalDict = trip.value as? Dictionary<String,String>{
+                                                //getting the main values
+                                                print("\(self.TAG): onWaiting: \(finalDict)")
+                                                guard let latitude = finalDict["latitude"] else{
+                                                    return
+                                                }
+                                                guard let longitude = finalDict["longitude"] else{
+                                                    return
+                                                }
+                                                guard let time = finalDict["time"] else{
+                                                    return
+                                                }
+                                                let locationObj = locationObject(latitude: latitude, longitude: longitude, time: time)
+                                                self.tripObj.onWaitingLocation.append(locationObj)
+                                            }
+                                            
+                                        }
+                                    }
+                                }
+                            }
+                            
+                        }
+
+                    }
+                    self.allUserTripsDict = [snap.key:self.tripObj]
+                }
+            }
+
+            }) { (error) in
+            print(error.localizedDescription)
+        }
     }
     
 
@@ -411,7 +505,10 @@ class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSou
                 for snap in snapshots {
                     if let user_snap = snap.value as? Dictionary<String, String>{
                         if let employee = self.parseUserSnap(uid: snap.key, userSnapDict: user_snap){
-                            self.employees.append(employee)
+                            //no need to show login users in the right user menu
+                            if employee.userNodeId != self.mUserObj.userNodeId{
+                                self.employees.append(employee)
+                            }
                         }
                     }
                 }
@@ -454,10 +551,10 @@ class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSou
         guard let route = userSnapDict["userRouteStatus"] else{
             return userObj
         }
-        guard let lat = userSnapDict["user_login_lat"] else{
+        guard let lat = userSnapDict["user_current_lat"] else{
             return userObj
         }
-        guard let lng = userSnapDict["user_login_lng"] else{
+        guard let lng = userSnapDict["user_current_lng"] else{
             return userObj
         }
         guard let status = userSnapDict["status"] else{
@@ -468,7 +565,7 @@ class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSou
         }
 
         
-        userObj = UserObject(uid: uid, companyName: self.mUserObj.companyName!, email: email, userName: name, routeStatus: route, imageUrl: imageUrl, user_login_lat: lat, user_login_lng: lng,status: status,chat_notify_count: chat_notify_count)
+        userObj = UserObject(uid: uid, companyName: self.mUserObj.companyName!, email: email, userName: name, routeStatus: route, imageUrl: imageUrl, user_current_lat: lat, user_current_lng: lng,status: status,chat_notify_count: chat_notify_count)
         
         return userObj
     }
@@ -585,7 +682,12 @@ class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSou
                     //remove the observers
                     DADataService.instance.REF_COMPANY.child(self.mUserObj.companyName!).child("chatGroup").removeAllObservers()
                     DADataService.instance.REF_COMPANY.child(self.mUserObj.companyName!).child("users").removeAllObservers()
-                    
+                    //clear all userDefaults
+                    if let appDomain = Bundle.main.bundleIdentifier {
+                        UserDefaults.standard.removePersistentDomain(forName: appDomain)
+                    }
+                    //reset the trip status
+                    onTrip = false
                     
                     self.dismiss(animated: true, completion: nil)
 
@@ -724,7 +826,7 @@ extension MapViewController: CLLocationManagerDelegate {
     //locationManager(_:didUpdateLocations:) executes when the location manager receives new location data.
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let location = locations.first {
-            if let user_lat = mUserObj.user_login_lat,let user_lng = mUserObj.user_login_lng
+            if let user_lat = mUserObj.user_current_lat,let user_lng = mUserObj.user_current_lng
             {
                 //journey already started or just opened the app
                 let user_current_location = CLLocation(latitude: user_lat.toDouble()!, longitude: user_lng.toDouble()!)
@@ -754,7 +856,7 @@ extension MapViewController: CLLocationManagerDelegate {
                 }
                 else
                 {
-                    // in of 20
+                    // in 20
                     if(self.status != Constants.STATUS_STOP){
                         status_lbl.text = "Slow"
                         DADataService.instance.add_location_with_status(uid: self.mUserObj.userNodeId!, companyName: self.mUserObj.companyName!, status: Constants.STATUS_ON_WAITING, latitude: user_new_location.coordinate.latitude, longitude: user_new_location.coordinate.longitude, callback: nil)
@@ -768,8 +870,8 @@ extension MapViewController: CLLocationManagerDelegate {
                     locationManager.stopUpdatingLocation()
                 }
             }else{
-                mUserObj.user_login_lat = "\(location.coordinate.latitude)"
-                mUserObj.user_login_lng = "\(location.coordinate.longitude)"
+                mUserObj.user_current_lat = "\(location.coordinate.latitude)"
+                mUserObj.user_current_lng = "\(location.coordinate.longitude)"
                 DADataService.instance.updateUserLoginLocation(uid: mUserObj.userNodeId!, companyName: mUserObj.companyName!, lat: location.coordinate.latitude, lng: location.coordinate.longitude, status: .ONLINE){
                     (response) in
                     self.getAllUserData()
@@ -788,7 +890,7 @@ extension MapViewController: CLLocationManagerDelegate {
     }
     
     func addUserMarker(userObj: UserObject){
-        let location: CLLocation = CLLocation(latitude: (Double)(userObj.user_login_lat!)!, longitude: (Double)(userObj.user_login_lng!)!)
+        let location: CLLocation = CLLocation(latitude: (Double)(userObj.user_current_lat!)!, longitude: (Double)(userObj.user_current_lng!)!)
             //add a new marker and save it to the dictionary
             let user_marker = GMSMarker()
             user_marker.position = CLLocationCoordinate2D(latitude: location.coordinate.latitude ,longitude: location.coordinate.longitude)
@@ -821,8 +923,9 @@ extension MapViewController: CLLocationManagerDelegate {
         CATransaction.setCompletionBlock({
             print("\(self.TAG): Animation completed")
             self.markerAnimationfinish = true
-            self.mUserObj.user_login_lat = "\(coordinates.latitude)"
-            self.mUserObj.user_login_lng = "\(coordinates.longitude)"
+            //insert the lat lng as users current location
+            self.mUserObj.user_current_lat = "\(coordinates.latitude)"
+            self.mUserObj.user_current_lng = "\(coordinates.longitude)"
         })
         CATransaction.setAnimationDuration(duration)
         marker.position = coordinates

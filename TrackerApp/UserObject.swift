@@ -21,12 +21,11 @@ class UserObject{
     private var _userNodeId: String!
     private var _userRouteStatus: String!
     private var _imageUrl: String!
-    private var _user_login_lat: String!
-    private var _user_login_lng: String!
     private var _user_status = Status.OFFLINE
     private var _chat_notify_count:String!
     
-    
+    private var _user_current_lat: String!
+    private var _user_current_lng: String!
     //getters
     var companyName: String?{
         return _companyName
@@ -54,20 +53,20 @@ class UserObject{
             _chat_notify_count = newValue
         }
     }
-    var user_login_lat: String?{
+    var user_current_lat: String?{
         get{
-            return _user_login_lat
+            return _user_current_lat
         }
         set{
-           _user_login_lat = newValue
+            _user_current_lat = newValue
         }
     }
-    var user_login_lng: String?{
+    var user_current_lng: String?{
         get{
-            return _user_login_lng
+            return _user_current_lng
         }
         set{
-            _user_login_lng = newValue
+            _user_current_lng = newValue
         }
     }
     var status: Status?{
@@ -87,16 +86,16 @@ class UserObject{
     }
     
     //for firebase User with lat lng
-    init(uid: String,companyName: String,email: String,userName: String,routeStatus: String,imageUrl: String,user_login_lat
-        :String,user_login_lng:String,status: String,chat_notify_count: String) {
+    init(uid: String,companyName: String,email: String,userName: String,routeStatus: String,imageUrl: String,user_current_lat
+        :String,user_current_lng:String,status: String,chat_notify_count: String) {
         self._userNodeId = uid
         self._userName = userName
         self._companyName = companyName
         self._userEmail = email
         self._imageUrl = imageUrl
         self._userRouteStatus = routeStatus
-        self._user_login_lat = user_login_lat
-        self._user_login_lng = user_login_lng
+        self._user_current_lat = user_current_lat
+        self._user_current_lng = user_current_lng
         self._chat_notify_count = chat_notify_count
         switch status {
         case Status.ONLINE.rawValue:
