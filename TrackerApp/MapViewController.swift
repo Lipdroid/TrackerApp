@@ -55,7 +55,8 @@ class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSou
     @IBOutlet weak var badge: UILabel!
     var isSearching = false
     
-    var allUserTripsDict = [String: TripObject]()
+    var allUserTripsDict = [String: [TripObject]]()
+    var tripObjects = [TripObject]()
     var tripObj:TripObject!
     
     deinit {
@@ -320,17 +321,21 @@ class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSou
         print("\(self.TAG): start observing trips")
         print("\(self.TAG): current Date: \(getCurrentDate())")
         DADataService.instance.REF_COMPANY.child(mUserObj.companyName!).child("userTrips").child(getCurrentDate()).observe(.value, with: { (snapshot) in
-            if let snapshots = snapshot.children.allObjects as? [FIRDataSnapshot]{
-                for snap in snapshots{
-                    if let trips = snap.value as? Dictionary<String,AnyObject>{
+            if let userNodes = snapshot.children.allObjects as? [FIRDataSnapshot]{
+                for userNode in userNodes{
+                    //this snap is user node id for each user
+                    if let trips = userNode.value as? Dictionary<String,AnyObject>{
+                        self.tripObjects.removeAll()
                         for trip in trips{
+                            //this trip is only random trip ids
+                            self.tripObj = TripObject()
                             if let tripDict = trip.value as? Dictionary<String,AnyObject>{
+                                //this is 3 different status of that trip
                                 if let onTrip = tripDict["onTrip"]{
                                     if let onTripDict = onTrip as? Dictionary<String,AnyObject>{
-                                        for trip in onTripDict{
-                                            self.tripObj = TripObject()
+                                        for triplocation in onTripDict{
                                 
-                                            if let finalDict = trip.value as? Dictionary<String,String>{
+                                            if let finalDict = triplocation.value as? Dictionary<String,String>{
                                                 //getting the main values
                                                 print("\(self.TAG): onTrip: \(finalDict)")
                                                 guard let latitude = finalDict["latitude"] else{
@@ -351,8 +356,8 @@ class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSou
                                 }
                                 if let onFinish = tripDict["onFinish"]{
                                     if let onFinishDict = onFinish as? Dictionary<String,AnyObject>{
-                                        for trip in onFinishDict{
-                                            if let finalDict = trip.value as? Dictionary<String,String>{
+                                        for tripLocation in onFinishDict{
+                                            if let finalDict = tripLocation.value as? Dictionary<String,String>{
                                                 //getting the main values
                                                 print("\(self.TAG): onFinish: \(finalDict)")
                                                 guard let latitude = finalDict["latitude"] else{
@@ -373,8 +378,8 @@ class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSou
                                 }
                                 if let onWaiting = tripDict["onWaiting"]{
                                     if let onWaitingDict = onWaiting as? Dictionary<String,AnyObject>{
-                                        for trip in onWaitingDict{
-                                            if let finalDict = trip.value as? Dictionary<String,String>{
+                                        for tripLocation in onWaitingDict{
+                                            if let finalDict = tripLocation.value as? Dictionary<String,String>{
                                                 //getting the main values
                                                 print("\(self.TAG): onWaiting: \(finalDict)")
                                                 guard let latitude = finalDict["latitude"] else{
@@ -393,12 +398,14 @@ class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSou
                                         }
                                     }
                                 }
+
                             }
-                            
+                           //we will get a trip object
+                            self.tripObjects.append(self.tripObj)
                         }
 
                     }
-                    self.allUserTripsDict = [snap.key:self.tripObj]
+                    self.allUserTripsDict.updateValue(self.tripObjects, forKey: userNode.key)
                 }
             }
 
