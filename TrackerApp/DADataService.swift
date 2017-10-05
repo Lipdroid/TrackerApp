@@ -162,4 +162,11 @@ class DADataService {
         let history = ["trip": true]
         REF_COMPANY.child(companyName).child("history").child(uid).child(date).child(tripId).setValue(history as Any as! [AnyHashable : Any])
     }
+    func update_userRouteStatus(uid: String,companyName: String,status: String,callback: Completion?){
+        let routeStatus = ["userRouteStatus": status]
+        REF_COMPANY.child(companyName).child("users").child(uid).updateChildValues(routeStatus as Any as! [AnyHashable : Any])
+        if let callback = callback{
+            callback("Success" as AnyObject)
+        }
+    }
 }
