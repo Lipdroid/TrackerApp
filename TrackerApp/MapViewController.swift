@@ -377,8 +377,10 @@ class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSou
                     userObj.user_current_lng = last_location?.longitude
                     //check if the marker is already in the map
                     if let marker = marker_dict[userObj.userNodeId!]{
-                        //update the marker location
-                        anitmateMarkertoLocation(marker: marker, coordinates: CLLocationCoordinate2D(latitude: Double(last_location!.latitude)!, longitude: Double(last_location!.longitude)!), degrees: 0, duration: 3)
+                        if(self.markerAnimationfinish){
+                            //update the marker location
+                            anitmateMarkertoLocation(marker: marker, coordinates: CLLocationCoordinate2D(latitude: Double(last_location!.latitude)!, longitude: Double(last_location!.longitude)!), degrees: 0, duration: 3)
+                        }
                     }else{
                         //add marker in that location
                         addUserMarker(userObj: userObj)
@@ -680,11 +682,15 @@ class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSou
                             print("\(self.TAG): \(employee.userName!) online marker not added")
                             //if user has already a marker then remove it and add new marker with new position
                             if let marker = self.marker_dict[employee.userNodeId!] {
-                                //remove if prevoiusly added
-                                marker.map = nil
-                                self.marker_dict.removeValue(forKey: employee.userNodeId!)
+                                if(self.markerAnimationfinish){
+                                    //no need to add again just animate it to the new location
+                                    //animate the marker there
+                                    self.anitmateMarkertoLocation(marker: marker, coordinates: CLLocationCoordinate2D(latitude: Double(employee.user_current_lat!)!, longitude: Double(employee.user_current_lng!)!), degrees: 0, duration: 3)
+                                }
+                                return
                             }
                             //add marker
+                            //if this line execute that means this is a new marker
                             self.addUserMarker(userObj: employee)
                             break
                         }
@@ -939,6 +945,8 @@ extension MapViewController: CLLocationManagerDelegate {
                         status_lbl.text = "Slow"
                         DADataService.instance.update_userRouteStatus(uid: mUserObj.userNodeId!, companyName: mUserObj.companyName!, status: Constants.STATUS_ON_WAITING, callback: nil)
                         DADataService.instance.add_location_with_status(uid: self.mUserObj.userNodeId!, companyName: self.mUserObj.companyName!, status: Constants.STATUS_ON_WAITING, latitude: user_new_location.coordinate.latitude, longitude: user_new_location.coordinate.longitude, callback: nil)
+                        //update users current location in firebase
+                        DADataService.instance.updateUserLoginLocation(uid: mUserObj.userNodeId!, companyName: mUserObj.companyName!, lat: location.coordinate.latitude, lng: location.coordinate.longitude, status: .ONLINE){(response) in}
                     }else{
                         status_lbl.text = "N/A"
                     }
@@ -990,6 +998,7 @@ extension MapViewController: CLLocationManagerDelegate {
     
     
     func anitmateMarkertoLocation(marker: GMSMarker,coordinates: CLLocationCoordinate2D, degrees: CLLocationDegrees, duration: Double) {
+        self.markerAnimationfinish = true
         // Keep Rotation Short
         //if want to update the rotation also comment out these two lines
 //        CATransaction.begin()
