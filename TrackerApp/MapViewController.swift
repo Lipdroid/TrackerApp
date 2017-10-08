@@ -19,6 +19,7 @@ import UserNotifications
 class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSource,UISearchBarDelegate {
     let TAG = "MapViewController"
     @IBOutlet weak var searchBar: UISearchBar!
+    @IBOutlet weak var btn_journey: RoundedCornerButton!
     
     @IBOutlet weak var tableView: UITableView!
     var mUserObj: UserObject! = nil
@@ -44,7 +45,7 @@ class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSou
     var filter_employee = [UserObject]()
     var marker_dict = Dictionary<String,GMSMarker>()
 
-    @IBOutlet weak var status_seg: UISegmentedControl!
+    @IBOutlet weak var status_view_top_constraints: NSLayoutConstraint!
     
     var status = Constants.STATUS_STOP
     var markerAnimationfinish = true
@@ -69,37 +70,30 @@ class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSou
 
     }
     
-    @IBAction func status_chage_pressed(_ sender: Any) {
-        switch status_seg.selectedSegmentIndex {
-        case Constants.STATUS_START:
-            status_segment_enable(enable: true)
-            locationManager.startUpdatingLocation()
-            status = Constants.STATUS_START
-            break
-        case Constants.STATUS_TRAFFIC:
-            status = Constants.STATUS_TRAFFIC
-            onTrip = true;
-            break
-        case Constants.STATUS_WAITING:
-            onTrip = true;
-            status = Constants.STATUS_WAITING
-            //reset_segment()
-            break
-        case Constants.STATUS_STOP:
-            DADataService.instance.update_userRouteStatus(uid: mUserObj.userNodeId!, companyName: mUserObj.companyName!, status: Constants.STATUS_ON_FINISH, callback: nil)
-            locationManager.stopUpdatingLocation()
-            status_segment_enable(enable: false)
-            self.status_seg.selectedSegmentIndex = 3;
-            status = Constants.STATUS_STOP
-            status_lbl.text = "Finish"
-            DADataService.instance.add_location_with_status(uid: self.mUserObj.userNodeId!, companyName: self.mUserObj.companyName!, status: Constants.STATUS_ON_FINISH, latitude: (Double)(mUserObj.user_current_lat!)!, longitude: (Double)(mUserObj.user_current_lng!)!, callback: nil)
-            onTrip = false;
-            break
-        default:
-            break
+    @IBAction func journey_btn_pressed(_ sender: Any) {
+        switch btn_journey.getTitle() {
+            case Constants.START_TRACKING:
+                btn_journey.setTitle(title: Constants.STOP_TRACKING)
+                showStatusView()
+                //start Tracking
+                locationManager.startUpdatingLocation()
+                status = Constants.STATUS_START
+                break
+            case Constants.STOP_TRACKING:
+                btn_journey.setTitle(title: Constants.START_TRACKING)
+                hideStatusView()
+                //stop tracking
+                DADataService.instance.update_userRouteStatus(uid: mUserObj.userNodeId!, companyName: mUserObj.companyName!, status: Constants.STATUS_ON_FINISH, callback: nil)
+                locationManager.stopUpdatingLocation()
+                status = Constants.STATUS_STOP
+                status_lbl.text = "Finish"
+                DADataService.instance.add_location_with_status(uid: self.mUserObj.userNodeId!, companyName: self.mUserObj.companyName!, status: Constants.STATUS_ON_FINISH, latitude: (Double)(mUserObj.user_current_lat!)!, longitude: (Double)(mUserObj.user_current_lng!)!, callback: nil)
+                onTrip = false;
+                break
+            default:
+                break
         }
     }
-    
     func startObservingChatDataChange(){
         print("\(self.TAG): start observing messagese")
         DADataService.instance.REF_COMPANY.child(mUserObj.companyName!).child("chatGroup").queryLimited(toLast: 1).observe(.childAdded, with: { (snapshot) in
@@ -237,28 +231,6 @@ class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSou
         chatObj = ChatObject(chatId: chatId,senderId: senderId, senderName: senderName, message: message, time: time, date: date, image_url: iamgeUrl)
         
         return chatObj
-    }
-    
-    public func status_segment_enable(enable: Bool){
-        if enable{
-            self.status_seg.setEnabled(true, forSegmentAt: 1);
-            self.status_seg.setEnabled(true, forSegmentAt: 2);
-            self.status_seg.setEnabled(true, forSegmentAt: 3);
-        }else{
-            self.status_seg.setEnabled(false, forSegmentAt: 1);
-            self.status_seg.setEnabled(false, forSegmentAt: 2);
-            self.status_seg.setEnabled(false, forSegmentAt: 3);
-        }
-    }
-    
-    public func reset_segment(){
-            self.status_seg.selectedSegmentIndex = UISegmentedControlNoSegment;
-
-            self.status_seg.setEnabled(true, forSegmentAt: 0);
-            self.status_seg.setEnabled(true, forSegmentAt: 1);
-            self.status_seg.setEnabled(true, forSegmentAt: 2);
-            self.status_seg.setEnabled(true, forSegmentAt: 3);
-        
     }
     
     func intMarkerSound(){
@@ -557,6 +529,10 @@ class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSou
                 dest.mUserObj = self.mUserObj
                 dest.chats = self.chats
             }
+        }else if segue.identifier == Constants.HISTORY_SEGUE_IDENTIFIER{
+            if let dest: HistoryVC = segue.destination as? HistoryVC{
+                dest.mUserObj = self.mUserObj
+            }
         }
     }
     
@@ -793,6 +769,26 @@ class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSou
         }
         if(right_nav_view_isShown){
             toggleRightMenu()
+        }
+    }
+    
+    private func showStatusView(){
+        status_view_top_constraints.constant = 0
+        UIView.animate(withDuration: 0.5, animations: {
+            self.view.layoutIfNeeded()
+            
+        }){(true) in
+            
+        }
+    }
+    
+    private func hideStatusView(){
+        status_view_top_constraints.constant = -120
+        UIView.animate(withDuration: 0.5, animations: {
+            self.view.layoutIfNeeded()
+            
+        }){(true) in
+            
         }
     }
     private func toggleLeftMenu(){

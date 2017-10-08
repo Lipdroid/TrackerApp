@@ -55,5 +55,9 @@ struct Constants {
 
     static var onChatPage = false;
     static let TRIP_ID = "trip_id"
+    
+    static let START_TRACKING = "START  TRACKING"
+    static let STOP_TRACKING = "STOP  TRACKING"
+
 
 }

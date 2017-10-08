@@ -21,8 +21,8 @@ class LoginViewController: UIViewController,GIDSignInDelegate,GIDSignInUIDelegat
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        KeychainWrapper.standard.removeObject(forKey: Constants.KEY_UID)
-        KeychainWrapper.standard.removeObject(forKey: Constants.KEY_COMPANY)
+//        KeychainWrapper.standard.removeObject(forKey: Constants.KEY_UID)
+//        KeychainWrapper.standard.removeObject(forKey: Constants.KEY_COMPANY)
         
         //configure Google Signin
         GIDSignIn.sharedInstance().clientID = FIRApp.defaultApp()?.options.clientID
