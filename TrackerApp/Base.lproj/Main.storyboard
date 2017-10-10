@@ -98,14 +98,6 @@
                             <view alpha="0.69999999999999996" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6AP-PM-I08" customClass="RoundedCornerView" customModule="TrackerApp" customModuleProvider="target">
                                 <rect key="frame" x="87.5" y="-100" width="200" height="40"/>
                                 <subviews>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xe5-8a-oxy" customClass="HeartBeatView" customModule="TrackerApp" customModuleProvider="target">
-                                        <rect key="frame" x="172" y="10" width="20" height="20"/>
-                                        <color key="backgroundColor" red="0.0033532574310000001" green="0.75003963709999999" blue="0.0027013139330000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="20" id="KfY-hG-Wo7"/>
-                                            <constraint firstAttribute="width" constant="20" id="zzY-oe-2Pj"/>
-                                        </constraints>
-                                    </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Enh-P3-0Jj" customClass="HeartBeatView" customModule="TrackerApp" customModuleProvider="target">
                                         <rect key="frame" x="8" y="9.5" width="20" height="20"/>
                                         <color key="backgroundColor" red="0.0033532574310000001" green="0.75003963709999999" blue="0.0027013139330000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -125,14 +117,17 @@
                                         <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xe5-8a-oxy" customClass="HeartBeatView" customModule="TrackerApp" customModuleProvider="target">
+                                        <rect key="frame" x="171.5" y="10" width="20" height="20"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" red="0.0033532574310000001" green="0.75003963709999999" blue="0.0027013139330000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </view>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="200" id="33z-0Q-Mxr"/>
                                     <constraint firstItem="UsF-S7-FLw" firstAttribute="centerX" secondItem="6AP-PM-I08" secondAttribute="centerX" id="6t8-rd-NaV"/>
-                                    <constraint firstAttribute="trailing" secondItem="xe5-8a-oxy" secondAttribute="trailing" constant="8" id="Ami-za-css"/>
                                     <constraint firstItem="UsF-S7-FLw" firstAttribute="centerY" secondItem="6AP-PM-I08" secondAttribute="centerY" id="LQg-Lv-YCX"/>
-                                    <constraint firstItem="xe5-8a-oxy" firstAttribute="centerY" secondItem="6AP-PM-I08" secondAttribute="centerY" id="TyD-WI-kGg"/>
                                     <constraint firstItem="Enh-P3-0Jj" firstAttribute="centerY" secondItem="6AP-PM-I08" secondAttribute="centerY" id="kJi-hI-L7U"/>
                                     <constraint firstItem="Enh-P3-0Jj" firstAttribute="leading" secondItem="6AP-PM-I08" secondAttribute="leading" constant="8" id="lo2-f6-bNQ"/>
                                     <constraint firstAttribute="height" constant="40" id="sNv-Ov-17t"/>
