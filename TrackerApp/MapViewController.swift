@@ -863,12 +863,10 @@ class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSou
     }
     
     private func showStatusView(){
-        status_view_top_constraints.constant = 0
-        UIView.animate(withDuration: 0.5, animations: {
-            self.view.layoutIfNeeded()
-            
-        }){(true) in
-            
+        status_view_top_constraints.constant = 5
+        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 5, options: .curveEaseInOut, animations: {
+               self.view.layoutIfNeeded()
+        }) { _ in
         }
     }
     
