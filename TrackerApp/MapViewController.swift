@@ -326,11 +326,18 @@ class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSou
             if userObj.user_current_lat == "\(LOGOUT_LAT)" && userObj.user_current_lng == "\(LOGOUT_LNG)"{
                 //user is logged out so user locationion is not available
                 //show an alert
+                if let cell = collectionView.cellForItem(at: indexPath) as? UserCollectionCell{
+                    cell.shake()
+                }
             }else{
                 //user location available
                 animateToUser(userObj: userObj)
+                if let cell = collectionView.cellForItem(at: indexPath) as? UserCollectionCell{
+                    cell.float()
+                }
             }
         }
+        
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
@@ -422,37 +429,40 @@ class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSou
                 //check the user is on move or slow
                 if userObj.userRouteStatus == Constants.STATUS_ON_TRIP{
                     //last location object
-                    let last_location = tripObj?.onTripLocation.last
-                    //update the lat lng
-                    userObj.user_current_lat = last_location?.latitude
-                    userObj.user_current_lng = last_location?.longitude
-                    //check if the marker is already in the map
-                    if let marker = marker_dict[userObj.userNodeId!]{
-                        if(self.markerAnimationfinish){
-                            //update the marker location
-                            anitmateMarkertoLocation(marker: marker, coordinates: CLLocationCoordinate2D(latitude: Double(last_location!.latitude)!, longitude: Double(last_location!.longitude)!), degrees: 0, duration: 3)
+                    if let last_location = tripObj?.onTripLocation.last{
+                        //update the lat lng
+                        userObj.user_current_lat = last_location.latitude
+                        userObj.user_current_lng = last_location.longitude
+                        //check if the marker is already in the map
+                        if let marker = marker_dict[userObj.userNodeId!]{
+                            if(self.markerAnimationfinish){
+                                //update the marker location
+                                anitmateMarkertoLocation(marker: marker, coordinates: CLLocationCoordinate2D(latitude: Double(last_location.latitude)!, longitude: Double(last_location.longitude)!), degrees: 0, duration: 3)
+                            }
+                        }else{
+                            //add marker in that location
+                            addUserMarker(userObj: userObj)
                         }
-                    }else{
-                        //add marker in that location
-                        addUserMarker(userObj: userObj)
                     }
                 }else if userObj.userRouteStatus == Constants.STATUS_ON_WAITING{
                     //last location object
-                    let last_location = tripObj?.onTripLocation.last
-                    //update the lat lng
-                    userObj.user_current_lat = last_location?.latitude
-                    userObj.user_current_lng = last_location?.longitude
+                    if let last_location = tripObj?.onTripLocation.last{
+                        //update the lat lng
+                        userObj.user_current_lat = last_location.latitude
+                        userObj.user_current_lng = last_location.longitude
+                    }
                 }else if userObj.userRouteStatus == Constants.STATUS_ON_FINISH{
                     //last location object
-                    let last_location = tripObj?.onTripLocation.last
-                    //update the lat lng
-                    userObj.user_current_lat = last_location?.latitude
-                    userObj.user_current_lng = last_location?.longitude
-                    if let _ = marker_dict[userObj.userNodeId!]{
-                        //nothing to do
-                    }else{
-                        //add marker in that location
-                        addUserMarker(userObj: userObj)
+                    if let last_location = tripObj?.onTripLocation.last{
+                        //update the lat lng
+                        userObj.user_current_lat = last_location.latitude
+                        userObj.user_current_lng = last_location.longitude
+                        if let _ = marker_dict[userObj.userNodeId!]{
+                            //nothing to do
+                        }else{
+                            //add marker in that location
+                            addUserMarker(userObj: userObj)
+                        }
                     }
                 }
             }
@@ -1102,4 +1112,3 @@ extension MapViewController: CLLocationManagerDelegate {
     }
     
 }
-

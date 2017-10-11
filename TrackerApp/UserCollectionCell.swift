@@ -8,7 +8,7 @@
 
 import UIKit
 
-class UserCollectionCell: UICollectionViewCell {
+class UserCollectionCell: UICollectionViewCell,Shakeable,Floatable {
 
     @IBOutlet weak var user_name: UILabel!
     @IBOutlet weak var profile_image: CircleImageView!

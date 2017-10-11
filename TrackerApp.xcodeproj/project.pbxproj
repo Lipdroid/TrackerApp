@@ -18,6 +18,8 @@
 		7402EB261F542AE700BE2897 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7402EB251F542AE700BE2897 /* MapViewController.swift */; };
 		7407A0451F8DBC1C00F1185D /* UserCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7407A0431F8DBC1C00F1185D /* UserCollectionCell.swift */; };
 		7407A0461F8DBC1C00F1185D /* UserCollectionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7407A0441F8DBC1C00F1185D /* UserCollectionCell.xib */; };
+		7407A0491F8DF43F00F1185D /* Shakeable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7407A0481F8DF43F00F1185D /* Shakeable.swift */; };
+		7407A04B1F8DF59A00F1185D /* Floatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7407A04A1F8DF59A00F1185D /* Floatable.swift */; };
 		741243B41F568D9600ADCCEF /* DADataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741243B31F568D9600ADCCEF /* DADataService.swift */; };
 		74177DFF1F77B02700A21DA2 /* ChatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74177DFE1F77B02700A21DA2 /* ChatCell.swift */; };
 		74177E011F77B4F200A21DA2 /* ChatObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74177E001F77B4F200A21DA2 /* ChatObject.swift */; };
@@ -59,6 +61,8 @@
 		7402EB251F542AE700BE2897 /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		7407A0431F8DBC1C00F1185D /* UserCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCollectionCell.swift; sourceTree = "<group>"; };
 		7407A0441F8DBC1C00F1185D /* UserCollectionCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UserCollectionCell.xib; sourceTree = "<group>"; };
+		7407A0481F8DF43F00F1185D /* Shakeable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shakeable.swift; sourceTree = "<group>"; };
+		7407A04A1F8DF59A00F1185D /* Floatable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Floatable.swift; sourceTree = "<group>"; };
 		741243B31F568D9600ADCCEF /* DADataService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DADataService.swift; sourceTree = "<group>"; };
 		74177DFE1F77B02700A21DA2 /* ChatCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatCell.swift; sourceTree = "<group>"; };
 		74177E001F77B4F200A21DA2 /* ChatObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatObject.swift; sourceTree = "<group>"; };
@@ -168,6 +172,15 @@
 			name = Model;
 			sourceTree = "<group>";
 		};
+		7407A0471F8DF3B400F1185D /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				7407A0481F8DF43F00F1185D /* Shakeable.swift */,
+				7407A04A1F8DF59A00F1185D /* Floatable.swift */,
+			);
+			name = Protocols;
+			sourceTree = "<group>";
+		};
 		741243B21F568D6600ADCCEF /* Services */ = {
 			isa = PBXGroup;
 			children = (
@@ -224,6 +237,7 @@
 			isa = PBXGroup;
 			children = (
 				711093B41F6C69CA00E86B5E /* TrackerApp.entitlements */,
+				7407A0471F8DF3B400F1185D /* Protocols */,
 				7198D7B71F69D40300EEF51E /* Extensions */,
 				741243B21F568D6600ADCCEF /* Services */,
 				744EFDBB1F55573D004364D0 /* CustomViews */,
@@ -380,9 +394,11 @@
 				745AAC951F7272C100BA8413 /* ChatRoomVC.swift in Sources */,
 				74C76D8F1F7C9F7F00B9A2FF /* BadgeLabel.swift in Sources */,
 				74177E011F77B4F200A21DA2 /* ChatObject.swift in Sources */,
+				7407A0491F8DF43F00F1185D /* Shakeable.swift in Sources */,
 				74D8184B1F73570600646154 /* ProfileVC.swift in Sources */,
 				7491B1111F89E055001DE7E6 /* RoundedCornerButton.swift in Sources */,
 				7491B1131F8A0DB6001DE7E6 /* HistoryCell.swift in Sources */,
+				7407A04B1F8DF59A00F1185D /* Floatable.swift in Sources */,
 				749BD1AA1F823EFA009030C3 /* locationObject.swift in Sources */,
 				744EFDB81F552807004364D0 /* Constants.swift in Sources */,
 				749BC3161F4A7D80006AA55D /* LoginViewController.swift in Sources */,
