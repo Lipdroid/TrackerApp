@@ -80,6 +80,20 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="rTD-CT-2So">
+                                <rect key="frame" x="0.0" y="60" width="375" height="100"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="100" id="thE-KA-I8e"/>
+                                </constraints>
+                                <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="3Kn-aD-7eW">
+                                    <size key="itemSize" width="50" height="50"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells/>
+                            </collectionView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7Ze-TN-YED" customClass="RoundedCornerButton" customModule="TrackerApp" customModuleProvider="target">
                                 <rect key="frame" x="37.5" y="599" width="300" height="60"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
@@ -528,6 +542,8 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="rTD-CT-2So" firstAttribute="trailing" secondItem="B3V-ha-krJ" secondAttribute="trailing" id="0ms-WQ-OEd"/>
+                            <constraint firstItem="rTD-CT-2So" firstAttribute="top" secondItem="zzz-aO-dz1" secondAttribute="bottom" id="6BF-WH-hoN"/>
                             <constraint firstItem="Ry2-3O-kxQ" firstAttribute="top" secondItem="50i-cE-GWe" secondAttribute="top" id="B0R-Tl-eeP"/>
                             <constraint firstItem="PcB-xI-t7c" firstAttribute="top" secondItem="xp8-x7-tqO" secondAttribute="bottom" id="EhQ-m1-xMB"/>
                             <constraint firstItem="B3V-ha-krJ" firstAttribute="leading" secondItem="50i-cE-GWe" secondAttribute="leading" id="EjD-O5-HHz"/>
@@ -542,6 +558,7 @@
                             <constraint firstAttribute="trailing" secondItem="B3V-ha-krJ" secondAttribute="trailing" id="Swv-7A-l3I"/>
                             <constraint firstItem="PcB-xI-t7c" firstAttribute="top" secondItem="B3V-ha-krJ" secondAttribute="bottom" id="Vvd-Ef-sF3"/>
                             <constraint firstItem="PcB-xI-t7c" firstAttribute="top" secondItem="d35-lF-KMF" secondAttribute="bottom" id="WET-VW-D74"/>
+                            <constraint firstItem="rTD-CT-2So" firstAttribute="leading" secondItem="B3V-ha-krJ" secondAttribute="leading" id="WLq-hJ-MWq"/>
                             <constraint firstItem="zzz-aO-dz1" firstAttribute="top" secondItem="Pdy-jC-lUU" secondAttribute="bottom" constant="12" id="eDH-wC-4ed"/>
                             <constraint firstItem="B3V-ha-krJ" firstAttribute="top" secondItem="50i-cE-GWe" secondAttribute="top" id="f70-FH-y60"/>
                             <constraint firstItem="xp8-x7-tqO" firstAttribute="top" secondItem="50i-cE-GWe" secondAttribute="top" id="fRB-Ed-zTc"/>
@@ -558,6 +575,7 @@
                     <connections>
                         <outlet property="badge" destination="nDZ-yS-oWw" id="MSK-Dw-YGS"/>
                         <outlet property="btn_journey" destination="7Ze-TN-YED" id="WRT-nc-JWd"/>
+                        <outlet property="collectionView" destination="rTD-CT-2So" id="dRx-3n-yK4"/>
                         <outlet property="currentLocationButtonView" destination="xeK-uB-aJ8" id="A8x-09-4U1"/>
                         <outlet property="google_map" destination="B3V-ha-krJ" id="ULY-cY-4NT"/>
                         <outlet property="left_nav_btn_view" destination="k4Q-zv-Bac" id="UKy-Ng-TyW"/>

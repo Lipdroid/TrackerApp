@@ -16,7 +16,8 @@ import SwiftKeychainWrapper
 import AVFoundation
 import UserNotifications
 
-class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSource,UISearchBarDelegate {
+class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSource,UISearchBarDelegate,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout {
+    @IBOutlet weak var collectionView: UICollectionView!
     let TAG = "MapViewController"
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var btn_journey: RoundedCornerButton!
@@ -254,12 +255,15 @@ class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSou
     }
 
     @IBAction func currentLocation_btn_pressed(_ sender: Any) {
-        guard let lat = mUserObj.user_current_lat,let lng = mUserObj.user_current_lng else {
+        animateToUser(userObj: mUserObj)
+    }
+    
+    func animateToUser(userObj: UserObject){
+        guard let lat = userObj.user_current_lat,let lng = userObj.user_current_lng else {
             return
         }
         let camera = GMSCameraPosition.camera(withLatitude: (Double)(lat)!, longitude: (Double)(lng)!, zoom: MAP_ZOOM_LEVEL)
         google_map.animate(to: camera)
-
     }
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -267,6 +271,8 @@ class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSou
         tableView.delegate = self
         tableView.dataSource = self
         tableView.tableFooterView = UIView()
+        collectionView.delegate = self
+        collectionView.dataSource = self
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
         NotificationCenter.default.addObserver(self, selector:#selector(checkForLocationPermission), name: NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
@@ -289,7 +295,80 @@ class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSou
         startObservingTrips()
         searchBar.delegate = self
         searchBar.returnKeyType = UIReturnKeyType.done
+        
+        let nib = UINib(nibName: "UserCollectionCell", bundle: nil)
+        collectionView.register(nib, forCellWithReuseIdentifier: "UserCollectionCell")
 
+    }
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 1
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return employees.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "UserCollectionCell", for: indexPath) as? UserCollectionCell{
+            cell.configureCell(userObj: employees[indexPath.row])
+            //cell.layer.cornerRadius = 5.0
+            //cell.layer.borderColor = UIColor.yellow.cgColor
+            //cell.layer.borderWidth = 1.0
+            //cell.dropShadow()
+            return cell;
+        }
+        return UICollectionViewCell()
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if let userObj = employees[indexPath.row] as? UserObject{
+            if userObj.user_current_lat == "\(LOGOUT_LAT)" && userObj.user_current_lng == "\(LOGOUT_LNG)"{
+                //user is logged out so user locationion is not available
+                //show an alert
+            }else{
+                //user location available
+                animateToUser(userObj: userObj)
+            }
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        
+        //Where elements_count is the count of all your items in that
+        //Collection view...
+        let cellCount = CGFloat(employees.count)
+        
+        //If the cell count is zero, there is no point in calculating anything.
+        if cellCount > 0 {
+            let flowLayout = collectionViewLayout as! UICollectionViewFlowLayout
+            let cellWidth = flowLayout.itemSize.width + flowLayout.minimumInteritemSpacing
+            
+            //20.00 was just extra spacing I wanted to add to my cell.
+            let totalCellWidth = cellWidth*cellCount + 20.00 * (cellCount-1)
+            let contentWidth = collectionView.frame.size.width - collectionView.contentInset.left - collectionView.contentInset.right
+            
+            if (totalCellWidth < contentWidth) {
+                //If the number of cells that exists take up less room than the
+                //collection view width... then there is an actual point to centering them.
+                
+                //Calculate the right amount of padding to center the cells.
+                let padding = (contentWidth - totalCellWidth) / 2.0
+                return UIEdgeInsetsMake(0, padding, 0, padding)
+            } else {
+                //Pretty much if the number of cells that exist take up
+                //more room than the actual collectionView width, there is no
+                // point in trying to center them. So we leave the default behavior.
+                return UIEdgeInsetsMake(0, 40, 0, 40)
+            }
+        }
+        
+        return UIEdgeInsets.zero
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize
+    {
+        return CGSize(width: 60.0, height: 80.0)
     }
     
     func startObservingTrips(){
@@ -563,6 +642,7 @@ class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSou
                     }
                 }
                 self.tableView.reloadData()
+                self.collectionView.reloadData()
                 //clear the dictionary data
                 self.allUserDict.removeAll()
                 //put markers for all the users/employee
@@ -641,7 +721,7 @@ class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSou
                     self.employees.append(employee)
                     self.allUserDict.updateValue(employee, forKey: employee.userNodeId!)
                     self.tableView.reloadData()
-                    
+                    self.collectionView.reloadData()
                     //if offline no marker add
                     switch employee.status!{
                         case .OFFLINE:

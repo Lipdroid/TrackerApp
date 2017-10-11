@@ -16,6 +16,8 @@
 		71F809EB1F6C480700C42771 /* Progress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71F809EA1F6C480700C42771 /* Progress.swift */; };
 		7402EB241F5422BC00BE2897 /* UserObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7402EB231F5422BC00BE2897 /* UserObject.swift */; };
 		7402EB261F542AE700BE2897 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7402EB251F542AE700BE2897 /* MapViewController.swift */; };
+		7407A0451F8DBC1C00F1185D /* UserCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7407A0431F8DBC1C00F1185D /* UserCollectionCell.swift */; };
+		7407A0461F8DBC1C00F1185D /* UserCollectionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7407A0441F8DBC1C00F1185D /* UserCollectionCell.xib */; };
 		741243B41F568D9600ADCCEF /* DADataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741243B31F568D9600ADCCEF /* DADataService.swift */; };
 		74177DFF1F77B02700A21DA2 /* ChatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74177DFE1F77B02700A21DA2 /* ChatCell.swift */; };
 		74177E011F77B4F200A21DA2 /* ChatObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74177E001F77B4F200A21DA2 /* ChatObject.swift */; };
@@ -55,6 +57,8 @@
 		71F809EA1F6C480700C42771 /* Progress.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Progress.swift; sourceTree = "<group>"; };
 		7402EB231F5422BC00BE2897 /* UserObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserObject.swift; sourceTree = "<group>"; };
 		7402EB251F542AE700BE2897 /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
+		7407A0431F8DBC1C00F1185D /* UserCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCollectionCell.swift; sourceTree = "<group>"; };
+		7407A0441F8DBC1C00F1185D /* UserCollectionCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UserCollectionCell.xib; sourceTree = "<group>"; };
 		741243B31F568D9600ADCCEF /* DADataService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DADataService.swift; sourceTree = "<group>"; };
 		74177DFE1F77B02700A21DA2 /* ChatCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatCell.swift; sourceTree = "<group>"; };
 		74177E001F77B4F200A21DA2 /* ChatObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatObject.swift; sourceTree = "<group>"; };
@@ -119,6 +123,7 @@
 			children = (
 				749BC3171F4A7D80006AA55D /* Main.storyboard */,
 				749BC31C1F4A7D80006AA55D /* LaunchScreen.storyboard */,
+				7407A0441F8DBC1C00F1185D /* UserCollectionCell.xib */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -158,6 +163,7 @@
 				749BD1A71F82055A009030C3 /* TripObject.swift */,
 				749BD1A91F823EFA009030C3 /* locationObject.swift */,
 				7491B1121F8A0DB6001DE7E6 /* HistoryCell.swift */,
+				7407A0431F8DBC1C00F1185D /* UserCollectionCell.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -306,6 +312,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7407A0461F8DBC1C00F1185D /* UserCollectionCell.xib in Resources */,
 				749BC31E1F4A7D80006AA55D /* LaunchScreen.storyboard in Resources */,
 				749BC3261F4A9883006AA55D /* GoogleService-Info.plist in Resources */,
 				7183373E1F703DCD00BEF060 /* marker_add.mp3 in Resources */,
@@ -386,6 +393,7 @@
 				71F809EB1F6C480700C42771 /* Progress.swift in Sources */,
 				7491B1151F8A209E001DE7E6 /* RoundedCornerView.swift in Sources */,
 				7491B1191F8A2B4A001DE7E6 /* FloatingView.swift in Sources */,
+				7407A0451F8DBC1C00F1185D /* UserCollectionCell.swift in Sources */,
 				7491B11B1F8A2B6C001DE7E6 /* HeartBeatView.swift in Sources */,
 				74A33A561F79051E00F7260F /* InsetLabel.swift in Sources */,
 				74177DFF1F77B02700A21DA2 /* ChatCell.swift in Sources */,
