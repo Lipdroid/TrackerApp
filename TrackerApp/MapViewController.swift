@@ -198,7 +198,11 @@ class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSou
                 let badge_count = self.chats.count - seen_notification
                 print("\(self.TAG): \(badge_count)")
                 if(badge_count > 0){
-                    badge.text = "\(badge_count)"
+                    if (badge_count > 9){
+                        badge.text = "9+"
+                    }else{
+                        badge.text = "\(badge_count)"
+                    }
                     badge.isHidden = false
                 }
             }
@@ -1110,3 +1114,4 @@ extension MapViewController: CLLocationManagerDelegate {
     }
     
 }
+
