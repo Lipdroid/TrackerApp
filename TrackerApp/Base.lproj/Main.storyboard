@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="feI-An-z1P">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -109,7 +108,7 @@
                                     <action selector="journey_btn_pressed:" destination="JRU-wA-dhl" eventType="touchUpInside" id="8e0-lV-Lux"/>
                                 </connections>
                             </button>
-                            <view alpha="0.69999999999999996" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6AP-PM-I08" customClass="RoundedCornerView" customModule="TrackerApp" customModuleProvider="target">
+                            <view hidden="YES" alpha="0.69999999999999996" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6AP-PM-I08" customClass="RoundedCornerView" customModule="TrackerApp" customModuleProvider="target">
                                 <rect key="frame" x="87.5" y="-100" width="200" height="40"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Enh-P3-0Jj" customClass="HeartBeatView" customModule="TrackerApp" customModuleProvider="target">
@@ -585,6 +584,7 @@
                         <outlet property="right_nav_trailing_constraint" destination="KuY-Zt-X4G" id="gue-kc-At7"/>
                         <outlet property="right_nav_view" destination="zzz-aO-dz1" id="8AF-Z1-VMW"/>
                         <outlet property="searchBar" destination="E5O-V9-76g" id="glI-zm-Rrb"/>
+                        <outlet property="statusView" destination="6AP-PM-I08" id="1BA-91-dd7"/>
                         <outlet property="status_lbl" destination="UsF-S7-FLw" id="gsJ-Yh-Mju"/>
                         <outlet property="status_view_top_constraints" destination="pvp-tz-EoS" id="M7o-jN-Bl1"/>
                         <outlet property="tableView" destination="hPi-DQ-K6O" id="XoG-KF-3Rh"/>
@@ -815,6 +815,57 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="R1Y-OZ-BSN" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-1130.4000000000001" y="223.53823088455775"/>
+        </scene>
+        <!--OnboardingVC-->
+        <scene sceneID="RP8-5K-1hQ">
+            <objects>
+                <viewController id="feI-An-z1P" customClass="OnboardingVC" customModule="TrackerApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Kbc-oo-m3F"/>
+                        <viewControllerLayoutGuide type="bottom" id="hkr-Ur-qGj"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="BTY-er-VsE">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Iq4-Qr-ajq" customClass="PaperOnboarding" customModule="paper_onboarding">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
+                            <button opaque="NO" alpha="0.0" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="o7z-ez-hjm" customClass="RoundedCornerButton" customModule="TrackerApp" customModuleProvider="target">
+                                <rect key="frame" x="107" y="547" width="160" height="45"/>
+                                <color key="backgroundColor" red="1" green="0.50196081400000003" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="160" id="Vpj-nH-LqQ"/>
+                                    <constraint firstAttribute="height" constant="45" id="lnT-Za-xDY"/>
+                                </constraints>
+                                <state key="normal" title="GET STARTED!">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="onclick_getStarted:" destination="feI-An-z1P" eventType="touchUpInside" id="tcS-Kp-OvC"/>
+                                    <segue destination="BYZ-38-t0r" kind="show" identifier="onboardingToLoginPage" id="i6b-rm-M77"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="o7z-ez-hjm" firstAttribute="centerX" secondItem="BTY-er-VsE" secondAttribute="centerX" id="7h7-0Z-DBM"/>
+                            <constraint firstItem="hkr-Ur-qGj" firstAttribute="top" secondItem="Iq4-Qr-ajq" secondAttribute="bottom" id="GNM-ot-egP"/>
+                            <constraint firstItem="Iq4-Qr-ajq" firstAttribute="leading" secondItem="BTY-er-VsE" secondAttribute="leading" id="LaK-P0-VQE"/>
+                            <constraint firstAttribute="trailing" secondItem="Iq4-Qr-ajq" secondAttribute="trailing" id="e3O-2E-LwC"/>
+                            <constraint firstItem="hkr-Ur-qGj" firstAttribute="top" secondItem="o7z-ez-hjm" secondAttribute="bottom" constant="75" id="gb9-JF-I1d"/>
+                            <constraint firstItem="Iq4-Qr-ajq" firstAttribute="top" secondItem="BTY-er-VsE" secondAttribute="top" id="xni-Cl-24Y"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="btn_getStarted" destination="o7z-ez-hjm" id="6AU-8A-G1o"/>
+                        <outlet property="paperView" destination="Iq4-Qr-ajq" id="p3I-6w-NFt"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="igi-2i-wuL" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-2657" y="-539"/>
         </scene>
         <!--HistoryVC-->
         <scene sceneID="1JA-Vb-S6n">

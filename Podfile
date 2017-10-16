@@ -15,5 +15,6 @@ target 'TrackerApp' do
   pod 'GoogleSignIn'
   pod 'GoogleMaps'
   pod 'SwiftKeychainWrapper'
-
+  pod 'paper-onboarding', '~> 2.0.1'
+  
 end

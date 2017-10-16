@@ -63,6 +63,7 @@ class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSou
     
     var allUserDict = [String: UserObject]()
     
+    @IBOutlet weak var statusView: RoundedCornerView!
     deinit {
         // Release all recoureces
         // perform the deinitialization
@@ -867,6 +868,7 @@ class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSou
     }
     
     private func showStatusView(){
+        statusView.isHidden = false
         status_view_top_constraints.constant = 5
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 5, options: .curveEaseInOut, animations: {
                self.view.layoutIfNeeded()
@@ -875,6 +877,7 @@ class MapViewController: UIViewController,UITableViewDelegate,UITableViewDataSou
     }
     
     private func hideStatusView(){
+        statusView.isHidden = true
         status_view_top_constraints.constant = -120
         UIView.animate(withDuration: 0.5, animations: {
             self.view.layoutIfNeeded()

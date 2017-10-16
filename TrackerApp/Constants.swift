@@ -32,6 +32,7 @@ struct Constants {
     static let HISTORY_SEGUE_IDENTIFIER = "toHistoryPage"
     static let PROFILE_SEGUE_IDENTIFIER = "toProfilePage"
     static let USER_PROFILE_SEGUE_IDENTIFIER = "toUserProfilePage"
+    static let ONBOARDING_LOGIN_SEGUE_IDENTIFIER = "onboardingToLoginPage"
 
     //user status on trip
     static let USER_ROUTE_STATUS_NOT_STARTED = "notStarted"

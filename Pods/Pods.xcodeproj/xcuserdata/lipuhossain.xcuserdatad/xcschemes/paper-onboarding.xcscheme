@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "F30DE2014A760FB81E621F55C15CC2D5"
-               BuildableName = "Pods_TrackerApp.framework"
-               BlueprintName = "Pods-TrackerApp"
+               BlueprintIdentifier = "436DD5906B4E1B432C3F41AB48B014DF"
+               BuildableName = "paper_onboarding.framework"
+               BlueprintName = "paper-onboarding"
                ReferencedContainer = "container:Pods.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -47,9 +47,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "F30DE2014A760FB81E621F55C15CC2D5"
-            BuildableName = "Pods_TrackerApp.framework"
-            BlueprintName = "Pods-TrackerApp"
+            BlueprintIdentifier = "436DD5906B4E1B432C3F41AB48B014DF"
+            BuildableName = "paper_onboarding.framework"
+            BlueprintName = "paper-onboarding"
             ReferencedContainer = "container:Pods.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
