@@ -28,26 +28,6 @@ class LoginViewController: UIViewController,GIDSignInDelegate,GIDSignInUIDelegat
         GIDSignIn.sharedInstance().clientID = FIRApp.defaultApp()?.options.clientID
         GIDSignIn.sharedInstance().delegate = self
         GIDSignIn.sharedInstance().uiDelegate = self
-        
-//        KeychainWrapper.standard.removeObject(forKey: Constants.KEY_UID)
-//        KeychainWrapper.standard.removeObject(forKey: Constants.KEY_COMPANY)
-        
-        if let uid = KeychainWrapper.standard.string(forKey: Constants.KEY_UID){
-            // segue to main view controller
-            print("\(self.TAG): Already logged in")
-            //get User Data from Firebase & autologin
-            if let company_name = KeychainWrapper.standard.string(forKey: Constants.KEY_COMPANY){
-                Progress.sharedInstance.showLoading()
-                DADataService.instance.getUserFromFirebaseDB(uid: uid,companyName: company_name){(user) in
-                    Progress.sharedInstance.dismissLoading()
-                    self.mUserObj = user as? UserObject
-                    self.go_to_main_page()
-
-                }
-            }
-            
-
-        }
     }
 
     override func didReceiveMemoryWarning() {

@@ -13,6 +13,7 @@ import FBSDKCoreKit
 import GoogleSignIn
 import GoogleMaps
 import UserNotifications
+import SwiftKeychainWrapper
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -30,9 +31,42 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FIRApp.configure()
         //initialize Map with key
         GMSServices.provideAPIKey(MAP_API_KEY)
+        
+        //checking user is already logged in
+        if let uid = KeychainWrapper.standard.string(forKey: Constants.KEY_UID){
+            // segue to main view controller
+            print("AppDelegate: Already logged in")
+            //get User Data from Firebase & autologin
+            if let company_name = KeychainWrapper.standard.string(forKey: Constants.KEY_COMPANY){
+                DADataService.instance.getUserFromFirebaseDB(uid: uid,companyName: company_name){(user) in
+                    let mUserObj = user as? UserObject
+                    self.go_to_main_page(userObj: mUserObj!)
+                    
+                }
+            }
+        }else{
+            go_to_onboarding_page()
+        }
         //Configure facebook
         return FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
         
+    }
+    
+    private func go_to_main_page(userObj: UserObject){
+        window = UIWindow(frame: UIScreen.main.bounds)
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let initialViewController = storyboard.instantiateViewController(withIdentifier: "MapViewController") as? MapViewController
+        initialViewController?.mUserObj = userObj
+        window?.rootViewController = initialViewController
+        window?.makeKeyAndVisible()
+    }
+    
+    private func go_to_onboarding_page(){
+        window = UIWindow(frame: UIScreen.main.bounds)
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let initialViewController = storyboard.instantiateViewController(withIdentifier: "OnboardingVC")
+        window?.rootViewController = initialViewController
+        window?.makeKeyAndVisible()
     }
     
     
