@@ -95,6 +95,7 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "$BUILT_PRODUCTS_DIR/GTMSessionFetcher/GTMSessionFetcher.framework"
   install_framework "$BUILT_PRODUCTS_DIR/GoogleToolboxForMac/GoogleToolboxForMac.framework"
   install_framework "$BUILT_PRODUCTS_DIR/SwiftKeychainWrapper/SwiftKeychainWrapper.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/UPCarouselFlowLayout/UPCarouselFlowLayout.framework"
   install_framework "$BUILT_PRODUCTS_DIR/paper-onboarding/paper_onboarding.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
@@ -109,5 +110,6 @@ if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "$BUILT_PRODUCTS_DIR/GTMSessionFetcher/GTMSessionFetcher.framework"
   install_framework "$BUILT_PRODUCTS_DIR/GoogleToolboxForMac/GoogleToolboxForMac.framework"
   install_framework "$BUILT_PRODUCTS_DIR/SwiftKeychainWrapper/SwiftKeychainWrapper.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/UPCarouselFlowLayout/UPCarouselFlowLayout.framework"
   install_framework "$BUILT_PRODUCTS_DIR/paper-onboarding/paper_onboarding.framework"
 fi
