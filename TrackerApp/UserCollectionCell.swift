@@ -21,7 +21,7 @@ class UserCollectionCell: UICollectionViewCell,Shakeable,Floatable {
     func configureCell(userObj: UserObject){
         user_name.text = userObj.userName?.components(separatedBy: " ").first
         if let imageUrl = userObj.imageUrl{
-            profile_image.imageFromServerURL(urlString: imageUrl, defaultImage: "")
+           // profile_image.imageFromServerURL(urlString: imageUrl, defaultImage: "")
         }
         switch userObj.status! {
         case .ONLINE:

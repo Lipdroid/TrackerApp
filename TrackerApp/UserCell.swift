@@ -31,7 +31,7 @@ class UserCell: UITableViewCell {
         user_name.text = userObj.userName
         user_route_status_label.text = "Trip: \(userObj.userRouteStatus ?? "Not Started")"
         if let imageUrl = userObj.imageUrl{
-            profile_image.imageFromServerURL(urlString: imageUrl, defaultImage: "")
+            //profile_image.imageFromServerURL(urlString: imageUrl, defaultImage: "")
         }
         switch userObj.status! {
         case .ONLINE:
