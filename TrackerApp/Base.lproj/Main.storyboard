@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="iKe-xK-Twk">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -76,7 +76,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="52m-eg-JvO">
-                                <rect key="frame" x="0.0" y="150" width="375" height="367"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="STy-Fs-xl8" customClass="UPCarouselFlowLayout" customModule="UPCarouselFlowLayout">
                                     <size key="itemSize" width="50" height="50"/>
@@ -86,17 +86,84 @@
                                 </collectionViewFlowLayout>
                                 <cells/>
                             </collectionView>
+                            <searchBar alpha="0.0" contentMode="redraw" searchBarStyle="minimal" placeholder="Search Groups" translatesAutoresizingMaskIntoConstraints="NO" id="xkj-gD-Y4m">
+                                <rect key="frame" x="10" y="60" width="355" height="50"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="tB9-KZ-poF"/>
+                                </constraints>
+                                <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <color key="barTintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <textInputTraits key="textInputTraits" keyboardAppearance="light" returnKeyType="done"/>
+                            </searchBar>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="88y-0J-31O" customClass="RoundedCornerButton" customModule="TrackerApp" customModuleProvider="target">
+                                <rect key="frame" x="97.5" y="597" width="180" height="50"/>
+                                <color key="backgroundColor" red="0.0033532574310000001" green="0.75003963709999999" blue="0.0027013139330000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="180" id="HwO-4O-Q4C"/>
+                                    <constraint firstAttribute="height" constant="50" id="WyP-pW-EEh"/>
+                                </constraints>
+                                <state key="normal" title="Create New Group">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="btn_new_group_pressed:" destination="iKe-xK-Twk" eventType="touchUpInside" id="rhn-80-CwB"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0Bu-yz-2xr">
+                                <rect key="frame" x="334" y="35" width="25" height="25"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="25" id="YcG-0V-IZb"/>
+                                    <constraint firstAttribute="height" constant="25" id="qzh-YE-VXu"/>
+                                </constraints>
+                                <color key="tintColor" red="0.0033532574310000001" green="0.75003963709999999" blue="0.0027013139330000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <state key="normal" image="icon_search"/>
+                                <connections>
+                                    <action selector="btn_new_group_pressed:" destination="iKe-xK-Twk" eventType="touchUpInside" id="pgp-vE-WSc"/>
+                                    <action selector="search_icon_pressed:" destination="iKe-xK-Twk" eventType="touchUpInside" id="8x4-up-SyS"/>
+                                </connections>
+                            </button>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ldQ-XQ-riM" customClass="FloatingView" customModule="TrackerApp" customModuleProvider="target">
+                                <rect key="frame" x="102.5" y="301" width="90" height="65"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_finger" translatesAutoresizingMaskIntoConstraints="NO" id="7GC-1Y-t4k">
+                                        <rect key="frame" x="0.0" y="0.0" width="90" height="65"/>
+                                    </imageView>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="7GC-1Y-t4k" firstAttribute="width" secondItem="ldQ-XQ-riM" secondAttribute="width" id="a2e-hV-zfL"/>
+                                    <constraint firstItem="7GC-1Y-t4k" firstAttribute="centerY" secondItem="ldQ-XQ-riM" secondAttribute="centerY" id="h5R-aO-QOK"/>
+                                    <constraint firstAttribute="height" constant="65" id="hy5-4U-hjW"/>
+                                    <constraint firstItem="7GC-1Y-t4k" firstAttribute="height" secondItem="ldQ-XQ-riM" secondAttribute="height" id="iAB-BA-pKS"/>
+                                    <constraint firstItem="7GC-1Y-t4k" firstAttribute="centerX" secondItem="ldQ-XQ-riM" secondAttribute="centerX" id="mhh-Gf-dZe"/>
+                                    <constraint firstAttribute="width" constant="90" id="wQy-iY-W07"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="o9J-PT-cUJ" firstAttribute="top" secondItem="52m-eg-JvO" secondAttribute="bottom" constant="150" id="IuA-xp-enM"/>
+                            <constraint firstItem="xkj-gD-Y4m" firstAttribute="top" secondItem="IUO-Ff-K1a" secondAttribute="top" constant="60" id="DTy-Wb-Zrm"/>
+                            <constraint firstItem="xkj-gD-Y4m" firstAttribute="leading" secondItem="IUO-Ff-K1a" secondAttribute="leading" constant="10" id="G05-b8-uLc"/>
+                            <constraint firstItem="o9J-PT-cUJ" firstAttribute="top" secondItem="52m-eg-JvO" secondAttribute="bottom" id="IuA-xp-enM"/>
+                            <constraint firstItem="88y-0J-31O" firstAttribute="centerX" secondItem="IUO-Ff-K1a" secondAttribute="centerX" id="KkH-bq-s3b"/>
+                            <constraint firstItem="ldQ-XQ-riM" firstAttribute="centerX" secondItem="IUO-Ff-K1a" secondAttribute="centerX" constant="-40" id="Ldl-y9-JUV"/>
+                            <constraint firstItem="o9J-PT-cUJ" firstAttribute="top" secondItem="88y-0J-31O" secondAttribute="bottom" constant="20" id="Sme-2u-hml"/>
+                            <constraint firstItem="ldQ-XQ-riM" firstAttribute="centerY" secondItem="IUO-Ff-K1a" secondAttribute="centerY" id="VdQ-fm-XE2"/>
                             <constraint firstAttribute="trailing" secondItem="52m-eg-JvO" secondAttribute="trailing" id="XOY-hc-UnL"/>
-                            <constraint firstItem="52m-eg-JvO" firstAttribute="top" secondItem="IUO-Ff-K1a" secondAttribute="top" constant="150" id="l7r-uP-5lh"/>
+                            <constraint firstItem="0Bu-yz-2xr" firstAttribute="top" secondItem="SLp-ZC-Rkc" secondAttribute="bottom" constant="15" id="Ylj-Ay-41Y"/>
+                            <constraint firstAttribute="trailing" secondItem="xkj-gD-Y4m" secondAttribute="trailing" constant="10" id="fol-cV-kiR"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="0Bu-yz-2xr" secondAttribute="trailing" id="hHY-Bo-sVp"/>
+                            <constraint firstItem="52m-eg-JvO" firstAttribute="top" secondItem="IUO-Ff-K1a" secondAttribute="top" id="l7r-uP-5lh"/>
                             <constraint firstItem="52m-eg-JvO" firstAttribute="leading" secondItem="IUO-Ff-K1a" secondAttribute="leading" id="sZU-5D-1ZM"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="btn_create_new_group" destination="88y-0J-31O" id="z6N-yb-4TD"/>
+                        <outlet property="btn_search" destination="0Bu-yz-2xr" id="585-zI-Z5O"/>
                         <outlet property="collectionView" destination="52m-eg-JvO" id="TfU-3G-SDY"/>
+                        <outlet property="finger_view" destination="ldQ-XQ-riM" id="IxF-7u-rvb"/>
+                        <outlet property="search_bar" destination="xkj-gD-Y4m" id="zDD-UR-RD5"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4IZ-VA-yFZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -873,8 +940,8 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
                             <button opaque="NO" alpha="0.0" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="o7z-ez-hjm" customClass="RoundedCornerButton" customModule="TrackerApp" customModuleProvider="target">
-                                <rect key="frame" x="107" y="547" width="160" height="45"/>
-                                <color key="backgroundColor" red="1" green="0.50196081400000003" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <rect key="frame" x="107.5" y="522" width="160" height="45"/>
+                                <color key="backgroundColor" red="0.0033532574310000001" green="0.75003963709999999" blue="0.0027013139330000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="160" id="Vpj-nH-LqQ"/>
                                     <constraint firstAttribute="height" constant="45" id="lnT-Za-xDY"/>
@@ -894,7 +961,7 @@
                             <constraint firstItem="hkr-Ur-qGj" firstAttribute="top" secondItem="Iq4-Qr-ajq" secondAttribute="bottom" id="GNM-ot-egP"/>
                             <constraint firstItem="Iq4-Qr-ajq" firstAttribute="leading" secondItem="BTY-er-VsE" secondAttribute="leading" id="LaK-P0-VQE"/>
                             <constraint firstAttribute="trailing" secondItem="Iq4-Qr-ajq" secondAttribute="trailing" id="e3O-2E-LwC"/>
-                            <constraint firstItem="hkr-Ur-qGj" firstAttribute="top" secondItem="o7z-ez-hjm" secondAttribute="bottom" constant="75" id="gb9-JF-I1d"/>
+                            <constraint firstItem="hkr-Ur-qGj" firstAttribute="top" secondItem="o7z-ez-hjm" secondAttribute="bottom" constant="100" id="gb9-JF-I1d"/>
                             <constraint firstItem="Iq4-Qr-ajq" firstAttribute="top" secondItem="BTY-er-VsE" secondAttribute="top" id="xni-Cl-24Y"/>
                         </constraints>
                     </view>
@@ -1237,11 +1304,13 @@
         <image name="icon_back" width="60" height="60"/>
         <image name="icon_chatroom" width="60" height="60"/>
         <image name="icon_current_location" width="60" height="60"/>
+        <image name="icon_finger" width="360" height="250"/>
         <image name="icon_history" width="60" height="60"/>
         <image name="icon_home" width="60" height="60"/>
         <image name="icon_left_menu" width="60" height="60"/>
         <image name="icon_logout" width="60" height="60"/>
         <image name="icon_online" width="60" height="60"/>
+        <image name="icon_search" width="50" height="50"/>
         <image name="icon_user_list" width="60" height="60"/>
         <image name="nil" width="16" height="16"/>
     </resources>
